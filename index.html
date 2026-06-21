@@ -728,10 +728,14 @@
       }
       /* 모바일 터치 줌/확대 방지 */
       .hero, .hero-visual, .hero-product-img,
-      section img {
-        touch-action: pan-y;
+      section img,
+      .catalog-item, .catalog-item-image, .catalog-item-image img {
+        touch-action: manipulation;
         -webkit-user-select: none;
         user-select: none;
+      }
+      .catalog-item:hover {
+        transform: none !important;
       }
       .section-catalog {
         scroll-snap-align: none !important;
