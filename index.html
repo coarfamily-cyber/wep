@@ -571,6 +571,35 @@
       letter-spacing: -0.22px;
     }
 
+    /* ─── Origin Button (Shop Now) ─────────────────────────── */
+    .btn-origin {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-origin-fill {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      width: 0; height: 0;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .btn-origin:hover .btn-origin-fill,
+    .btn-origin:focus .btn-origin-fill {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    .btn-origin-label {
+      position: relative;
+      z-index: 1;
+    }
+    .btn-origin:active {
+      transform: scale(0.985);
+      transition: transform 0.1s ease;
+    }
+
     /* ─── SVG Placeholder Helpers ───────────────────────────── */
     .placeholder-svg { width: 100%; height: 100%; }
 
@@ -905,7 +934,7 @@
     <div class="section-inner">
       <h2 class="strip-headline">Start Now.</h2>
       <p class="strip-body">Feel the happiness of healthy skin</p>
-      <a href="https://www.etsy.com/shop/KoreaBeautylove?ref=shop_profile&listing_id=4522760260" target="_blank" class="btn-primary" style="font-size:17px; padding:14px 28px;">Shop Now</a>
+      <a href="https://www.etsy.com/shop/KoreaBeautylove?ref=shop_profile&listing_id=4522760260" target="_blank" class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px;"><span class="btn-origin-fill"></span><span class="btn-origin-label">Shop Now</span></a>
     </div>
   </section>
 
@@ -923,5 +952,21 @@
     </div>
   </footer>
 
+  <script>
+    // Shop Now 버튼 — 커서 위치에서 원이 퍼지는 효과
+    document.querySelectorAll('.btn-origin').forEach(function(btn) {
+      var fill = btn.querySelector('.btn-origin-fill');
+      btn.addEventListener('mouseenter', function(e) {
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        var size = Math.hypot(rect.width, rect.height) * 2;
+        fill.style.width = size + 'px';
+        fill.style.height = size + 'px';
+        fill.style.left = x + 'px';
+        fill.style.top = y + 'px';
+      });
+    });
+  </script>
 </body>
 </html>
