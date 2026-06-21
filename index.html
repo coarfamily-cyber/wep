@@ -592,11 +592,23 @@
 
       /* Hero */
       .hero {
-        height: calc(100svh - 30px);
+        height: 100vh;
+        height: -webkit-fill-available;
+        height: 100svh;
       }
       .hero-product-img {
         object-fit: cover !important;
         object-position: center top;
+      }
+      /* 스크롤 시 이미지 확대/축소 방지 */
+      .hero-product-img,
+      #section2-img,
+      section img {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: auto;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
       }
 
       /* Sections */
@@ -784,7 +796,7 @@
 
 
   <!-- ⑤ Full-bleed Image Section -->
-  <section style="position:relative; background:#111111; height:100svh; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start;">
+  <section class="hero" style="position:relative; background:#111111; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start;">
     <!-- 배경 이미지 -->
     <img id="section2-img" src="images/section2.jpg" alt="제품 이미지" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:38% 45%;">
     <!-- 오버레이 -->
