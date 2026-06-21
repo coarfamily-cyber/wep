@@ -773,7 +773,16 @@
         height: 180px !important;
       }
     }
-  </style>
+    /* 모바일 고정 높이 */
+  .hero {
+    height: var(--fixed-vh, 100svh);
+  }
+</style>
+<script>
+  // 주소창 포함 초기 높이로 고정 → 주소창 사라져도 크기 안 변함
+  var vh = window.innerHeight + 'px';
+  document.documentElement.style.setProperty('--fixed-vh', vh);
+</script>
 </head>
 <body>
 
