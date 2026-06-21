@@ -579,7 +579,7 @@
     .btn-origin-fill {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.25);
+      background: #c8962a;
       width: 0; height: 0;
       transform: translate(-50%, -50%) scale(0);
       transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
@@ -590,6 +590,9 @@
     .btn-origin:focus .btn-origin-fill {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+    }
+    .btn-origin:hover .btn-origin-label {
+      color: #111111;
     }
     .btn-origin-label {
       position: relative;
