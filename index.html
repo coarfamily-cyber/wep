@@ -374,7 +374,15 @@
       letter-spacing: -0.19px;
       cursor: pointer;
     }
-    .inline-link:hover { text-decoration: underline; }
+    .inline-link {
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      display: inline-flex;
+      transform-origin: right center;
+    }
+    .inline-link:hover {
+      transform: scale(2);
+      text-decoration: none;
+    }
     .light-col-image {
       border-radius: var(--radius-cards);
       overflow: hidden;
