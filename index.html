@@ -663,7 +663,7 @@
       .nav-wrapper {
         position: absolute;
       }
-      .nav-wrapper img {
+      .nav-wrapper img, .nav-wrapper > div {
         height: 120px !important;
         opacity: 0.6;
       }
@@ -847,7 +847,7 @@
       .section-inner {
         padding: 0 28px;
       }
-      .nav-wrapper img {
+      .nav-wrapper img, .nav-wrapper > div {
         height: 180px !important;
       }
     }
@@ -868,7 +868,10 @@
   <!-- ② Navigation -->
   <div class="nav-wrapper">
     <nav>
-      <img src="images/logo.png" alt="브랜드 로고" class="logo-butterfly" style="height:280px; width:auto; object-fit:contain;">
+      <div style="position:relative; display:inline-block; height:280px;">
+        <img src="images/logo-no-butterfly.png" alt="브랜드 로고" style="height:280px; width:auto; object-fit:contain; display:block;">
+        <img src="images/logo-butterfly.png" alt="" class="logo-butterfly" style="position:absolute; top:0; left:0; height:280px; width:auto; object-fit:contain;">
+      </div>
     </nav>
   </div>
 
