@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
   <style>
     /* ─── CSS Custom Properties ─────────────────────────────── */
     :root {
@@ -175,6 +176,28 @@
       align-items: flex-start;
       justify-content: flex-start;
     }
+    .lang-switcher {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      border-radius: 3px;
+      overflow: hidden;
+      opacity: 0.55;
+      transition: opacity 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .lang-btn:hover { opacity: 1; transform: scale(1.22); }
+    .lang-btn.active { opacity: 1; }
+    .lang-btn .fi { font-size: 26px; display: block; line-height: 1; }
     .nav-logo {
       font-family: var(--font-display);
       font-size: 19px;
@@ -729,6 +752,8 @@
     /* ─── Mobile Responsive ─────────────────────────────────── */
     @media (max-width: 768px) {
 
+      .lang-btn-kr { display: none; }
+
       /* Nav */
       nav {
         padding: 0px 0px 0px 0px;
@@ -964,6 +989,11 @@
         <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
         <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
       </div>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')" title="English"><span class="fi fi-us"></span></button>
+        <button class="lang-btn lang-btn-kr" onclick="setLang('kr')" title="한국어"><span class="fi fi-kr"></span></button>
+        <button class="lang-btn" onclick="setLang('zh')" title="中文"><span class="fi fi-cn"></span></button>
+      </div>
     </nav>
   </div>
 
@@ -973,7 +1003,7 @@
       <img class="hero-product-img" src="images/hero-bg.jpg" alt="Hero Model">
       <div class="hero-overlay"></div>
     </div>
-    <p class="hero-subtext" style="position:absolute; z-index:10; top:360px; left:90px; font-family:var(--font-text); font-size:16px; font-weight:400; color:var(--color-frost-white); letter-spacing:-0.1px; opacity:0.7; max-width:340px; line-height:1.5;">As a seller in South Korea, I specialize in products that Korean women particularly appreciate and trust.</p>
+    <p class="hero-subtext" data-i18n="hero-subtext" style="position:absolute; z-index:10; top:360px; left:90px; font-family:var(--font-text); font-size:16px; font-weight:400; color:var(--color-frost-white); letter-spacing:-0.1px; opacity:0.7; max-width:340px; line-height:1.5;">As a seller in South Korea, I specialize in products that Korean women particularly appreciate and trust.</p>
   </section>
 
 
@@ -987,11 +1017,11 @@
       pointer-events:none;"></div>
     <!-- 텍스트: 오른쪽 상단 -->
     <div class="section-text-overlay" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
-      <h2 class="light-headline" style="color:var(--color-frost-white);">A product that will<br>change your everyday.</h2>
-      <p class="light-body" style="color:var(--color-frost-white); font-weight:600;">Write your body text here to describe the value and experience of the product. Three to four sentences works best.</p>
+      <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
+      <h2 class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">A product that will<br>change your everyday.</h2>
+      <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Write your body text here to describe the value and experience of the product. Three to four sentences works best.</p>
       <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
-        <span>Learn more</span>
+        <span data-i18n="s2-learn">Learn more</span>
         <span>›</span>
       </a>
     </div>
@@ -1007,10 +1037,10 @@
         pointer-events:none;"></div>
     </div>
     <div class="section-text-overlay section3-text" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
-      <h2 class="light-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
+      <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
+      <h2 class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
       <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
-        <span>Learn more</span>
+        <span data-i18n="s3-learn">Learn more</span>
         <span>›</span>
       </a>
     </div>
@@ -1020,7 +1050,7 @@
   <section class="section-catalog" id="catalog">
     <div class="section-inner">
       <div class="catalog-header">
-        <h2 class="catalog-headline" style="color:#c8962a; font-size:17px;">Full Catalog</h2>
+        <h2 class="catalog-headline" data-i18n="catalog-headline" style="color:#c8962a; font-size:17px;">Full Catalog</h2>
       </div>
       <div class="catalog-carousel">
         <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
@@ -1034,8 +1064,8 @@
               <img src="images/product1.webp" alt="Product 01" style="width:100%; height:100%; object-fit:cover;">
             </div>
             <div class="catalog-item-info">
-              <div class="catalog-item-name">La Belle Rose Glass Lip Gloss</div>
-              <div class="catalog-item-desc">Moisturizing • Radiant finish</div>
+              <div class="catalog-item-name" data-i18n="p1-name">La Belle Rose Glass Lip Gloss</div>
+              <div class="catalog-item-desc" data-i18n="p1-desc">Moisturizing • Radiant finish</div>
             </div>
           </a>
           <!-- Item 2 -->
@@ -1044,8 +1074,8 @@
               <img src="images/product2.jpg" alt="Product 02" style="width:100%; height:100%; object-fit:cover; object-position:70% center;">
             </div>
             <div class="catalog-item-info">
-              <div class="catalog-item-name">Dewy Calming</div>
-              <div class="catalog-item-desc">Centella Cica &amp; Blue Vervetiale</div>
+              <div class="catalog-item-name" data-i18n="p2-name">Dewy Calming</div>
+              <div class="catalog-item-desc" data-i18n="p2-desc">Centella Cica &amp; Blue Vervetiale</div>
             </div>
           </a>
           <!-- Item 4 -->
@@ -1054,8 +1084,8 @@
               <img src="images/product4.jpg" alt="Product 04" style="width:100%; height:100%; object-fit:cover;">
             </div>
             <div class="catalog-item-info">
-              <div class="catalog-item-name">Collagen Glow Mist Ampoule</div>
-              <div class="catalog-item-desc">Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen</div>
+              <div class="catalog-item-name" data-i18n="p3-name">Collagen Glow Mist Ampoule</div>
+              <div class="catalog-item-desc" data-i18n="p3-desc">Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen</div>
             </div>
           </a>
         </div>
@@ -1068,8 +1098,8 @@
               <img src="images/product3.jpg" alt="Product 03" style="width:100%; height:100%; object-fit:cover;">
             </div>
             <div class="catalog-item-info">
-              <div class="catalog-item-name">Concentrated PDRN Glow Essence</div>
-              <div class="catalog-item-desc">Radiant, Firm, Youthful Skin</div>
+              <div class="catalog-item-name" data-i18n="p4-name">Concentrated PDRN Glow Essence</div>
+              <div class="catalog-item-desc" data-i18n="p4-desc">Radiant, Firm, Youthful Skin</div>
             </div>
           </a>
           <!-- Item 5 -->
@@ -1078,8 +1108,8 @@
               <img src="images/비타민c.jpg" alt="Product 05" style="width:100%; height:100%; object-fit:cover;">
             </div>
             <div class="catalog-item-info">
-              <div class="catalog-item-name">Vita C Whip First Essence</div>
-              <div class="catalog-item-desc">Skin Boosting · Brightening</div>
+              <div class="catalog-item-name" data-i18n="p5-name">Vita C Whip First Essence</div>
+              <div class="catalog-item-desc" data-i18n="p5-desc">Skin Boosting · Brightening</div>
             </div>
           </a>
         </div>
@@ -1093,9 +1123,9 @@
   <!-- ⑧ CTA Strip -->
   <section class="section-strip">
     <div class="section-inner">
-      <h2 class="strip-headline">Start Now.</h2>
-      <p class="strip-body">Feel the happiness of healthy skin</p>
-      <a href="https://www.etsy.com/shop/KoreaBeautylove?ref=shop_profile&listing_id=4522760260" target="_blank" class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px;"><span class="btn-origin-fill"></span><span class="btn-origin-label">Shop Now</span></a>
+      <h2 class="strip-headline" data-i18n="cta-headline">Start Now.</h2>
+      <p class="strip-body" data-i18n="cta-body">Feel the happiness of healthy skin</p>
+      <a href="https://www.etsy.com/shop/KoreaBeautylove?ref=shop_profile&listing_id=4522760260" target="_blank" class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px;"><span class="btn-origin-fill"></span><span class="btn-origin-label" data-i18n="cta-btn">Shop Now</span></a>
     </div>
   </section>
 
@@ -1104,12 +1134,12 @@
     <div class="footer-inner">
       <span class="footer-brand">Brand</span>
       <ul class="footer-links">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#" id="support-btn">Customer Support</a></li>
+        <li><a href="#" data-i18n="footer-about">About Us</a></li>
+        <li><a href="#" data-i18n="footer-privacy">Privacy Policy</a></li>
+        <li><a href="#" data-i18n="footer-terms">Terms of Use</a></li>
+        <li><a href="#" id="support-btn" data-i18n="footer-support">Customer Support</a></li>
       </ul>
-      <span class="footer-copy">© 2026 Brand. All rights reserved.</span>
+      <span class="footer-copy" data-i18n="footer-copy">© 2026 Brand. All rights reserved.</span>
     </div>
   </footer>
 
@@ -1151,6 +1181,112 @@
       track.scrollBy({ left: dir * itemW * 4, behavior: 'smooth' });
     }
   </script>
+  <script>
+    var i18nData = {
+      en: {
+        'hero-subtext': 'As a seller in South Korea, I specialize in products that Korean women particularly appreciate and trust.',
+        's2-eyebrow': 'Category Tag',
+        's2-headline': 'A product that will<br>change your everyday.',
+        's2-body': 'Write your body text here to describe the value and experience of the product. Three to four sentences works best.',
+        's2-learn': 'Learn more',
+        's3-eyebrow': 'Category Tag',
+        's3-headline': 'Skin that glows<br>from within.',
+        's3-learn': 'Learn more',
+        'catalog-headline': 'Full Catalog',
+        'p1-name': 'La Belle Rose Glass Lip Gloss',
+        'p1-desc': 'Moisturizing • Radiant finish',
+        'p2-name': 'Dewy Calming',
+        'p2-desc': 'Centella Cica &amp; Blue Vervetiale',
+        'p3-name': 'Collagen Glow Mist Ampoule',
+        'p3-desc': 'Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen',
+        'p4-name': 'Concentrated PDRN Glow Essence',
+        'p4-desc': 'Radiant, Firm, Youthful Skin',
+        'p5-name': 'Vita C Whip First Essence',
+        'p5-desc': 'Skin Boosting · Brightening',
+        'cta-headline': 'Start Now.',
+        'cta-body': 'Feel the happiness of healthy skin',
+        'cta-btn': 'Shop Now',
+        'footer-about': 'About Us',
+        'footer-privacy': 'Privacy Policy',
+        'footer-terms': 'Terms of Use',
+        'footer-support': 'Customer Support',
+        'footer-copy': '© 2026 Brand. All rights reserved.'
+      },
+      kr: {
+        'hero-subtext': '한국에서 온 믿을 수 있는 셀러로서, 한국 여성들이 가장 사랑하고 신뢰하는 뷰티 제품만을 엄선해 여러분께 아름다움과 안심을 선사합니다.',
+        's2-eyebrow': '카테고리 태그',
+        's2-headline': '당신의 일상을 새롭게 바꿔줄 제품',
+        's2-body': '제품의 가치와 경험을 3~4문장으로 담아 매력을 표현하세요.',
+        's2-learn': '더 알아보기',
+        's3-eyebrow': '카테고리 태그',
+        's3-headline': '피부 속부터 빛나는 광채',
+        's3-learn': '더 알아보기',
+        'catalog-headline': '전체 카탈로그',
+        'p1-name': 'La Belle Rose 글래스 립글로스',
+        'p1-desc': '촉촉함 • 빛나는 마무리',
+        'p2-name': 'Dewy Calming',
+        'p2-desc': '센텔라 시카 &amp; 블루 버베나',
+        'p3-name': '콜라겐 글로우 미스트 앰플',
+        'p3-desc': '광채 &amp; 탄력 강화 · 소분자 나노 콜라겐',
+        'p4-name': '고농축 PDRN 글로우 에센스',
+        'p4-desc': '빛나는, 탄탄한, 젊은 피부',
+        'p5-name': '비타C 휩 퍼스트 에센스',
+        'p5-desc': '피부 활력 · 브라이트닝',
+        'cta-headline': '지금 바로 시작하세요',
+        'cta-body': '건강한 피부가 주는 행복을 느껴보세요',
+        'cta-btn': '지금 쇼핑하기',
+        'footer-about': '회사 소개',
+        'footer-privacy': '개인정보 처리방침',
+        'footer-terms': '이용 약관',
+        'footer-support': '고객 지원',
+        'footer-copy': '© 2026 브랜드. 모든 권리 보유.'
+      },
+      zh: {
+        'hero-subtext': '作为韩国的卖家，我专注于韩国女性特别喜爱和信赖的产品。',
+        's2-eyebrow': '分类标签',
+        's2-headline': '一款能改变你日常生活的产品。',
+        's2-body': '在此撰写正文，描述产品的价值与体验。三到四句话为佳。',
+        's2-learn': '了解更多',
+        's3-eyebrow': '分类标签',
+        's3-headline': '由内而外焕发光彩的肌肤。',
+        's3-learn': '了解更多',
+        'catalog-headline': '全部目录',
+        'p1-name': 'La Belle Rose 玻璃唇彩',
+        'p1-desc': '保湿 • 光泽妆效',
+        'p2-name': 'Dewy Calming',
+        'p2-desc': '积雪草Cica &amp; 蓝色马鞭草',
+        'p3-name': '胶原焕亮喷雾安瓶',
+        'p3-desc': '提升光泽与弹性 · 小分子纳米胶原',
+        'p4-name': '高浓度PDRN焕亮精华',
+        'p4-desc': '光泽、紧致、年轻肌肤',
+        'p5-name': '维他命C绵密精华',
+        'p5-desc': '提升肌肤 · 焕亮肤色',
+        'cta-headline': '立即开始。',
+        'cta-body': '感受健康肌肤的喜悦',
+        'cta-btn': '立即购买',
+        'footer-about': '关于我们',
+        'footer-privacy': '隐私政策',
+        'footer-terms': '使用条款',
+        'footer-support': '客户支持',
+        'footer-copy': '© 2026 品牌。保留所有权利。'
+      }
+    };
+
+    function setLang(lang) {
+      var dict = i18nData[lang];
+      if (!dict) return;
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      var activeBtn = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+  </script>
+
   <script>
     document.getElementById('support-btn').addEventListener('click', function(e) {
       e.preventDefault();
