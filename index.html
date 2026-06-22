@@ -513,7 +513,9 @@
     .catalog-link:hover { text-decoration: underline; }
     /* 카탈로그 캐러셀 */
     .catalog-carousel {
-      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     /* catalog-arrow 모바일에서 숨김은 모바일 미디어쿼리 안에서 처리 */
     /* 카탈로그 아이템 - 데스크탑 4열 스크롤 */
@@ -1017,13 +1019,9 @@
     <div class="section-inner">
       <div class="catalog-header">
         <h2 class="catalog-headline" style="color:#c8962a; font-size:17px;">Full Catalog</h2>
-        <div style="display:flex; align-items:center; gap:12px;">
-          <a class="catalog-link" href="#">View All ›</a>
-          <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
-          <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
-        </div>
       </div>
       <div class="catalog-carousel">
+        <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
         <div class="catalog-items">
 
         <!-- Row 1 -->
@@ -1085,6 +1083,7 @@
         </div>
 
         </div><!-- /.catalog-items -->
+        <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
       </div><!-- /.catalog-carousel -->
     </div>
   </section>
