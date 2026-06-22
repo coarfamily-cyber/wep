@@ -105,24 +105,19 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 44px; height: 44px;
+        width: 36px; height: 36px;
         border-radius: 50%;
         background: transparent;
         border: 2px solid #c8962a;
         color: #c8962a;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 700;
         cursor: pointer;
-        z-index: 10;
         transition: background 0.2s, color 0.2s;
         line-height: 1;
+        flex-shrink: 0;
       }
       .catalog-arrow:hover { background: #c8962a; color: #111; }
-      .catalog-arrow-left  { left: -22px; }
-      .catalog-arrow-right { right: -22px; }
       .catalog-arrow:disabled { opacity: 0.25; cursor: default; }
     }
     @media (min-width: 769px) {
@@ -1021,10 +1016,13 @@
     <div class="section-inner">
       <div class="catalog-header">
         <h2 class="catalog-headline" style="color:#c8962a; font-size:17px;">Full Catalog</h2>
-        <a class="catalog-link" href="#">View All ›</a>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <a class="catalog-link" href="#">View All ›</a>
+          <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
+          <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
+        </div>
       </div>
       <div class="catalog-carousel">
-        <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
         <div class="catalog-items">
 
         <!-- Row 1 -->
@@ -1086,7 +1084,6 @@
         </div>
 
         </div><!-- /.catalog-items -->
-        <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
       </div><!-- /.catalog-carousel -->
     </div>
   </section>
