@@ -57,6 +57,7 @@
       font-feature-settings: "numr";
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      position: relative;
     }
     img { display: block; width: 100%; }
     a { text-decoration: none; }
@@ -177,7 +178,7 @@
       justify-content: flex-start;
     }
     .lang-switcher {
-      position: fixed;
+      position: absolute;
       top: 20px;
       right: 24px;
       z-index: 200;
@@ -758,10 +759,11 @@
         top: 16px;
         right: 16px;
         gap: 7px;
+        z-index: 200;
       }
       .lang-switcher .lang-btn .fi { font-size: 18px; }
       .lang-switcher .lang-btn { opacity: 0.3; }
-      .lang-switcher .lang-btn.active { opacity: 0.55; }
+      .lang-switcher .lang-btn.active { opacity: 0.5; }
       .lang-switcher .lang-btn:hover { opacity: 0.7; }
 
       /* Nav */
@@ -993,16 +995,18 @@
 
 
   <!-- ② Navigation -->
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')" title="English"><span class="fi fi-us"></span></button>
+    <button class="lang-btn lang-btn-kr" onclick="setLang('kr')" title="한국어"><span class="fi fi-kr"></span></button>
+    <button class="lang-btn" onclick="setLang('zh')" title="中文"><span class="fi fi-cn"></span></button>
+    <button class="lang-btn" onclick="setLang('es')" title="Español"><span class="fi fi-es"></span></button>
+  </div>
+
   <div class="nav-wrapper">
     <nav>
       <div class="logo-wrapper">
         <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
         <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
-      </div>
-      <div class="lang-switcher">
-        <button class="lang-btn active" onclick="setLang('en')" title="English"><span class="fi fi-us"></span></button>
-        <button class="lang-btn lang-btn-kr" onclick="setLang('kr')" title="한국어"><span class="fi fi-kr"></span></button>
-        <button class="lang-btn" onclick="setLang('zh')" title="中文"><span class="fi fi-cn"></span></button>
       </div>
     </nav>
   </div>
@@ -1250,6 +1254,35 @@
         'footer-terms': '이용 약관',
         'footer-support': '고객 지원',
         'footer-copy': '© 2026 브랜드. 모든 권리 보유.'
+      },
+      es: {
+        'hero-subtext': 'Como vendedor de confianza en Corea, selecciono cuidadosamente los productos de belleza que las mujeres coreanas más aman y en los que más confían, para brindarte seguridad y belleza.',
+        's2-eyebrow': 'Etiqueta de categoría',
+        's2-headline': 'Un producto que transformará<br>tu día a día',
+        's2-body': 'Describe aquí el valor y la experiencia del producto en tres o cuatro frases para destacar su encanto.',
+        's2-learn': 'Más información',
+        's3-eyebrow': 'Etiqueta de categoría',
+        's3-headline': 'Una piel que brilla<br>desde dentro',
+        's3-learn': 'Más información',
+        'catalog-headline': 'Catálogo completo',
+        'p1-name': 'La Belle Rose Glass Lip Gloss',
+        'p1-desc': 'Hidratante • Acabado radiante',
+        'p2-name': 'Dewy Calming',
+        'p2-desc': 'Centella Cica &amp; Blue Vervetiale',
+        'p3-name': 'Collagen Glow Mist Ampoule',
+        'p3-desc': 'Mejora la luminosidad y elasticidad · Nano-colágeno de molécula pequeña',
+        'p4-name': 'Concentrated PDRN Glow Essence',
+        'p4-desc': 'Piel radiante, firme y juvenil',
+        'p5-name': 'Vita C Whip First Essence',
+        'p5-desc': 'Potenciador de la piel · Iluminador',
+        'cta-headline': 'Empieza ahora',
+        'cta-body': 'Siente la felicidad de una piel sana',
+        'cta-btn': 'Comprar ahora',
+        'footer-about': 'Sobre nosotros',
+        'footer-privacy': 'Política de privacidad',
+        'footer-terms': 'Términos de uso',
+        'footer-support': 'Atención al cliente',
+        'footer-copy': '© 2026 Marca. Todos los derechos reservados.'
       },
       zh: {
         'hero-subtext': '作为韩国的卖家，我专注于韩国女性特别喜爱和信赖的产品。',
