@@ -496,6 +496,9 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
+    .catalog-row {
+      display: contents; /* 데스크탑: 그리드에 직접 참여 */
+    }
     .catalog-item {
       background: var(--color-graphite);
       border-radius: var(--radius-cards);
@@ -763,10 +766,25 @@
         aspect-ratio: 4 / 3;
       }
 
-      /* Catalog: 모바일 2×2 */
+      /* Catalog: 모바일 — 두 줄 독립 스크롤 */
       .catalog-items {
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        flex-direction: column;
         gap: 8px;
+      }
+      .catalog-row {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+      .catalog-row::-webkit-scrollbar { display: none; }
+      .catalog-row .catalog-item {
+        flex: 0 0 calc(50% - 4px);
+        scroll-snap-align: start;
       }
       .catalog-headline {
         font-size: 24px;
@@ -968,49 +986,63 @@
       </div>
       <div class="catalog-items">
 
-        <!-- Item 1 -->
-        <a class="catalog-item" href="https://www.etsy.com/listing/4522152669/k-beauty-tinted-lip-oil?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
-          <div class="catalog-item-image">
-            <img src="images/product1.webp" alt="Product 01" style="width:100%; height:100%; object-fit:contain;">
-          </div>
-          <div class="catalog-item-info">
-            <div class="catalog-item-name">La Belle Rose Glass Lip Gloss</div>
-            <div class="catalog-item-desc">Moisturizing • Radiant finish</div>
-          </div>
-        </a>
+        <!-- Row 1 -->
+        <div class="catalog-row">
+          <!-- Item 1 -->
+          <a class="catalog-item" href="https://www.etsy.com/listing/4522152669/k-beauty-tinted-lip-oil?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
+            <div class="catalog-item-image">
+              <img src="images/product1.webp" alt="Product 01" style="width:100%; height:100%; object-fit:contain;">
+            </div>
+            <div class="catalog-item-info">
+              <div class="catalog-item-name">La Belle Rose Glass Lip Gloss</div>
+              <div class="catalog-item-desc">Moisturizing • Radiant finish</div>
+            </div>
+          </a>
+          <!-- Item 2 -->
+          <a class="catalog-item" href="https://www.etsy.com/listing/4519984276/curest-bubble-essence-toner-calmy-o?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
+            <div class="catalog-item-image">
+              <img src="images/product2.jpg" alt="Product 02" style="width:100%; height:100%; object-fit:cover; object-position:70% center;">
+            </div>
+            <div class="catalog-item-info">
+              <div class="catalog-item-name">Dewy Calming</div>
+              <div class="catalog-item-desc">Centella Cica &amp; Blue Vervetiale</div>
+            </div>
+          </a>
+          <!-- Item 5 -->
+          <a class="catalog-item" href="#" style="text-decoration:none;">
+            <div class="catalog-item-image">
+              <img src="images/비타민c.jpg" alt="Product 05" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="catalog-item-info">
+              <div class="catalog-item-name">Vita C Whip First Essence</div>
+              <div class="catalog-item-desc">Skin Boosting · Brightening</div>
+            </div>
+          </a>
+        </div>
 
-        <!-- Item 2 -->
-        <a class="catalog-item" href="https://www.etsy.com/listing/4519984276/curest-bubble-essence-toner-calmy-o?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
-          <div class="catalog-item-image">
-            <img src="images/product2.jpg" alt="Product 02" style="width:100%; height:100%; object-fit:cover; object-position:70% center;">
-          </div>
-          <div class="catalog-item-info">
-            <div class="catalog-item-name">Dewy Calming</div>
-            <div class="catalog-item-desc">Centella Cica &amp; Blue Vervetiale</div>
-          </div>
-        </a>
-
-        <!-- Item 3 -->
-        <a class="catalog-item" href="https://www.etsy.com/listing/4520582166/k-beauty-vt-pdrn-glow-essence-hydrating?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
-          <div class="catalog-item-image">
-            <img src="images/product3.jpg" alt="Product 03" style="width:100%; height:100%; object-fit:cover;">
-          </div>
-          <div class="catalog-item-info">
-            <div class="catalog-item-name">Concentrated PDRN Glow Essence</div>
-            <div class="catalog-item-desc">Radiant, Firm, Youthful Skin</div>
-          </div>
-        </a>
-
-        <!-- Item 4 -->
-        <a class="catalog-item" href="https://www.etsy.com/listing/4522760260/korean-skincare-k-beauty-facial-mist?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
-          <div class="catalog-item-image">
-            <img src="images/product4.jpg" alt="Product 04" style="width:100%; height:100%; object-fit:cover;">
-          </div>
-          <div class="catalog-item-info">
-            <div class="catalog-item-name">Collagen Glow Mist Ampoule</div>
-            <div class="catalog-item-desc">Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen</div>
-          </div>
-        </a>
+        <!-- Row 2 -->
+        <div class="catalog-row">
+          <!-- Item 3 -->
+          <a class="catalog-item" href="https://www.etsy.com/listing/4520582166/k-beauty-vt-pdrn-glow-essence-hydrating?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
+            <div class="catalog-item-image">
+              <img src="images/product3.jpg" alt="Product 03" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="catalog-item-info">
+              <div class="catalog-item-name">Concentrated PDRN Glow Essence</div>
+              <div class="catalog-item-desc">Radiant, Firm, Youthful Skin</div>
+            </div>
+          </a>
+          <!-- Item 4 -->
+          <a class="catalog-item" href="https://www.etsy.com/listing/4522760260/korean-skincare-k-beauty-facial-mist?ref=listings_manager_grid" target="_blank" style="text-decoration:none;">
+            <div class="catalog-item-image">
+              <img src="images/product4.jpg" alt="Product 04" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div class="catalog-item-info">
+              <div class="catalog-item-name">Collagen Glow Mist Ampoule</div>
+              <div class="catalog-item-desc">Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen</div>
+            </div>
+          </a>
+        </div>
 
       </div>
     </div>
