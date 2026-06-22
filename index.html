@@ -972,7 +972,7 @@
         <li><a href="#">About Us</a></li>
         <li><a href="#">Privacy Policy</a></li>
         <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Customer Support</a></li>
+        <li><a href="#" id="support-btn">Customer Support</a></li>
       </ul>
       <span class="footer-copy">© 2026 Brand. All rights reserved.</span>
     </div>
@@ -992,6 +992,41 @@
         fill.style.left = x + 'px';
         fill.style.top = y + 'px';
       });
+    });
+  </script>
+
+  <!-- Customer Support toast -->
+  <div id="support-toast" style="
+    display:none; position:fixed; bottom:40px; left:50%; transform:translateX(-50%);
+    background:#1a1a1a; color:#fff; border:1px solid #333;
+    padding:18px 28px; border-radius:14px; z-index:9999;
+    text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    font-family:'SF Pro Text','Helvetica Neue',sans-serif; font-size:15px; line-height:1.6;
+    min-width:280px;
+  ">
+    <div style="font-weight:600; margin-bottom:6px;">📧 Email copied!</div>
+    <div style="color:#aaa; font-size:13px;">coar1004@naver.com</div>
+    <div style="color:#888; font-size:12px; margin-top:6px;">Feel free to reach out — we'll reply as soon as possible.</div>
+  </div>
+  <script>
+    document.getElementById('support-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      navigator.clipboard.writeText('coar1004@naver.com').catch(function() {
+        var t = document.createElement('textarea');
+        t.value = 'coar1004@naver.com';
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+      });
+      var toast = document.getElementById('support-toast');
+      toast.style.display = 'block';
+      toast.style.opacity = '1';
+      setTimeout(function() {
+        toast.style.transition = 'opacity 0.5s';
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.style.display = 'none'; toast.style.transition = ''; toast.style.opacity = '1'; }, 500);
+      }, 3000);
     });
   </script>
 </body>
