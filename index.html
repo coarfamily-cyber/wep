@@ -1328,6 +1328,38 @@
       });
       var activeBtn = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
       if (activeBtn) activeBtn.classList.add('active');
+      wrapSubtextWords();
+      if (subtextAnimDone) colorSubtextBlue(0);
+    }
+
+    var subtextAnimDone = false;
+
+    function wrapSubtextWords() {
+      var el = document.querySelector('.hero-subtext');
+      if (!el) return;
+      var text = el.textContent.trim();
+      el.innerHTML = text.split(/\s+/).map(function(w) {
+        return '<span class="hero-word">' + w + '</span>';
+      }).join(' ');
+    }
+
+    function colorSubtextBlue(delayPerWord) {
+      document.querySelectorAll('.hero-word').forEach(function(w, i) {
+        setTimeout(function() {
+          w.style.transition = 'color 0.45s ease';
+          w.style.color = '#2997ff';
+        }, i * (delayPerWord || 0));
+      });
+    }
+
+    wrapSubtextWords();
+
+    var butterflyEl = document.querySelector('.logo-butterfly');
+    if (butterflyEl) {
+      butterflyEl.addEventListener('animationend', function() {
+        subtextAnimDone = true;
+        colorSubtextBlue(85);
+      });
     }
   </script>
 
