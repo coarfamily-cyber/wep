@@ -60,6 +60,25 @@
     img { display: block; width: 100%; }
     a { text-decoration: none; }
 
+    /* ─── 로고 래퍼 ────────────────────────────────────────── */
+    .logo-wrapper {
+      position: relative;
+      display: inline-block;
+      height: 280px;
+    }
+    .logo-base {
+      height: 280px;
+      width: auto;
+      display: block;
+    }
+    .logo-butterfly {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 280px;
+      width: auto;
+    }
+
     /* ─── 나비 로고 날아오기 애니메이션 ───────────────────────── */
     @keyframes butterfly-land {
       0%   { transform: translateX(120px) translateY(-25px) rotate(6deg); opacity: 0; }
@@ -663,7 +682,7 @@
       .nav-wrapper {
         position: absolute;
       }
-      .nav-wrapper img, .nav-wrapper > div {
+      .logo-wrapper, .logo-wrapper img {
         height: 120px !important;
         opacity: 0.6;
       }
@@ -847,7 +866,7 @@
       .section-inner {
         padding: 0 28px;
       }
-      .nav-wrapper img, .nav-wrapper > div {
+      .logo-wrapper, .logo-wrapper img {
         height: 180px !important;
       }
     }
@@ -868,9 +887,9 @@
   <!-- ② Navigation -->
   <div class="nav-wrapper">
     <nav>
-      <div style="position:relative; display:inline-block; height:280px;">
-        <img src="images/logo-no-butterfly.png" alt="브랜드 로고" style="height:280px; width:auto; object-fit:contain; display:block;">
-        <img src="images/logo-butterfly.png" alt="" class="logo-butterfly" style="position:absolute; top:0; left:0; height:280px; width:auto; object-fit:contain;">
+      <div class="logo-wrapper">
+        <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
+        <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
       </div>
     </nav>
   </div>
