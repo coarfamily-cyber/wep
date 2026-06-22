@@ -1329,18 +1329,32 @@
       var activeBtn = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
       if (activeBtn) activeBtn.classList.add('active');
       wrapSubtextWords();
-      if (subtextAnimDone) colorSubtextBlue(0);
+      if (subtextAnimDone) {
+        if (isMobile) {
+          applyMobileSubtextDone();
+        } else {
+          colorSubtextBlue(0);
+        }
+      }
     }
 
     var subtextAnimDone = false;
+    var isMobile = window.innerWidth <= 768;
 
     function wrapSubtextWords() {
       var el = document.querySelector('.hero-subtext');
       if (!el) return;
       var text = el.textContent.trim();
-      el.innerHTML = text.split(/\s+/).map(function(w) {
-        return '<span class="hero-word">' + w + '</span>';
-      }).join(' ');
+      if (isMobile) {
+        el.style.opacity = '1';
+        el.innerHTML = text.split(/\s+/).map(function(w) {
+          return '<span class="hero-word" style="color:#2997ff; opacity:0; transition:opacity 0.55s ease;">' + w + '</span>';
+        }).join(' ');
+      } else {
+        el.innerHTML = text.split(/\s+/).map(function(w) {
+          return '<span class="hero-word">' + w + '</span>';
+        }).join(' ');
+      }
     }
 
     function colorSubtextBlue(delayPerWord) {
@@ -1352,13 +1366,37 @@
       });
     }
 
+    function revealSubtextMobile() {
+      var wordEls = document.querySelectorAll('.hero-word');
+      wordEls.forEach(function(w, i) {
+        setTimeout(function() { w.style.opacity = '1'; }, i * 95);
+      });
+      var allShown = wordEls.length * 95 + 700;
+      setTimeout(function() {
+        var el = document.querySelector('.hero-subtext');
+        if (el) { el.style.transition = 'opacity 2s ease'; el.style.opacity = '0.28'; }
+      }, allShown + 3000);
+    }
+
+    function applyMobileSubtextDone() {
+      var el = document.querySelector('.hero-subtext');
+      if (el) el.style.opacity = '0.28';
+      document.querySelectorAll('.hero-word').forEach(function(w) {
+        w.style.opacity = '1';
+      });
+    }
+
     wrapSubtextWords();
 
     var butterflyEl = document.querySelector('.logo-butterfly');
     if (butterflyEl) {
       butterflyEl.addEventListener('animationend', function() {
         subtextAnimDone = true;
-        colorSubtextBlue(85);
+        if (isMobile) {
+          revealSubtextMobile();
+        } else {
+          colorSubtextBlue(85);
+        }
       });
     }
   </script>
