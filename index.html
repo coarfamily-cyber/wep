@@ -108,8 +108,8 @@
         width: 36px; height: 36px;
         border-radius: 50%;
         background: transparent;
-        border: 2px solid #c8962a;
-        color: #c8962a;
+        border: 2px solid #333336;
+        color: #333336;
         font-size: 16px;
         font-weight: 700;
         cursor: pointer;
@@ -117,7 +117,7 @@
         line-height: 1;
         flex-shrink: 0;
       }
-      .catalog-arrow:hover { background: #c8962a; color: #111; transform: scale(2); }
+      .catalog-arrow:hover { background: #333336; color: #fff; transform: scale(2); }
       .catalog-arrow:disabled { opacity: 0.25; cursor: default; }
     }
     @media (min-width: 769px) {
@@ -492,6 +492,7 @@
       align-items: flex-end;
       justify-content: space-between;
       margin-bottom: 48px;
+      padding-left: 80px; /* 버튼(36px) + 간격(44px) */
     }
     .catalog-headline {
       font-family: var(--font-display);
@@ -515,7 +516,7 @@
     .catalog-carousel {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 44px;
     }
     /* catalog-arrow 모바일에서 숨김은 모바일 미디어쿼리 안에서 처리 */
     /* 카탈로그 아이템 - 데스크탑 4열 스크롤 */
