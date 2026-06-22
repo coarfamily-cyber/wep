@@ -379,10 +379,13 @@
       display: inline-flex;
       transform-origin: right center;
     }
-    /* 2페이지 learn more — 데스크탑만 반대 방향 */
+    /* 2페이지 learn more — 모바일: 오른쪽, 데스크탑: 왼쪽 */
+    .section-text-overlay:not(.section3-text) .inline-link {
+      transform-origin: left center;
+    }
     @media (min-width: 769px) {
       .section-text-overlay:not(.section3-text) .inline-link {
-        transform-origin: left center;
+        transform-origin: right center;
       }
     }
     .inline-link:hover {
