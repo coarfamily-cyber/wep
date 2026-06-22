@@ -515,9 +515,7 @@
     .catalog-carousel {
       position: relative;
     }
-    .catalog-arrow {
-      display: none; /* 모바일 기본: 숨김 */
-    }
+    /* catalog-arrow 모바일에서 숨김은 모바일 미디어쿼리 안에서 처리 */
     /* 카탈로그 아이템 - 데스크탑 4열 스크롤 */
     .catalog-items {
       display: flex;
@@ -916,6 +914,9 @@
       }
       .section-catalog {
         scroll-snap-align: none !important;
+      }
+      .catalog-arrow {
+        display: none;
       }
       .catalog-header {
         display: none;
