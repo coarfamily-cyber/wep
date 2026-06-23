@@ -1069,7 +1069,7 @@
       linear-gradient(to bottom, #111111 0%, rgba(17,17,17,0.5) 5%, transparent 14%, transparent 65%, rgba(17,17,17,0.5) 80%, rgba(17,17,17,0.85) 92%, #111111 100%);
       pointer-events:none;"></div>
     <!-- 사운드 버튼 -->
-    <div id="sound-btn" onclick="toggleSound()" style="position:absolute; z-index:10; bottom:24px; right:24px;
+    <div id="sound-btn" onclick="event.stopPropagation(); toggleSound();" style="position:absolute; z-index:10; bottom:24px; right:24px;
       width:36px; height:36px; border-radius:50%;
       background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.25);
       display:flex; align-items:center; justify-content:center;
@@ -1424,6 +1424,9 @@
       wordEls.forEach(function(w, i) {
         setTimeout(function() { w.style.opacity = '0.55'; }, i * 95);
       });
+      setTimeout(function() {
+        if (el) { el.style.transition = 'opacity 1.2s ease'; el.style.opacity = '0.3'; }
+      }, 1000);
     }
 
     function applyMobileSubtextDone() {
