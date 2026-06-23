@@ -792,13 +792,24 @@
       }
       /* 스크롤 시 이미지 확대/축소 방지 */
       .hero-product-img,
-      #section2-img,
       section img {
         transform: translateZ(0);
         -webkit-transform: translateZ(0);
         will-change: auto;
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
+      }
+
+      /* 모바일: 영상 확대 채우기 (B안) */
+      #section2-video {
+        width: 100% !important;
+        height: auto !important;
+        inset: unset !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-22%, -50%) scale(3.9) !important;
+        transform-origin: center center;
+        object-fit: unset !important;
       }
 
       /* Sections */
@@ -1024,8 +1035,11 @@
 
   <!-- ⑤ Full-bleed Image Section -->
   <section class="hero" style="position:relative; background:#111111; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start;">
-    <!-- 배경 이미지 -->
-    <img id="section2-img" src="images/section2.jpg" alt="제품 이미지" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:38% 45%;">
+    <!-- 배경 영상 (데스크탑: cover / 모바일: scale 확대) -->
+    <video id="section2-video" autoplay muted loop playsinline
+      style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center center;">
+      <source src="kling_no_watermark.mp4" type="video/mp4">
+    </video>
     <!-- 오버레이 -->
     <div style="position:absolute; inset:0; background:
       linear-gradient(to bottom, #111111 0%, rgba(17,17,17,0.5) 5%, transparent 14%, transparent 65%, rgba(17,17,17,0.5) 80%, rgba(17,17,17,0.85) 92%, #111111 100%);
