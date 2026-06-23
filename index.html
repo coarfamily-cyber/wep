@@ -996,6 +996,16 @@
   .hero {
     height: var(--fixed-vh, 100svh);
   }
+
+  /* 데스크탑: 사운드 버튼 왼쪽 상단 */
+  @media (min-width: 769px) {
+    #sound-btn {
+      top: 16px !important;
+      left: 16px !important;
+      bottom: auto !important;
+      right: auto !important;
+    }
+  }
 </style>
 <script>
   // 주소창 포함 초기 높이로 고정 → 주소창 사라져도 크기 안 변함
