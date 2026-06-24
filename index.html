@@ -794,7 +794,7 @@
       }
       .hero-product-img {
         object-fit: cover !important;
-        object-position: 60% top;
+        object-position: 60% 30%;
       }
       /* 스크롤 시 이미지 확대/축소 방지 */
       .hero-product-img,
@@ -1476,24 +1476,17 @@
     function applyMobileSubtextDone() {
       var el = document.querySelector('.hero-subtext');
       if (el) el.style.opacity = '0.28';
-      document.querySelectorAll('.hero-word').forEach(function(w) {
-        w.style.opacity = '1';
-      });
+      document.querySelectorAll('.hero-word').forEach(function(w) { w.style.opacity = '1'; });
     }
 
     wrapSubtextWords();
-
-    if (isMobile) {
-      revealSubtextMobile();
-    }
+    if (isMobile) { revealSubtextMobile(); }
 
     var butterflyEl = document.querySelector('.logo-butterfly');
     if (butterflyEl) {
       butterflyEl.addEventListener('animationend', function() {
         subtextAnimDone = true;
-        if (!isMobile) {
-          colorSubtextBlue(85);
-        }
+        if (!isMobile) { colorSubtextBlue(85); }
       });
     }
   </script>
@@ -1522,6 +1515,11 @@
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/wep/sw.js');
+    }
+  </script>
+</body>
+</html>
+sw.js');
     }
   </script>
 </body>
