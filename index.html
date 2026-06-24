@@ -266,7 +266,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      object-position: 60% 30%
+      object-position: center top;
     }
     .hero-overlay {
       position: absolute;
@@ -794,7 +794,7 @@
       }
       .hero-product-img {
         object-fit: cover !important;
-        object-position: 60% 30%;
+        object-position: center center;
       }
       /* 스크롤 시 이미지 확대/축소 방지 */
       .hero-product-img,
@@ -1515,11 +1515,6 @@
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/wep/sw.js');
-    }
-  </script>
-</body>
-</html>
-sw.js');
     }
   </script>
 </body>
