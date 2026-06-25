@@ -861,6 +861,39 @@
       transition: border-color 0.2s;
     }
     .add-modal-cancel:hover { border-color: var(--color-silver-mist); }
+    /* 이미지 업로드 영역 */
+    .img-upload-area {
+      width: 100%;
+      height: 160px;
+      background: #2c2c2e;
+      border: 1.5px dashed #3a3a3c;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      overflow: hidden;
+      position: relative;
+    }
+    .img-upload-area:hover,
+    .img-upload-area.drag-over { border-color: var(--color-halo-blue); background: #232325; }
+    .img-upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #636366;
+      font-family: var(--font-text);
+      font-size: 13px;
+      pointer-events: none;
+      text-align: center;
+    }
+    .img-upload-placeholder-icon { font-size: 28px; }
+    #imgPreview {
+      width: 100%; height: 100%; object-fit: cover;
+      display: none;
+    }
     /* 저장된 커스텀 카드 삭제 버튼 */
     /* custom-items wrapper: 데스크탑에서 flex 흐름에 투명하게 참여 */
     #custom-items { display: contents; }
@@ -1491,7 +1524,20 @@
   <div class="add-modal-overlay" id="addModal">
     <div class="add-modal">
       <div class="add-modal-title">새 제품 추가</div>
-      <input id="add-img"   type="text" placeholder="이미지 URL (예: images/xxx.jpg)">
+      <!-- 이미지 업로드 -->
+      <div class="img-upload-area" id="imgUploadArea"
+        onclick="document.getElementById('add-img-file').click()"
+        ondragover="event.preventDefault();this.classList.add('drag-over')"
+        ondragleave="this.classList.remove('drag-over')"
+        ondrop="event.preventDefault();this.classList.remove('drag-over');handleImgSelect(event.dataTransfer.files[0])">
+        <input type="file" id="add-img-file" accept="image/*" style="display:none"
+          onchange="handleImgSelect(this.files[0])">
+        <div class="img-upload-placeholder" id="imgUploadPlaceholder">
+          <span class="img-upload-placeholder-icon">🖼️</span>
+          <span>클릭 또는 드래그해서 이미지 업로드</span>
+        </div>
+        <img id="imgPreview" alt="미리보기">
+      </div>
       <input id="add-name"  type="text" placeholder="제품명 *">
       <input id="add-desc"  type="text" placeholder="설명 (예: Moisturizing · Glow)">
       <input id="add-price" type="text" placeholder="가격 (예: $12.99)">
@@ -1613,14 +1659,46 @@
     });
 
     /* ── 제품 추가 기능 ── */
+    var addImgData = ''; // 선택된 이미지 base64 저장
+
+    function handleImgSelect(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var MAX = 900;
+          var w = img.width, h = img.height;
+          if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
+          else        { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          addImgData = canvas.toDataURL('image/jpeg', 0.82);
+          var preview = document.getElementById('imgPreview');
+          preview.src = addImgData;
+          preview.style.display = 'block';
+          document.getElementById('imgUploadPlaceholder').style.display = 'none';
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function openAddModal() {
       document.getElementById('addModal').classList.add('open');
     }
     function closeAddModal() {
       document.getElementById('addModal').classList.remove('open');
-      ['add-img','add-name','add-desc','add-price','add-link'].forEach(function(id){
+      ['add-name','add-desc','add-price','add-link'].forEach(function(id){
         document.getElementById(id).value = '';
       });
+      // 이미지 초기화
+      addImgData = '';
+      document.getElementById('add-img-file').value = '';
+      document.getElementById('imgPreview').style.display = 'none';
+      document.getElementById('imgPreview').src = '';
+      document.getElementById('imgUploadPlaceholder').style.display = 'flex';
     }
     // 모달 바깥 클릭 시 닫기
     document.getElementById('addModal').addEventListener('click', function(e){
@@ -1632,7 +1710,7 @@
       if (!name) { alert('제품명을 입력해주세요.'); return; }
       var product = {
         id:    Date.now(),
-        img:   document.getElementById('add-img').value.trim(),
+        img:   addImgData,
         name:  name,
         desc:  document.getElementById('add-desc').value.trim(),
         price: document.getElementById('add-price').value.trim(),
