@@ -861,6 +861,8 @@
     }
     .add-modal-cancel:hover { border-color: var(--color-silver-mist); }
     /* 저장된 커스텀 카드 삭제 버튼 */
+    /* custom-items wrapper: 데스크탑에서 flex 흐름에 투명하게 참여 */
+    #custom-items { display: contents; }
     .catalog-item-custom {
       position: relative;
     }
@@ -1118,6 +1120,26 @@
       }
       .catalog-row::-webkit-scrollbar { display: none; }
       .catalog-row .catalog-item {
+        flex: 0 0 calc(50% - 4px);
+        scroll-snap-align: start;
+      }
+      /* 모바일: 추가 카드·커스텀 카드도 catalog-row처럼 가로 스크롤 행으로 */
+      .catalog-item-add {
+        flex: 0 0 calc(50% - 4px);
+        scroll-snap-align: start;
+        min-height: 200px;
+      }
+      #custom-items {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+      #custom-items::-webkit-scrollbar { display: none; }
+      #custom-items .catalog-item {
         flex: 0 0 calc(50% - 4px);
         scroll-snap-align: start;
       }
