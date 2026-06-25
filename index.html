@@ -648,6 +648,139 @@
       color: var(--color-frost-white);
     }
 
+    /* ─── 제품 추가 카드 & 모달 ──────────────────────────────── */
+    .catalog-item-add {
+      flex: 0 0 calc(25% - 9px);
+      background: var(--color-graphite);
+      border-radius: var(--radius-cards);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      cursor: pointer;
+      border: 2px dashed var(--color-smoke);
+      transition: border-color 0.2s, transform 0.25s ease;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .catalog-item-add:hover {
+      border-color: var(--color-silver-mist);
+      transform: scale(1.015);
+    }
+    .catalog-item-add-icon {
+      font-size: 36px;
+      color: var(--color-platinum);
+      line-height: 1;
+    }
+    .catalog-item-add-label {
+      font-family: var(--font-text);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-platinum);
+      letter-spacing: -0.1px;
+    }
+    /* 모달 오버레이 */
+    .add-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+    }
+    .add-modal-overlay.open { display: flex; }
+    .add-modal {
+      background: #1c1c1e;
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      width: 92%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .add-modal-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-frost-white);
+      margin-bottom: 4px;
+    }
+    .add-modal input {
+      width: 100%;
+      background: #2c2c2e;
+      border: 1.5px solid #3a3a3c;
+      border-radius: 10px;
+      color: var(--color-frost-white);
+      font-family: var(--font-text);
+      font-size: 14px;
+      padding: 11px 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .add-modal input::placeholder { color: #636366; }
+    .add-modal input:focus { border-color: var(--color-halo-blue); }
+    .add-modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .add-modal-save {
+      flex: 1;
+      background: var(--color-halo-blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .add-modal-save:hover { opacity: 0.85; }
+    .add-modal-cancel {
+      flex: 1;
+      background: #2c2c2e;
+      color: var(--color-platinum);
+      border: 1.5px solid #3a3a3c;
+      border-radius: 10px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .add-modal-cancel:hover { border-color: var(--color-silver-mist); }
+    /* 저장된 커스텀 카드 삭제 버튼 */
+    .catalog-item-custom {
+      position: relative;
+    }
+    .catalog-item-delete {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      background: rgba(0,0,0,0.55);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .catalog-item-delete:hover { background: rgba(255,59,48,0.8); }
+
     /* ─── Divider Section Dark → Light ─────────────────────── */
     .section-strip {
       background: var(--color-pure-black);
@@ -1195,11 +1328,36 @@
           </a>
         </div>
 
+          <!-- + 제품 추가 카드 -->
+          <div class="catalog-item-add" onclick="openAddModal()">
+            <div class="catalog-item-add-icon">+</div>
+            <div class="catalog-item-add-label">제품 추가</div>
+          </div>
+
+          <!-- 저장된 커스텀 제품들 -->
+          <div id="custom-items"></div>
+
         </div><!-- /.catalog-items -->
         <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
       </div><!-- /.catalog-carousel -->
     </div>
   </section>
+
+  <!-- 제품 추가 모달 -->
+  <div class="add-modal-overlay" id="addModal">
+    <div class="add-modal">
+      <div class="add-modal-title">새 제품 추가</div>
+      <input id="add-img"   type="text" placeholder="이미지 URL (예: images/xxx.jpg)">
+      <input id="add-name"  type="text" placeholder="제품명 *">
+      <input id="add-desc"  type="text" placeholder="설명 (예: Moisturizing · Glow)">
+      <input id="add-price" type="text" placeholder="가격 (예: $12.99)">
+      <input id="add-link"  type="text" placeholder="링크 URL (Etsy, BUYMA 등)">
+      <div class="add-modal-btns">
+        <button class="add-modal-save"   onclick="saveProduct()">저장</button>
+        <button class="add-modal-cancel" onclick="closeAddModal()">취소</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ⑧ CTA Strip -->
   <section class="section-strip">
@@ -1261,6 +1419,76 @@
       var itemW = track.querySelector('.catalog-item').offsetWidth + 12;
       track.scrollBy({ left: dir * itemW * 4, behavior: 'smooth' });
     }
+
+    /* ── 제품 추가 기능 ── */
+    function openAddModal() {
+      document.getElementById('addModal').classList.add('open');
+    }
+    function closeAddModal() {
+      document.getElementById('addModal').classList.remove('open');
+      ['add-img','add-name','add-desc','add-price','add-link'].forEach(function(id){
+        document.getElementById(id).value = '';
+      });
+    }
+    // 모달 바깥 클릭 시 닫기
+    document.getElementById('addModal').addEventListener('click', function(e){
+      if (e.target === this) closeAddModal();
+    });
+
+    function saveProduct() {
+      var name  = document.getElementById('add-name').value.trim();
+      if (!name) { alert('제품명을 입력해주세요.'); return; }
+      var product = {
+        id:    Date.now(),
+        img:   document.getElementById('add-img').value.trim(),
+        name:  name,
+        desc:  document.getElementById('add-desc').value.trim(),
+        price: document.getElementById('add-price').value.trim(),
+        link:  document.getElementById('add-link').value.trim()
+      };
+      var products = getProducts();
+      products.push(product);
+      localStorage.setItem('customProducts', JSON.stringify(products));
+      renderCustomProducts();
+      closeAddModal();
+    }
+
+    function deleteProduct(id) {
+      var products = getProducts().filter(function(p){ return p.id !== id; });
+      localStorage.setItem('customProducts', JSON.stringify(products));
+      renderCustomProducts();
+    }
+
+    function getProducts() {
+      try { return JSON.parse(localStorage.getItem('customProducts')) || []; }
+      catch(e) { return []; }
+    }
+
+    function renderCustomProducts() {
+      var container = document.getElementById('custom-items');
+      container.innerHTML = '';
+      getProducts().forEach(function(p) {
+        var imgHTML = p.img
+          ? '<img src="' + p.img + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;">'
+          : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#636366;font-size:13px;">이미지 없음</div>';
+        var outer = p.link ? 'a' : 'div';
+        var linkAttr = p.link ? 'href="' + p.link + '" target="_blank"' : '';
+        container.insertAdjacentHTML('beforeend',
+          '<' + outer + ' class="catalog-item catalog-item-custom" ' + linkAttr + ' style="text-decoration:none;position:relative;">' +
+            '<button class="catalog-item-delete" onclick="event.preventDefault();event.stopPropagation();deleteProduct(' + p.id + ')">×</button>' +
+            '<div class="catalog-item-image">' + imgHTML + '</div>' +
+            '<div class="catalog-item-info">' +
+              '<div class="catalog-item-name">' + p.name + '</div>' +
+              (p.desc  ? '<div class="catalog-item-desc">'  + p.desc  + '</div>' : '') +
+              (p.price ? '<div class="catalog-item-price">' + p.price + '</div>' : '') +
+            '</div>' +
+          '</' + outer + '>'
+        );
+      });
+    }
+
+    // 페이지 로드 시 저장된 제품 렌더링
+    renderCustomProducts();
   </script>
   <script>
     var i18nData = {
