@@ -1902,6 +1902,20 @@
       track.addEventListener('scroll', updateActive, { passive: true });
       // 제품 추가/삭제 후 도트 재생성
       window._rebuildCatalogDots = buildDots;
+
+      // 카탈로그 섹션 진입 시 첫 번째 카드로 초기화
+      var catalogSection = document.getElementById('catalog');
+      if (catalogSection && 'IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              track.scrollLeft = 0;
+              updateActive();
+            }
+          });
+        }, { threshold: 0.1 });
+        observer.observe(catalogSection);
+      }
     }
 
     // 페이지 로드 시 Firebase에서 제품 불러오기
