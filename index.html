@@ -622,11 +622,11 @@
     }
     .catalog-item-price {
       font-family: var(--font-display);
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 600;
       color: var(--color-frost-white);
       letter-spacing: -0.24px;
-      font-feature-settings: "numr";
+      margin-top: 8px;
       white-space: nowrap;
     }
     .btn-ghost {
@@ -920,6 +920,25 @@
       transition: background 0.2s;
     }
     .catalog-item-delete:hover { background: rgba(255,59,48,0.8); }
+    .catalog-item-edit {
+      position: absolute;
+      top: 10px;
+      right: 44px;
+      z-index: 10;
+      background: rgba(0,0,0,0.55);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .catalog-item-edit:hover { background: rgba(41,151,255,0.8); }
 
     /* ─── Divider Section Dark → Light ─────────────────────── */
     .section-strip {
@@ -1509,7 +1528,7 @@
   <!-- 제품 추가 모달 -->
   <div class="add-modal-overlay" id="addModal">
     <div class="add-modal">
-      <div class="add-modal-title">새 제품 추가</div>
+      <div class="add-modal-title" id="add-modal-title">새 제품 추가</div>
       <!-- 이미지 업로드 -->
       <div class="img-upload-area" id="imgUploadArea"
         onclick="document.getElementById('add-img-file').click()"
@@ -1606,7 +1625,7 @@
       document.getElementById('addProductCard').style.display = on ? 'flex' : 'none';
       document.getElementById('adminBadge').style.display = on ? 'block' : 'none';
       // 삭제 버튼 표시/숨김
-      document.querySelectorAll('.catalog-item-delete').forEach(function(btn){
+      document.querySelectorAll('.catalog-item-delete, .catalog-item-edit').forEach(function(btn){
         btn.style.display = on ? 'flex' : 'none';
       });
     }
@@ -1645,7 +1664,8 @@
     });
 
     /* ── 제품 추가 기능 ── */
-    var addImgData = ''; // 선택된 이미지 base64 저장
+    var addImgData = '';   // 선택된 이미지 base64 저장
+    var editingId  = null; // 수정 중인 제품 id (null=신규)
 
     function handleImgSelect(file) {
       if (!file || !file.type.startsWith('image/')) return;
@@ -1685,39 +1705,100 @@
       document.getElementById('imgPreview').style.display = 'none';
       document.getElementById('imgPreview').src = '';
       document.getElementById('imgUploadPlaceholder').style.display = 'flex';
+      // 수정 모드 초기화
+      editingId = null;
+      document.getElementById('add-modal-title').textContent = '새 제품 추가';
     }
     // 모달 바깥 클릭 시 닫기
     document.getElementById('addModal').addEventListener('click', function(e){
       if (e.target === this) closeAddModal();
     });
 
+    function openEditModal(id) {
+      var p = getProducts().find(function(x){ return x.id === id; });
+      if (!p) return;
+      editingId = id;
+      document.getElementById('add-modal-title').textContent = '제품 수정';
+      document.getElementById('add-name').value  = p.name  || '';
+      document.getElementById('add-desc').value  = p.desc  || '';
+      document.getElementById('add-price').value = p.price || '';
+      document.getElementById('add-link').value  = p.link  || '';
+      if (p.img) {
+        addImgData = p.img;
+        document.getElementById('imgPreview').src = p.img;
+        document.getElementById('imgPreview').style.display = 'block';
+        document.getElementById('imgUploadPlaceholder').style.display = 'none';
+      }
+      document.getElementById('addModal').classList.add('open');
+    }
+
+    /* ── Firebase 동기화 ── */
+    var FIREBASE_URL = 'https://coarfamily-e4960-default-rtdb.firebaseio.com';
+    var _products = []; // 인메모리 캐시
+
+    function getProducts() { return _products; }
+
+    function saveProducts(arr) {
+      _products = arr;
+      fetch(FIREBASE_URL + '/products.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(arr)
+      }).catch(function() {
+        localStorage.setItem('customProducts', JSON.stringify(arr));
+      });
+    }
+
+    function loadProducts() {
+      fetch(FIREBASE_URL + '/products.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          _products = Array.isArray(data) ? data : [];
+          renderCustomProducts();
+          if (isAdmin()) setAdminUI(true);
+        })
+        .catch(function() {
+          try { _products = JSON.parse(localStorage.getItem('customProducts')) || []; }
+          catch(e) { _products = []; }
+          renderCustomProducts();
+          if (isAdmin()) setAdminUI(true);
+        });
+    }
+
     function saveProduct() {
-      var name  = document.getElementById('add-name').value.trim();
+      var name = document.getElementById('add-name').value.trim();
       if (!name) { alert('제품명을 입력해주세요.'); return; }
-      var product = {
-        id:    Date.now(),
-        img:   addImgData,
-        name:  name,
-        desc:  document.getElementById('add-desc').value.trim(),
-        price: document.getElementById('add-price').value.trim(),
-        link:  document.getElementById('add-link').value.trim()
-      };
-      var products = getProducts();
-      products.unshift(product);
-      localStorage.setItem('customProducts', JSON.stringify(products));
+      var products = getProducts().slice();
+      if (editingId !== null) {
+        products = products.map(function(p) {
+          return p.id === editingId ? {
+            id:    p.id,
+            img:   addImgData || p.img,
+            name:  name,
+            desc:  document.getElementById('add-desc').value.trim(),
+            price: document.getElementById('add-price').value.trim(),
+            link:  document.getElementById('add-link').value.trim()
+          } : p;
+        });
+      } else {
+        products.unshift({
+          id:    Date.now(),
+          img:   addImgData,
+          name:  name,
+          desc:  document.getElementById('add-desc').value.trim(),
+          price: document.getElementById('add-price').value.trim(),
+          link:  document.getElementById('add-link').value.trim()
+        });
+      }
+      saveProducts(products);
       renderCustomProducts();
       closeAddModal();
     }
 
     function deleteProduct(id) {
-      var products = getProducts().filter(function(p){ return p.id !== id; });
-      localStorage.setItem('customProducts', JSON.stringify(products));
+      var products = getProducts().filter(function(p) { return p.id !== id; });
+      saveProducts(products);
       renderCustomProducts();
-    }
-
-    function getProducts() {
-      try { return JSON.parse(localStorage.getItem('customProducts')) || []; }
-      catch(e) { return []; }
     }
 
     function renderCustomProducts() {
@@ -1732,6 +1813,7 @@
         var delDisplay = isAdmin() ? 'flex' : 'none';
         container.insertAdjacentHTML('beforeend',
           '<' + outer + ' class="catalog-item catalog-item-custom" ' + linkAttr + ' style="text-decoration:none;position:relative;">' +
+            '<button class="catalog-item-edit"   style="display:' + delDisplay + '" onclick="event.preventDefault();event.stopPropagation();openEditModal(' + p.id + ')">✏️</button>' +
             '<button class="catalog-item-delete" style="display:' + delDisplay + '" onclick="event.preventDefault();event.stopPropagation();deleteProduct(' + p.id + ')">×</button>' +
             '<div class="catalog-item-image">' + imgHTML + '</div>' +
             '<div class="catalog-item-info">' +
@@ -1744,9 +1826,8 @@
       });
     }
 
-    // 페이지 로드 시 저장된 제품 렌더링 + 로그인 상태 복원
-    renderCustomProducts();
-    if (isAdmin()) setAdminUI(true);
+    // 페이지 로드 시 Firebase에서 제품 불러오기
+    loadProducts();
   </script>
   <script>
     var i18nData = {
