@@ -551,6 +551,30 @@
       align-items: center;
       gap: 44px;
     }
+    /* 모바일 도트 인디케이터 */
+    .catalog-dots {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .catalog-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 14px;
+      }
+      .catalog-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        transition: background 0.25s, transform 0.25s;
+        flex-shrink: 0;
+      }
+      .catalog-dot.active {
+        background: var(--color-halo-blue);
+        transform: scale(1.3);
+      }
+    }
     /* catalog-arrow 모바일에서 숨김은 모바일 미디어쿼리 안에서 처리 */
     /* 카탈로그 아이템 - 데스크탑 4열 스크롤 */
     .catalog-items {
@@ -621,12 +645,12 @@
       justify-content: space-between;
     }
     .catalog-item-price {
-      font-family: var(--font-display);
-      font-size: 17px;
+      font-family: var(--font-text);
+      font-size: 14px;
       font-weight: 600;
       color: var(--color-frost-white);
-      letter-spacing: -0.24px;
-      margin-top: 8px;
+      letter-spacing: -0.2px;
+      margin-top: 6px;
       white-space: nowrap;
     }
     .btn-ghost {
@@ -1186,6 +1210,9 @@
       .catalog-headline {
         font-size: 24px;
       }
+      .catalog-item-info {
+        padding: 12px 14px 14px;
+      }
 
       /* Strip */
       .strip-headline {
@@ -1505,6 +1532,7 @@
         </div><!-- /.catalog-items -->
         <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
       </div><!-- /.catalog-carousel -->
+      <div class="catalog-dots" id="catalogDots"></div>
     </div>
   </section>
 
@@ -1754,27 +1782,27 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (Array.isArray(data) && data.length > 0) {
-            // Firebase에 데이터 있음
             _products = data;
             renderCustomProducts();
             if (isAdmin()) setAdminUI(true);
           } else {
-            // Firebase 비어있음 → localStorage 데이터 있으면 Firebase로 이전
             var local = [];
             try { local = JSON.parse(localStorage.getItem('customProducts')) || []; } catch(e) {}
             if (local.length > 0) {
               _products = local;
-              saveProducts(local); // Firebase에 업로드
+              saveProducts(local);
             }
             renderCustomProducts();
             if (isAdmin()) setAdminUI(true);
           }
+          initCatalogDots();
         })
         .catch(function() {
           try { _products = JSON.parse(localStorage.getItem('customProducts')) || []; }
           catch(e) { _products = []; }
           renderCustomProducts();
           if (isAdmin()) setAdminUI(true);
+          initCatalogDots();
         });
     }
 
@@ -1832,11 +1860,47 @@
             '<div class="catalog-item-info">' +
               '<div class="catalog-item-name">' + p.name + '</div>' +
               (p.desc  ? '<div class="catalog-item-desc">'  + p.desc  + '</div>' : '') +
-              (p.price ? '<div class="catalog-item-price">' + p.price + '</div>' : '') +
             '</div>' +
           '</' + outer + '>'
         );
       });
+    }
+
+    // 모바일 도트 인디케이터
+    function initCatalogDots() {
+      if (window.innerWidth > 768) return;
+      var track = document.querySelector('.catalog-items');
+      var dotsEl = document.getElementById('catalogDots');
+      if (!track || !dotsEl) return;
+
+      function buildDots() {
+        var items = track.querySelectorAll('.catalog-item, .catalog-item-add');
+        var visible = [];
+        items.forEach(function(el) {
+          if (el.style.display !== 'none') visible.push(el);
+        });
+        var count = visible.length;
+        dotsEl.innerHTML = '';
+        for (var i = 0; i < count; i++) {
+          var d = document.createElement('span');
+          d.className = 'catalog-dot' + (i === 0 ? ' active' : '');
+          dotsEl.appendChild(d);
+        }
+      }
+
+      function updateActive() {
+        var dots = dotsEl.querySelectorAll('.catalog-dot');
+        if (!dots.length) return;
+        var itemW = track.clientWidth * 0.5;
+        var idx = Math.round(track.scrollLeft / itemW);
+        idx = Math.max(0, Math.min(idx, dots.length - 1));
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+      }
+
+      buildDots();
+      track.addEventListener('scroll', updateActive, { passive: true });
+      // 제품 추가/삭제 후 도트 재생성
+      window._rebuildCatalogDots = buildDots;
     }
 
     // 페이지 로드 시 Firebase에서 제품 불러오기
