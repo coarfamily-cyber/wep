@@ -1129,6 +1129,7 @@
         flex: 0 0 calc(50% - 4px);
         scroll-snap-align: start;
         min-height: 200px;
+        order: 999;
       }
       #custom-items {
         display: flex;
@@ -1396,6 +1397,12 @@
         <button class="catalog-arrow catalog-arrow-left" onclick="catalogSlide(-1)">&#10094;</button>
         <div class="catalog-items">
 
+          <!-- + 제품 추가 카드 (로그인 시에만 표시) -->
+          <div class="catalog-item-add" id="addProductCard" onclick="openAddModal()" style="display:none;">
+            <div class="catalog-item-add-icon">+</div>
+            <div class="catalog-item-add-label">제품 추가</div>
+          </div>
+
         <!-- Row 1 -->
         <div class="catalog-row">
           <!-- Item 1 -->
@@ -1453,12 +1460,6 @@
             </div>
           </a>
         </div>
-
-          <!-- + 제품 추가 카드 (로그인 시에만 표시) -->
-          <div class="catalog-item-add" id="addProductCard" onclick="openAddModal()" style="display:none;">
-            <div class="catalog-item-add-icon">+</div>
-            <div class="catalog-item-add-label">제품 추가</div>
-          </div>
 
           <!-- 저장된 커스텀 제품들 -->
           <div id="custom-items"></div>

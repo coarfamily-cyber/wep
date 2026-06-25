@@ -1,4 +1,4 @@
-const CACHE = 'coar-v6';
+const CACHE = 'coar-v7';
 const ASSETS = [
   '/wep/',
   '/wep/index.html',
