@@ -525,7 +525,8 @@
       align-items: flex-end;
       justify-content: space-between;
       margin-bottom: 48px;
-      padding-left: 80px; /* 버튼(36px) + 간격(44px) */
+      padding-left: 80px;  /* 버튼(36px) + 간격(44px) */
+      padding-right: 80px; /* 오른쪽 화살표 영역만큼 맞춤 */
     }
     .catalog-headline {
       font-family: var(--font-display);
@@ -887,6 +888,26 @@
       transition: border-color 0.2s;
     }
     .add-modal-cancel:hover { border-color: var(--color-silver-mist); }
+    .modal-lang-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .modal-lang-tab {
+      background: #2c2c2e;
+      border: 1px solid #3a3a3c;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 12px;
+      cursor: pointer;
+      opacity: 0.45;
+      transition: opacity 0.15s, border-color 0.15s;
+    }
+    .modal-lang-tab.active {
+      opacity: 1;
+      border-color: var(--color-halo-blue);
+    }
     /* 이미지 업로드 영역 */
     .img-upload-area {
       width: 100%;
@@ -1313,12 +1334,18 @@
       }
       .catalog-header {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: 16px;
         padding-left: 0;
       }
       .catalog-headline {
         font-size: 16px;
       }
+      .catalog-header .lang-btn .fi { font-size: 18px; }
+      .catalog-header .lang-btn { opacity: 0.3; }
+      .catalog-header .lang-btn.active { opacity: 0.5; }
+      .catalog-header .lang-btn:hover { opacity: 0.7; }
 
     }
 
@@ -1584,6 +1611,12 @@
         </div>
         <img id="imgPreview" alt="미리보기">
       </div>
+      <div class="modal-lang-tabs">
+        <button class="modal-lang-tab active" onclick="switchModalLang('en')">🇺🇸 EN</button>
+        <button class="modal-lang-tab" onclick="switchModalLang('ja')">🇯🇵 JP</button>
+        <button class="modal-lang-tab" onclick="switchModalLang('zh')">🇨🇳 ZH</button>
+        <button class="modal-lang-tab" onclick="switchModalLang('es')">🇪🇸 ES</button>
+      </div>
       <input id="add-name"  type="text" placeholder="제품명 *">
       <input id="add-desc"  type="text" placeholder="설명 (예: Moisturizing · Glow)">
       <input id="add-price" type="text" placeholder="가격 (예: $12.99)">
@@ -1732,7 +1765,30 @@
       reader.readAsDataURL(file);
     }
 
+    var _modalLangData = {};
+    var _modalActiveLang = 'en';
+
+    function switchModalLang(lang) {
+      // 현재 언어 값 저장
+      _modalLangData[_modalActiveLang] = {
+        name: document.getElementById('add-name').value,
+        desc: document.getElementById('add-desc').value
+      };
+      _modalActiveLang = lang;
+      // 새 언어 값 로드
+      var d = _modalLangData[lang] || { name: '', desc: '' };
+      document.getElementById('add-name').value = d.name;
+      document.getElementById('add-desc').value = d.desc;
+      // 탭 활성화
+      document.querySelectorAll('.modal-lang-tab').forEach(function(t) {
+        t.classList.toggle('active', t.textContent.toLowerCase().includes(lang === 'ja' ? 'jp' : lang));
+      });
+    }
+
     function openAddModal() {
+      _modalLangData = {};
+      _modalActiveLang = 'en';
+      document.querySelectorAll('.modal-lang-tab').forEach(function(t, i) { t.classList.toggle('active', i === 0); });
       document.getElementById('addModal').classList.add('open');
     }
     function closeAddModal() {
@@ -1748,6 +1804,8 @@
       document.getElementById('imgUploadPlaceholder').style.display = 'flex';
       // 수정 모드 초기화
       editingId = null;
+      _modalLangData = {};
+      _modalActiveLang = 'en';
       document.getElementById('add-modal-title').textContent = '새 제품 추가';
     }
     // 모달 바깥 클릭 시 닫기
@@ -1759,9 +1817,18 @@
       var p = getProducts().find(function(x){ return x.id === id; });
       if (!p) return;
       editingId = id;
+      // 언어별 데이터 복원
+      _modalLangData = {
+        en: { name: p.name_en || '', desc: p.desc_en || '' },
+        ja: { name: p.name_ja || '', desc: p.desc_ja || '' },
+        zh: { name: p.name_zh || '', desc: p.desc_zh || '' },
+        es: { name: p.name_es || '', desc: p.desc_es || '' }
+      };
+      _modalActiveLang = 'en';
+      document.querySelectorAll('.modal-lang-tab').forEach(function(t, i) { t.classList.toggle('active', i === 0); });
       document.getElementById('add-modal-title').textContent = '제품 수정';
-      document.getElementById('add-name').value  = p.name  || '';
-      document.getElementById('add-desc').value  = p.desc  || '';
+      document.getElementById('add-name').value  = _modalLangData.en.name;
+      document.getElementById('add-desc').value  = _modalLangData.en.desc;
       document.getElementById('add-price').value = p.price || '';
       document.getElementById('add-link').value  = p.link  || '';
       if (p.img) {
@@ -1820,29 +1887,44 @@
     }
 
     function saveProduct() {
-      var name = document.getElementById('add-name').value.trim();
-      if (!name) { alert('제품명을 입력해주세요.'); return; }
+      // 현재 탭 값 저장
+      _modalLangData[_modalActiveLang] = {
+        name: document.getElementById('add-name').value.trim(),
+        desc: document.getElementById('add-desc').value.trim()
+      };
+      // EN이 기본 제품명 (없으면 다른 언어 중 첫 번째)
+      var langs = ['en','ja','zh','es'];
+      var defaultName = '';
+      for (var i = 0; i < langs.length; i++) {
+        if (_modalLangData[langs[i]] && _modalLangData[langs[i]].name) {
+          defaultName = _modalLangData[langs[i]].name; break;
+        }
+      }
+      if (!defaultName) { alert('제품명을 입력해주세요.'); return; }
+
+      function langField(lang, field) {
+        return (_modalLangData[lang] && _modalLangData[lang][field]) || '';
+      }
+      var productData = {
+        img:     addImgData,
+        name_en: langField('en','name'), desc_en: langField('en','desc'),
+        name_ja: langField('ja','name'), desc_ja: langField('ja','desc'),
+        name_zh: langField('zh','name'), desc_zh: langField('zh','desc'),
+        name_es: langField('es','name'), desc_es: langField('es','desc'),
+        // 기존 호환성: name/desc = EN 값 (fallback)
+        name:    langField('en','name') || defaultName,
+        desc:    langField('en','desc'),
+        price:   document.getElementById('add-price').value.trim(),
+        link:    document.getElementById('add-link').value.trim()
+      };
+
       var products = getProducts().slice();
       if (editingId !== null) {
         products = products.map(function(p) {
-          return p.id === editingId ? {
-            id:    p.id,
-            img:   addImgData || p.img,
-            name:  name,
-            desc:  document.getElementById('add-desc').value.trim(),
-            price: document.getElementById('add-price').value.trim(),
-            link:  document.getElementById('add-link').value.trim()
-          } : p;
+          return p.id === editingId ? Object.assign({ id: p.id, img: addImgData || p.img }, productData) : p;
         });
       } else {
-        products.unshift({
-          id:    Date.now(),
-          img:   addImgData,
-          name:  name,
-          desc:  document.getElementById('add-desc').value.trim(),
-          price: document.getElementById('add-price').value.trim(),
-          link:  document.getElementById('add-link').value.trim()
-        });
+        products.unshift(Object.assign({ id: Date.now() }, productData));
       }
       saveProducts(products);
       renderCustomProducts();
@@ -1856,11 +1938,14 @@
     }
 
     function renderCustomProducts() {
+      var lang = window._currentLang || 'en';
       var container = document.getElementById('custom-items');
       container.innerHTML = '';
       getProducts().forEach(function(p) {
+        var displayName = p['name_' + lang] || p.name || '';
+        var displayDesc = p['desc_' + lang] || p.desc || '';
         var imgHTML = p.img
-          ? '<img src="' + p.img + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;">'
+          ? '<img src="' + p.img + '" alt="' + displayName + '" style="width:100%;height:100%;object-fit:cover;">'
           : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#636366;font-size:13px;">이미지 없음</div>';
         var outer = p.link ? 'a' : 'div';
         var linkAttr = p.link ? 'href="' + p.link + '" target="_blank"' : '';
@@ -1871,8 +1956,8 @@
             '<button class="catalog-item-delete" style="display:' + delDisplay + '" onclick="event.preventDefault();event.stopPropagation();deleteProduct(' + p.id + ')">×</button>' +
             '<div class="catalog-item-image">' + imgHTML + '</div>' +
             '<div class="catalog-item-info">' +
-              '<div class="catalog-item-name">' + p.name + '</div>' +
-              (p.desc  ? '<div class="catalog-item-desc">'  + p.desc  + '</div>' : '') +
+              '<div class="catalog-item-name">' + displayName + '</div>' +
+              (displayDesc ? '<div class="catalog-item-desc">' + displayDesc + '</div>' : '') +
             '</div>' +
           '</' + outer + '>'
         );
@@ -2085,6 +2170,7 @@
     function setLang(lang) {
       var dict = i18nData[lang];
       if (!dict) return;
+      window._currentLang = lang;
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.getAttribute('data-i18n');
         if (dict[key] !== undefined) el.innerHTML = dict[key];
@@ -2094,6 +2180,7 @@
       });
       var activeBtn = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
       if (activeBtn) activeBtn.classList.add('active');
+      renderCustomProducts();
       wrapSubtextWords();
       if (subtextAnimDone) {
         if (isMobile) {
