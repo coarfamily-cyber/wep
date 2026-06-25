@@ -1753,9 +1753,22 @@
       fetch(FIREBASE_URL + '/products.json')
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          _products = Array.isArray(data) ? data : [];
-          renderCustomProducts();
-          if (isAdmin()) setAdminUI(true);
+          if (Array.isArray(data) && data.length > 0) {
+            // Firebase에 데이터 있음
+            _products = data;
+            renderCustomProducts();
+            if (isAdmin()) setAdminUI(true);
+          } else {
+            // Firebase 비어있음 → localStorage 데이터 있으면 Firebase로 이전
+            var local = [];
+            try { local = JSON.parse(localStorage.getItem('customProducts')) || []; } catch(e) {}
+            if (local.length > 0) {
+              _products = local;
+              saveProducts(local); // Firebase에 업로드
+            }
+            renderCustomProducts();
+            if (isAdmin()) setAdminUI(true);
+          }
         })
         .catch(function() {
           try { _products = JSON.parse(localStorage.getItem('customProducts')) || []; }
