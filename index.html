@@ -648,6 +648,109 @@
       color: var(--color-frost-white);
     }
 
+    /* ─── 로그인 모달 ───────────────────────────────────────── */
+    .login-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      z-index: 9100;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-modal-overlay.open { display: flex; }
+    .login-modal {
+      background: #1c1c1e;
+      border-radius: 20px;
+      padding: 32px 28px 28px;
+      width: 92%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .login-modal-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-frost-white);
+    }
+    .login-modal-sub {
+      font-family: var(--font-text);
+      font-size: 13px;
+      color: var(--color-platinum);
+      margin-top: -6px;
+    }
+    .login-modal input[type="password"] {
+      width: 100%;
+      background: #2c2c2e;
+      border: 1.5px solid #3a3a3c;
+      border-radius: 10px;
+      color: var(--color-frost-white);
+      font-family: var(--font-text);
+      font-size: 15px;
+      padding: 12px 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      letter-spacing: 4px;
+    }
+    .login-modal input[type="password"]::placeholder { letter-spacing: 0; color: #636366; }
+    .login-modal input[type="password"]:focus { border-color: var(--color-halo-blue); }
+    .login-error {
+      font-family: var(--font-text);
+      font-size: 13px;
+      color: #ff453a;
+      display: none;
+    }
+    .login-modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .login-submit {
+      flex: 1;
+      background: var(--color-halo-blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .login-submit:hover { opacity: 0.85; }
+    .login-cancel {
+      flex: 1;
+      background: #2c2c2e;
+      color: var(--color-platinum);
+      border: 1.5px solid #3a3a3c;
+      border-radius: 10px;
+      font-family: var(--font-text);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 12px;
+      cursor: pointer;
+    }
+    /* 로그인 상태 표시 */
+    .admin-badge {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(41,151,255,0.15);
+      border: 1px solid rgba(41,151,255,0.4);
+      color: var(--color-halo-blue);
+      font-family: var(--font-text);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 20px;
+      z-index: 8000;
+      cursor: pointer;
+    }
+
     /* ─── 제품 추가 카드 & 모달 ──────────────────────────────── */
     .catalog-item-add {
       flex: 0 0 calc(25% - 9px);
@@ -1188,7 +1291,7 @@
 
   <div class="nav-wrapper">
     <nav>
-      <div class="logo-wrapper">
+      <div class="logo-wrapper" onclick="logoClick()" style="cursor:pointer;">
         <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
         <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
       </div>
@@ -1328,8 +1431,8 @@
           </a>
         </div>
 
-          <!-- + 제품 추가 카드 -->
-          <div class="catalog-item-add" onclick="openAddModal()">
+          <!-- + 제품 추가 카드 (로그인 시에만 표시) -->
+          <div class="catalog-item-add" id="addProductCard" onclick="openAddModal()" style="display:none;">
             <div class="catalog-item-add-icon">+</div>
             <div class="catalog-item-add-label">제품 추가</div>
           </div>
@@ -1342,6 +1445,23 @@
       </div><!-- /.catalog-carousel -->
     </div>
   </section>
+
+  <!-- 로그인 모달 -->
+  <div class="login-modal-overlay" id="loginModal">
+    <div class="login-modal">
+      <div class="login-modal-title">관리자 로그인</div>
+      <div class="login-modal-sub">비밀번호를 입력하세요</div>
+      <input type="password" id="loginPw" placeholder="비밀번호" onkeydown="if(event.key==='Enter')submitLogin()">
+      <div class="login-error" id="loginError">비밀번호가 틀렸습니다</div>
+      <div class="login-modal-btns">
+        <button class="login-submit" onclick="submitLogin()">확인</button>
+        <button class="login-cancel" onclick="closeLoginModal()">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 로그인 상태 배지 -->
+  <div class="admin-badge" id="adminBadge" onclick="adminLogout()">🔐 관리자 · 로그아웃</div>
 
   <!-- 제품 추가 모달 -->
   <div class="add-modal-overlay" id="addModal">
@@ -1420,6 +1540,54 @@
       track.scrollBy({ left: dir * itemW * 4, behavior: 'smooth' });
     }
 
+    /* ── 로그인 기능 ── */
+    var PW_HASH = '830522'; // 비밀번호
+
+    function isAdmin() {
+      return sessionStorage.getItem('adminAuth') === '1';
+    }
+    function setAdminUI(on) {
+      document.getElementById('addProductCard').style.display = on ? 'flex' : 'none';
+      document.getElementById('adminBadge').style.display = on ? 'block' : 'none';
+      // 삭제 버튼 표시/숨김
+      document.querySelectorAll('.catalog-item-delete').forEach(function(btn){
+        btn.style.display = on ? 'flex' : 'none';
+      });
+    }
+    function logoClick() {
+      if (isAdmin()) {
+        // 이미 로그인 → 로그아웃 확인
+        if (confirm('로그아웃 하시겠어요?')) adminLogout();
+      } else {
+        document.getElementById('loginModal').classList.add('open');
+        setTimeout(function(){ document.getElementById('loginPw').focus(); }, 100);
+      }
+    }
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.remove('open');
+      document.getElementById('loginPw').value = '';
+      document.getElementById('loginError').style.display = 'none';
+    }
+    function submitLogin() {
+      var pw = document.getElementById('loginPw').value;
+      if (pw === PW_HASH) {
+        sessionStorage.setItem('adminAuth', '1');
+        setAdminUI(true);
+        closeLoginModal();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginPw').value = '';
+        document.getElementById('loginPw').focus();
+      }
+    }
+    function adminLogout() {
+      sessionStorage.removeItem('adminAuth');
+      setAdminUI(false);
+    }
+    document.getElementById('loginModal').addEventListener('click', function(e){
+      if (e.target === this) closeLoginModal();
+    });
+
     /* ── 제품 추가 기능 ── */
     function openAddModal() {
       document.getElementById('addModal').classList.add('open');
@@ -1473,9 +1641,10 @@
           : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#636366;font-size:13px;">이미지 없음</div>';
         var outer = p.link ? 'a' : 'div';
         var linkAttr = p.link ? 'href="' + p.link + '" target="_blank"' : '';
+        var delDisplay = isAdmin() ? 'flex' : 'none';
         container.insertAdjacentHTML('beforeend',
           '<' + outer + ' class="catalog-item catalog-item-custom" ' + linkAttr + ' style="text-decoration:none;position:relative;">' +
-            '<button class="catalog-item-delete" onclick="event.preventDefault();event.stopPropagation();deleteProduct(' + p.id + ')">×</button>' +
+            '<button class="catalog-item-delete" style="display:' + delDisplay + '" onclick="event.preventDefault();event.stopPropagation();deleteProduct(' + p.id + ')">×</button>' +
             '<div class="catalog-item-image">' + imgHTML + '</div>' +
             '<div class="catalog-item-info">' +
               '<div class="catalog-item-name">' + p.name + '</div>' +
@@ -1487,8 +1656,9 @@
       });
     }
 
-    // 페이지 로드 시 저장된 제품 렌더링
+    // 페이지 로드 시 저장된 제품 렌더링 + 로그인 상태 복원
     renderCustomProducts();
+    if (isAdmin()) setAdminUI(true);
   </script>
   <script>
     var i18nData = {
