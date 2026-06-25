@@ -1588,7 +1588,7 @@
     <div class="section-inner">
       <h2 class="strip-headline">Contact me for bulk orders</h2>
       <p class="strip-body">まとめ買いのご相談はE-mailへ</p>
-      <span class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px; cursor:default;"><span class="btn-origin-fill"></span><span class="btn-origin-label">E-mail</span></span>
+      <button onclick="showEmailToast()" class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px; border:none; cursor:pointer;"><span class="btn-origin-fill"></span><span class="btn-origin-label">E-mail</span></button>
     </div>
   </section>
 
@@ -2137,6 +2137,25 @@
   </script>
 
   <script>
+    function showEmailToast() {
+      navigator.clipboard.writeText('coar1004@naver.com').catch(function() {
+        var t = document.createElement('textarea');
+        t.value = 'coar1004@naver.com';
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+      });
+      var toast = document.getElementById('support-toast');
+      toast.style.display = 'block';
+      toast.style.opacity = '1';
+      setTimeout(function() {
+        toast.style.transition = 'opacity 0.5s';
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.style.display = 'none'; toast.style.transition = ''; toast.style.opacity = '1'; }, 500);
+      }, 3000);
+    }
+
     document.getElementById('support-btn').addEventListener('click', function(e) {
       e.preventDefault();
       navigator.clipboard.writeText('coar1004@naver.com').catch(function() {
