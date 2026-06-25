@@ -1137,13 +1137,8 @@
         aspect-ratio: 4 / 3;
       }
 
-      /* Catalog: 모바일 — 두 줄 독립 스크롤 */
+      /* Catalog: 모바일 — 1줄 가로 스크롤 */
       .catalog-items {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .catalog-row {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
@@ -1152,32 +1147,21 @@
         scrollbar-width: none;
         gap: 8px;
       }
-      .catalog-row::-webkit-scrollbar { display: none; }
-      .catalog-row .catalog-item {
-        flex: 0 0 calc(50% - 4px);
-        scroll-snap-align: start;
+      .catalog-items::-webkit-scrollbar { display: none; }
+      .catalog-row {
+        display: contents;
       }
-      /* 모바일: 추가 카드·커스텀 카드도 catalog-row처럼 가로 스크롤 행으로 */
+      .catalog-row .catalog-item,
+      #custom-items .catalog-item,
       .catalog-item-add {
         flex: 0 0 calc(50% - 4px);
         scroll-snap-align: start;
         min-height: 200px;
-        order: 999;
       }
+      .catalog-item-add { order: 0; }
       #custom-items {
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 8px;
-        order: 999;
-      }
-      #custom-items::-webkit-scrollbar { display: none; }
-      #custom-items .catalog-item {
-        flex: 0 0 calc(50% - 4px);
-        scroll-snap-align: start;
+        display: contents;
+        order: 0;
       }
       .catalog-headline {
         font-size: 24px;
