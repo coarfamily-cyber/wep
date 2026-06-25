@@ -1172,6 +1172,7 @@
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         gap: 8px;
+        order: 999;
       }
       #custom-items::-webkit-scrollbar { display: none; }
       #custom-items .catalog-item {
@@ -1436,6 +1437,9 @@
             <div class="catalog-item-add-label">제품 추가</div>
           </div>
 
+          <!-- 저장된 커스텀 제품들 (+ 바로 뒤 = 맨 앞) -->
+          <div id="custom-items"></div>
+
         <!-- Row 1 -->
         <div class="catalog-row">
           <!-- Item 1 -->
@@ -1493,9 +1497,6 @@
             </div>
           </a>
         </div>
-
-          <!-- 저장된 커스텀 제품들 -->
-          <div id="custom-items"></div>
 
         </div><!-- /.catalog-items -->
         <button class="catalog-arrow catalog-arrow-right" onclick="catalogSlide(1)">&#10095;</button>
@@ -1717,7 +1718,7 @@
         link:  document.getElementById('add-link').value.trim()
       };
       var products = getProducts();
-      products.push(product);
+      products.unshift(product);
       localStorage.setItem('customProducts', JSON.stringify(products));
       renderCustomProducts();
       closeAddModal();
