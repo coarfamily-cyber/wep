@@ -2292,6 +2292,16 @@
     wrapSubtextWords();
     if (isMobile) { revealSubtextMobile(); }
 
+    // 1초 후 subtext 선명도 0.8로 전환
+    (function() {
+      var st = document.querySelector('.hero-subtext');
+      if (!st) return;
+      setTimeout(function() {
+        st.style.transition = 'opacity 0.6s ease';
+        st.style.opacity = '0.8';
+      }, 1000);
+    })();
+
     var butterflyEl = document.querySelector('.logo-butterfly');
     if (butterflyEl) {
       butterflyEl.addEventListener('animationend', function() {
