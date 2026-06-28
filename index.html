@@ -1054,6 +1054,43 @@
       letter-spacing: -0.22px;
     }
 
+    /* ─── Hero CTA Block ───────────────────────────────────── */
+    .hero-cta-block {
+      position: absolute;
+      z-index: 10;
+      bottom: 72px;
+      left: 60px;
+      max-width: 500px;
+    }
+    .hero-eyebrow-label {
+      font-family: var(--font-text);
+      font-size: 12px;
+      font-weight: 600;
+      color: #c8962a;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .hero-main-headline {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5.5vw, 72px);
+      font-weight: 700;
+      color: var(--color-frost-white);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .hero-subtext {
+      font-family: var(--font-text);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-frost-white);
+      opacity: 0.75;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 380px;
+    }
+
     /* ─── Origin Button (Shop Now) ─────────────────────────── */
     .btn-origin {
       position: relative;
@@ -1263,13 +1300,20 @@
         padding: 4px 16px;
       }
 
-      /* Hero 서브텍스트 모바일 */
+      /* Hero CTA 블록 모바일 */
+      .hero-cta-block {
+        bottom: 56px;
+        left: 20px;
+        right: 20px;
+        max-width: 100%;
+      }
+      .hero-main-headline {
+        font-size: clamp(32px, 9vw, 44px);
+      }
       .hero-subtext {
-        top: auto !important;
-        left: 16px !important;
-        bottom: 80px !important;
-        max-width: calc(100% - 32px) !important;
-        font-size: 14px !important;
+        font-size: 14px;
+        margin-bottom: 18px;
+        max-width: 100%;
       }
 
       /* Section 2 텍스트 — 모바일 왼쪽 하단 */
@@ -1427,7 +1471,12 @@
       <img class="hero-product-img" src="images/hero-new.jpg" alt="Hero Model" style="object-fit:cover; object-position:center center;">
       <div class="hero-overlay"></div>
     </div>
-    <p class="hero-subtext" data-i18n="hero-subtext" style="position:absolute; z-index:10; top:360px; left:90px; font-family:var(--font-text); font-size:16px; font-weight:400; color:var(--color-frost-white); letter-spacing:-0.1px; opacity:0.7; max-width:340px; line-height:1.5;">As a seller in South Korea, I specialize in products that Korean women particularly appreciate and trust.</p>
+    <div class="hero-cta-block">
+      <p class="hero-eyebrow-label">K-Beauty · Seoul</p>
+      <h1 class="hero-main-headline" data-i18n="hero-headline">Real skincare.<br>Real results.</h1>
+      <p class="hero-subtext" data-i18n="hero-subtext">Sourced in Seoul. Trusted by millions.<br>Shipped to your door.</p>
+      <a href="#catalog" class="btn-primary" style="font-size:15px; padding:12px 26px;" data-i18n="cta-btn">Shop Now ›</a>
+    </div>
   </section>
 
 
@@ -1457,9 +1506,9 @@
     </div>
     <!-- 텍스트: 오른쪽 상단 -->
     <div class="section-text-overlay" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
+      <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">K-Beauty</div>
       <h2 class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">A product that will<br>change your everyday.</h2>
-      <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Discover Korean beauty products trusted by millions of women — curated and shipped directly from Seoul.</p>
+      <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Korean skincare trusted by millions — freshly sourced from Seoul and shipped straight to your door.</p>
       <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s2-learn">Learn more</span>
         <span>›</span>
@@ -1477,7 +1526,7 @@
         pointer-events:none;"></div>
     </div>
     <div class="section-text-overlay section3-text" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Category Tag</div>
+      <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Skincare</div>
       <h2 class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
       <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s3-learn">Learn more</span>
@@ -1632,16 +1681,19 @@
   <!-- ⑧ CTA Strip -->
   <section class="section-strip">
     <div class="section-inner">
-      <h2 class="strip-headline">Contact me for bulk orders</h2>
-      <p class="strip-body">まとめ買いのご相談はE-mailへ</p>
-      <button onclick="showEmailToast()" class="btn-primary btn-origin" style="font-size:17px; padding:14px 28px; border:none; cursor:pointer;"><span class="btn-origin-fill"></span><span class="btn-origin-label">E-mail</span></button>
+      <h2 class="strip-headline" data-i18n="cta-headline">Discover the full collection.</h2>
+      <p class="strip-body" data-i18n="cta-body">Every product hand-picked from Korea — tried, tested, and ready to ship.</p>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <a href="#catalog" class="btn-primary btn-origin" style="font-size:15px; padding:13px 28px; text-decoration:none;"><span class="btn-origin-fill"></span><span class="btn-origin-label" data-i18n="cta-btn">Shop Now ›</span></a>
+        <button onclick="showEmailToast()" class="btn-ghost" style="font-size:15px; padding:13px 28px; cursor:pointer;">Contact Us</button>
+      </div>
     </div>
   </section>
 
   <!-- ⑨ Footer -->
   <footer>
     <div class="footer-inner">
-      <span class="footer-brand">Brand</span>
+      <span class="footer-brand">Coar Family</span>
       <ul class="footer-links">
         <li><a href="#" data-i18n="footer-about">About Us</a></li>
         <li><a href="#" data-i18n="footer-privacy">Privacy Policy</a></li>
@@ -2022,14 +2074,15 @@
   <script>
     var i18nData = {
       en: {
-        'hero-subtext': 'As a seller in South Korea, I specialize in products that Korean women particularly appreciate and trust.',
-        's2-eyebrow': 'Category Tag',
+        'hero-headline': 'Real skincare.<br>Real results.',
+        'hero-subtext': 'Sourced in Seoul. Trusted by millions.<br>Shipped to your door.',
+        's2-eyebrow': 'K-Beauty',
         's2-headline': 'A product that will<br>change your everyday.',
-        's2-body': 'Discover Korean beauty products trusted by millions of women — curated and shipped directly from Seoul.',
-        's2-learn': 'Learn more',
-        's3-eyebrow': 'Category Tag',
+        's2-body': 'Korean skincare trusted by millions — freshly sourced from Seoul and shipped straight to your door.',
+        's2-learn': 'Shop now',
+        's3-eyebrow': 'Skincare',
         's3-headline': 'Skin that glows<br>from within.',
-        's3-learn': 'Learn more',
+        's3-learn': 'Shop now',
         'catalog-headline': 'Full Catalog',
         'p1-name': 'La Belle Rose Glass Lip Gloss',
         'p1-desc': 'Moisturizing • Radiant finish',
@@ -2041,22 +2094,23 @@
         'p4-desc': 'Radiant, Firm, Youthful Skin',
         'p5-name': 'Vita C Whip First Essence',
         'p5-desc': 'Skin Boosting · Brightening',
-        'cta-headline': 'Start Now.',
-        'cta-body': 'Feel the happiness of healthy skin',
-        'cta-btn': 'Shop Now',
+        'cta-headline': 'Discover the full collection.',
+        'cta-body': 'Every product hand-picked from Korea — tried, tested, and ready to ship.',
+        'cta-btn': 'Shop Now ›',
         'footer-about': 'About Us',
         'footer-privacy': 'Privacy Policy',
         'footer-terms': 'Terms of Use',
         'footer-support': 'Customer Support',
-        'footer-copy': '© 2026 Brand. All rights reserved.'
+        'footer-copy': '© 2026 Coar Family. All rights reserved.'
       },
       kr: {
-        'hero-subtext': '한국에서 온 믿을 수 있는 셀러로서, 한국 여성들이 가장 사랑하고 신뢰하는 뷰티 제품만을 엄선해 여러분께 아름다움과 안심을 선사합니다.',
-        's2-eyebrow': '카테고리 태그',
+        'hero-headline': '진짜 피부 관리.<br>진짜 변화.',
+        'hero-subtext': '서울에서 소싱. 수백만 명이 신뢰.<br>전 세계 배송.',
+        's2-eyebrow': 'K-뷰티',
         's2-headline': '당신의 일상을 새롭게 바꿔줄 제품',
         's2-body': '제품의 가치와 경험을 3~4문장으로 담아 매력을 표현하세요.',
         's2-learn': '더 알아보기',
-        's3-eyebrow': '카테고리 태그',
+        's3-eyebrow': '스킨케어',
         's3-headline': '피부 속부터 빛나는 광채',
         's3-learn': '더 알아보기',
         'catalog-headline': '전체 카탈로그',
@@ -2070,22 +2124,23 @@
         'p4-desc': '빛나는, 탄탄한, 젊은 피부',
         'p5-name': '비타C 휩 퍼스트 에센스',
         'p5-desc': '피부 활력 · 브라이트닝',
-        'cta-headline': '지금 바로 시작하세요',
-        'cta-body': '건강한 피부가 주는 행복을 느껴보세요',
-        'cta-btn': '지금 쇼핑하기',
+        'cta-headline': '전체 컬렉션을 만나보세요.',
+        'cta-body': '한국에서 직접 고른 제품 — 검증 완료, 바로 배송.',
+        'cta-btn': '지금 쇼핑하기 ›',
         'footer-about': '회사 소개',
         'footer-privacy': '개인정보 처리방침',
         'footer-terms': '이용 약관',
         'footer-support': '고객 지원',
-        'footer-copy': '© 2026 브랜드. 모든 권리 보유.'
+        'footer-copy': '© 2026 Coar Family. 모든 권리 보유.'
       },
       es: {
-        'hero-subtext': 'Como vendedor de confianza en Corea, selecciono cuidadosamente los productos de belleza que las mujeres coreanas más aman y en los que más confían, para brindarte seguridad y belleza.',
-        's2-eyebrow': 'Etiqueta de categoría',
+        'hero-headline': 'Cuidado real.<br>Resultados reales.',
+        'hero-subtext': 'Desde Seúl. Confiado por millones.<br>Enviado a tu puerta.',
+        's2-eyebrow': 'K-Beauty',
         's2-headline': 'Un producto que transformará<br>tu día a día',
         's2-body': 'Describe aquí el valor y la experiencia del producto en tres o cuatro frases para destacar su encanto.',
         's2-learn': 'Más información',
-        's3-eyebrow': 'Etiqueta de categoría',
+        's3-eyebrow': 'Skincare',
         's3-headline': 'Una piel que brilla<br>desde dentro',
         's3-learn': 'Más información',
         'catalog-headline': 'Catálogo completo',
@@ -2099,22 +2154,23 @@
         'p4-desc': 'Piel radiante, firme y juvenil',
         'p5-name': 'Vita C Whip First Essence',
         'p5-desc': 'Potenciador de la piel · Iluminador',
-        'cta-headline': 'Empieza ahora',
-        'cta-body': 'Siente la felicidad de una piel sana',
-        'cta-btn': 'Comprar ahora',
+        'cta-headline': 'Descubre la colección completa.',
+        'cta-body': 'Cada producto elegido a mano en Corea — probado, verificado y listo para enviar.',
+        'cta-btn': 'Comprar ahora ›',
         'footer-about': 'Sobre nosotros',
         'footer-privacy': 'Política de privacidad',
         'footer-terms': 'Términos de uso',
         'footer-support': 'Atención al cliente',
-        'footer-copy': '© 2026 Marca. Todos los derechos reservados.'
+        'footer-copy': '© 2026 Coar Family. Todos los derechos reservados.'
       },
       ja: {
-        'hero-subtext': '韓国のセラーとして、韓国女性が特に愛用し信頼する美容製品だけを厳選してお届けします。',
-        's2-eyebrow': 'カテゴリータグ',
+        'hero-headline': '本物のスキンケア。<br>本物の効果。',
+        'hero-subtext': 'ソウル発。数百万人が信頼。<br>世界中にお届け。',
+        's2-eyebrow': 'K-ビューティー',
         's2-headline': 'あなたの毎日を<br>変える一品。',
         's2-body': '製品の価値と体験を3〜4文で描いて魅力を伝えましょう。',
         's2-learn': '詳しく見る',
-        's3-eyebrow': 'カテゴリータグ',
+        's3-eyebrow': 'スキンケア',
         's3-headline': '内側から輝く<br>美しい肌。',
         's3-learn': '詳しく見る',
         'catalog-headline': '全製品カタログ',
@@ -2164,7 +2220,7 @@
         'footer-privacy': '隐私政策',
         'footer-terms': '使用条款',
         'footer-support': '客户支持',
-        'footer-copy': '© 2026 品牌。保留所有权利。'
+        'footer-copy': '© 2026 Coar Family。保留所有权利。'
       }
     };
 
