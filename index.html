@@ -1085,7 +1085,7 @@
       font-size: 16px;
       font-weight: 400;
       color: var(--color-frost-white);
-      opacity: 0.75;
+      opacity: 1;
       line-height: 1.6;
       margin-bottom: 24px;
       max-width: 380px;
@@ -1158,7 +1158,7 @@
       }
       .logo-wrapper, .logo-wrapper img {
         height: 120px !important;
-        opacity: 0.6;
+        opacity: 1;
       }
 
       /* Hero */
@@ -1473,9 +1473,7 @@
     </div>
     <div class="hero-cta-block">
       <p class="hero-eyebrow-label">K-Beauty · Seoul</p>
-      <h1 class="hero-main-headline" data-i18n="hero-headline">Real skincare.<br>Real results.</h1>
       <p class="hero-subtext" data-i18n="hero-subtext">Sourced in Seoul. Trusted by millions.<br>Shipped to your door.</p>
-      <a href="#catalog" class="btn-primary" style="font-size:15px; padding:12px 26px;" data-i18n="cta-btn">Shop Now ›</a>
     </div>
   </section>
 
@@ -2278,19 +2276,16 @@
 
     function revealSubtextMobile() {
       var el = document.querySelector('.hero-subtext');
-      if (el) el.style.opacity = '0.55';
+      if (el) el.style.opacity = '1';
       var wordEls = document.querySelectorAll('.hero-word');
       wordEls.forEach(function(w, i) {
-        setTimeout(function() { w.style.opacity = '0.55'; }, i * 95);
+        setTimeout(function() { w.style.opacity = '1'; }, i * 95);
       });
-      setTimeout(function() {
-        if (el) { el.style.transition = 'opacity 1.2s ease'; el.style.opacity = '0.3'; }
-      }, 1000);
     }
 
     function applyMobileSubtextDone() {
       var el = document.querySelector('.hero-subtext');
-      if (el) el.style.opacity = '0.28';
+      if (el) el.style.opacity = '1';
       document.querySelectorAll('.hero-word').forEach(function(w) { w.style.opacity = '1'; });
     }
 
