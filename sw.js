@@ -1,10 +1,9 @@
-const CACHE = 'coar-v9';
+const CACHE = 'coarfamily-brand-v10';
 // HTML은 캐시 제외 — 항상 최신 버전 로드
 const ASSETS = [
-  '/wep/kling_no_watermark.mp4',
-  '/wep/runway_clean.mp4',
-  '/wep/icon-192.png',
-  '/wep/icon-512.png'
+  '/wep/images/coarfamily-wordmark.png',
+  '/wep/images/coarfamily-icon-192.png',
+  '/wep/images/coarfamily-icon-512.png'
 ];
 
 self.addEventListener('install', e => {

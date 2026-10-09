@@ -2,14 +2,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Coar Family</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COARFAMILY | Korean skincare &amp; sales channels</title>
+  <meta name="description" content="Explore Korean skincare and existing marketplace listings. COARFAMILY Shopify is in preparation; check product details and delivery terms on each sales channel.">
+  <link rel="canonical" href="https://coarfamily-cyber.github.io/wep/">
+  <link rel="icon" href="images/coarfamily-icon-192.png" type="image/png">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#111111">
+  <meta name="theme-color" content="#FAFAF8">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Coar">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="images/coarfamily-icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
@@ -1432,6 +1435,76 @@
       right: auto !important;
     }
   }
+
+  /* COARFAMILY brand refresh: original layout and geometric artwork */
+  html { scroll-snap-type:none; scroll-behavior:smooth; }
+  body { background:#FAFAF8; color:#1D1D1F; }
+  :root { --font-display:var(--font-text); }
+  .nav-wrapper { position:relative; top:auto; width:100%; padding:22px 6%; background:#FAFAF8; }
+  .nav-wrapper nav { display:flex; justify-content:space-between; align-items:center; max-width:1280px; margin:auto; width:100%; min-height:44px; }
+  .logo-wrapper { width:190px !important; height:40px !important; margin:0 !important; flex-shrink:0; }
+  .logo-base { width:190px !important; height:38px !important; object-fit:contain; position:static !important; opacity:1 !important; transform:none !important; }
+  .logo-butterfly { display:none !important; }
+  .brand-nav-links { display:flex; gap:24px; margin-right:225px; font-size:13px; }
+  .brand-nav-links a { color:#465469; }
+  .lang-switcher { position:absolute; top:28px; right:6%; left:auto; transform:none; gap:7px; z-index:100; }
+  .lang-btn { border-color:#dce4ec; background:#fff; }
+  .lang-btn.active { border-color:#0071e3; }
+  .brand-intro { max-width:1280px; margin:auto; padding:0 28px; }
+  .brand-hero { min-height:570px; display:grid; grid-template-columns:1.05fr 1fr; align-items:center; gap:28px; padding:56px 0 66px; position:relative; }
+  .brand-kicker,.brand-step { font-size:11px; font-weight:650; letter-spacing:2px; color:#557089; margin-bottom:24px; }
+  .brand-hero h1 { font-size:clamp(38px,5.5vw,70px); line-height:1.08; font-weight:650; letter-spacing:-2.7px; margin-bottom:26px; }
+  .brand-hero .hero-subtext { font-size:17px; line-height:1.8; color:#566270; max-width:460px; opacity:1 !important; text-align:left; }
+  .brand-hero .hero-word { opacity:1 !important; color:inherit !important; }
+  .brand-actions { display:flex; flex-wrap:wrap; gap:12px; margin:30px 0 20px; }
+  .brand-primary,.brand-secondary { display:inline-flex; align-items:center; justify-content:center; border-radius:9px; padding:14px 20px; font-size:13px; font-weight:600; line-height:1.5; }
+  .brand-primary { color:#fff; background:#0071e3; border:1px solid #0071e3; }
+  .brand-primary:hover { background:#005fc0; }
+  .brand-secondary { color:#1d1d1f; border:1px solid #d1dce7; background:#fff; }
+  .brand-small { max-width:470px; font-size:12px; line-height:1.7; color:#718094; }
+  .brand-art { min-height:415px; position:relative; border-radius:48% 48% 20% 44%; background:#e6effa; overflow:hidden; }
+  .brand-orb { border-radius:50%; position:absolute; }
+  .brand-orb-one { width:300px;height:300px; background:linear-gradient(145deg,#fff,#c4dcf5); right:-45px; top:-20px; }
+  .brand-orb-two { width:240px;height:240px;background:linear-gradient(145deg,#cce0f8,#f9fcff);left:30px;bottom:-35px; }
+  .brand-ring { border:1px solid #789ec7; width:260px;height:260px; border-radius:50%; position:absolute;top:125px;right:52px; }
+  .brand-art span { position:absolute;top:154px;right:120px; font-size:72px; color:#fff;font-weight:700;letter-spacing:-7px; }
+  .brand-flow { display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px; }
+  .brand-flow-card { background:#fff;border:1px solid #e3e9f0;border-radius:18px;padding:30px; }
+  .brand-flow h2 { font-size:24px;line-height:1.4;letter-spacing:-.7px;margin-bottom:14px; }
+  .brand-flow p:not(.brand-step) { color:#667384;font-size:14px;line-height:1.8; }
+  .brand-flow a { display:inline-block;margin-top:20px;color:#0066cc;font-size:13px; }
+  .brand-shopify { display:flex;justify-content:space-between;align-items:center;gap:40px;background:#edf3fb;border-radius:18px;padding:34px;margin-bottom:60px; }
+  .brand-shopify h2 { font-size:27px;letter-spacing:-1px;margin:12px 0; }
+  .brand-shopify p:not(.brand-status) { max-width:670px;color:#607086;font-size:14px;line-height:1.8; }
+  .brand-shopify .brand-primary { flex-shrink:0; }
+  .brand-status { font-size:10px;letter-spacing:1.5px;font-weight:700;color:#0066cc; }
+  .section-catalog { background:#fff !important; padding:65px 0 !important; min-height:auto !important; height:auto !important; }
+  .catalog-headline { color:#1d1d1f !important; font-size:34px !important; letter-spacing:-1px; }
+  .catalog-item { background:#f5f7fa !important; border:1px solid #e4eaf0; border-radius:16px; overflow:hidden; }
+  .catalog-item-name { color:#1d1d1f !important; }
+  .catalog-item-desc { color:#68768a !important; }
+  .catalog-arrow { color:#1d1d1f !important; background:#edf2f7 !important; }
+  .section-strip { background:#f4f7fb !important; min-height:auto !important; height:auto !important; padding:70px 22px !important; }
+  .strip-headline { color:#1d1d1f !important; font-size:32px !important; }
+  .strip-body { color:#627187 !important; max-width:680px; margin:20px auto 28px !important; }
+  .brand-information { max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:65px 28px; }
+  .brand-information article { scroll-margin-top:30px; }
+  .brand-information h2 { font-size:18px;margin-bottom:14px; }
+  .brand-information p { color:#667384;font-size:13px;line-height:1.9; }
+  .brand-information a { color:#0066cc;font-size:13px;display:inline-block;margin-top:10px; }
+  footer { background:#FAFAF8 !important;color:#647489 !important;border-top:1px solid #e1e7ed; }
+  footer a,.footer-brand { color:#647489 !important; }
+  a:focus-visible,button:focus-visible { outline:3px solid #82b8ef;outline-offset:4px; }
+  @media(max-width:900px){ .brand-nav-links { display:none; } .brand-hero { gap:22px;min-height:480px; } .brand-art { min-height:330px; } .brand-shopify { flex-direction:column;align-items:flex-start;gap:22px; } }
+  @media(max-width:600px){
+   .nav-wrapper { padding:18px 20px 60px; } .logo-wrapper,.logo-base { width:160px !important; } .lang-switcher { top:73px;right:20px;gap:8px; } .brand-intro { padding:0 22px; }
+   .brand-hero { grid-template-columns:1fr;gap:30px;padding:26px 0 35px;min-height:0; } .brand-hero h1 { font-size:43px;letter-spacing:-2px; } .brand-hero .hero-subtext { font-size:15px; } .brand-kicker { margin-bottom:20px; }
+   .brand-art { min-height:265px;border-radius:18px; } .brand-ring { width:190px;height:190px;top:65px;right:38px; } .brand-art span { font-size:56px;top:110px;right:98px; }
+   .brand-flow,.brand-information { grid-template-columns:1fr;gap:16px; } .brand-flow-card { padding:25px; } .brand-flow h2 { font-size:21px; } .brand-shopify { padding:25px;margin-bottom:36px; }
+   .brand-shopify h2 { font-size:24px; } .catalog-headline { font-size:27px !important; } .section-catalog { padding:42px 0 !important; } .catalog-header { align-items:flex-start;gap:18px;flex-wrap:wrap; }
+   .section-strip { padding:48px 22px !important; } .strip-headline { font-size:27px !important; } .brand-information { padding:44px 22px; } .brand-primary,.brand-secondary { padding:12px 16px; }
+  }
+  @media(prefers-reduced-motion:reduce){ html {scroll-behavior:auto;} *,*::before,*::after {animation-duration:.01ms !important;transition-duration:.01ms !important;} }
 </style>
 <script>
   // 주소창 포함 초기 높이로 고정 → 주소창 사라져도 크기 안 변함
@@ -1468,85 +1541,40 @@
   <div class="nav-wrapper">
     <nav>
       <div class="logo-wrapper" onclick="logoClick()" style="cursor:pointer;">
-        <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
-        <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
+        <img src="images/coarfamily-wordmark.png" alt="COARFAMILY" class="logo-base">
+        <span class="logo-butterfly" hidden aria-hidden="true"></span>
       </div>
+      <div class="brand-nav-links"><a href="#catalog" data-i18n="nav-catalog">Catalog</a><a href="#shopify" data-i18n="nav-shopify">Shopify preparation</a><a href="#contact" data-i18n="nav-contact">Contact</a></div>
     </nav>
   </div>
 
-  <!-- ③ Hero Stage -->
-  <section class="hero">
-    <div class="hero-visual">
-      <img class="hero-product-img" src="images/hero-new.jpg" alt="Hero Model" style="object-fit:cover; object-position:center center;">
-      <div class="hero-overlay"></div>
-    </div>
-    <div class="hero-cta-block">
-      <p class="hero-eyebrow-label">K-Beauty · Seoul</p>
-      <p class="hero-subtext" data-i18n="hero-subtext">Sourced in Seoul. Trusted by millions. Shipped to your door.</p>
-    </div>
-  </section>
-
-
-  <!-- ⑤ Full-bleed Image Section -->
-  <section class="hero" id="section2" onclick="toggleSound()" style="position:relative; background:#111111; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start; cursor:pointer;">
-    <!-- 배경 영상 (데스크탑: cover / 모바일: scale 확대) -->
-    <video id="section2-video" autoplay muted loop playsinline
-      style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center center;">
-      <source src="kling_no_watermark.mp4" type="video/mp4">
-    </video>
-    <!-- 오버레이 -->
-    <div style="position:absolute; inset:0; background:
-      linear-gradient(to bottom, #111111 0%, rgba(17,17,17,0.5) 5%, transparent 14%, transparent 65%, rgba(17,17,17,0.5) 80%, rgba(17,17,17,0.85) 92%, #111111 100%);
-      pointer-events:none;"></div>
-    <!-- 사운드 버튼 -->
-    <div id="sound-btn" onclick="event.stopPropagation(); toggleSound();" style="position:absolute; z-index:10; bottom:24px; right:24px;
-      width:36px; height:36px; border-radius:50%;
-      background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.25);
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; transition:opacity 0.3s; opacity:0.25;">
-      <svg id="sound-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <!-- 음소거 아이콘 -->
-        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-        <line x1="23" y1="9" x2="17" y2="15" class="mute-x"/>
-        <line x1="17" y1="9" x2="23" y2="15" class="mute-x"/>
-      </svg>
-    </div>
-    <!-- 텍스트: 오른쪽 상단 -->
-    <div class="section-text-overlay" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">K-Beauty</div>
-      <h2 class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">A product that will<br>change your everyday.</h2>
-      <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Korean skincare trusted by millions — freshly sourced from Seoul and shipped straight to your door.</p>
-      <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
-        <span data-i18n="s2-learn">Learn more</span>
-        <span>›</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- ⑥ Section 3 Full-bleed -->
-  <section class="hero">
-    <div class="hero-visual">
-      <img class="hero-product-img" src="images/4.png" alt="Section 3" style="width:100%; height:100%; object-fit:cover; object-position:center center;">
-      <div style="position:absolute; inset:0; background:
-        linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%),
-        linear-gradient(to bottom, #111111 0%, rgba(17,17,17,0.3) 5%, transparent 12%, transparent 45%, rgba(17,17,17,0.3) 60%, rgba(17,17,17,0.65) 75%, rgba(17,17,17,0.9) 88%, #111111 94%);
-        pointer-events:none;"></div>
-    </div>
-    <div class="section-text-overlay section3-text" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
-      <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Skincare</div>
-      <h2 class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
-      <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
-        <span data-i18n="s3-learn">Learn more</span>
-        <span>›</span>
-      </a>
-    </div>
-  </section>
+  <!-- COARFAMILY brand refresh: original CSS artwork, no product photograph -->
+  <main class="brand-intro">
+    <section class="brand-hero" aria-labelledby="brand-title">
+      <div class="brand-hero-copy">
+        <p class="brand-kicker">COARFAMILY / K-BEAUTY</p>
+        <h1 id="brand-title" data-i18n="hero-headline">Thoughtful choices.<br>Everyday skincare.</h1>
+        <p class="hero-subtext" data-i18n="hero-subtext">Korean skincare, product details, and sales channels in one place.</p>
+        <div class="brand-actions"><a class="brand-primary" href="#catalog" data-i18n="browse-catalog">Explore the catalog</a><a class="brand-secondary" href="#shopify" data-i18n="shopify-entry">Shopify: in preparation</a></div>
+        <p class="brand-small" data-i18n="channel-note">Availability, prices, and delivery depend on the selected sales channel.</p>
+      </div>
+      <div class="brand-art" aria-hidden="true"><div class="brand-orb brand-orb-one"></div><div class="brand-orb brand-orb-two"></div><div class="brand-ring"></div><span>CF</span></div>
+    </section>
+    <section class="brand-flow" id="section2" aria-label="Product information">
+      <div class="brand-flow-card"><p class="brand-step">01 / DETAILS</p><h2 data-i18n="s2-headline">Know what you choose.</h2><p data-i18n="s2-body">Review ingredients, pack size, usage, and precautions on the product page before ordering.</p><a href="#catalog" data-i18n="s2-learn">View product pages</a></div>
+      <div class="brand-flow-card"><p class="brand-step">02 / CHANNELS</p><h2 data-i18n="s3-headline">Choose your sales channel.</h2><p data-i18n="channel-body">Existing marketplace links are kept below. The destination seller's listing and checkout terms apply.</p><a href="#catalog" data-i18n="s3-learn">See marketplace listings</a></div>
+    </section>
+    <section class="brand-shopify" id="shopify" aria-labelledby="shopify-title">
+      <div><p class="brand-status" data-i18n="shopify-status">IN PREPARATION</p><h2 id="shopify-title" data-i18n="shopify-title">The next COARFAMILY storefront.</h2><p data-i18n="shopify-body">Our Shopify store is being prepared for Korea. It is password protected; new product listings and checkout links are not advertised as ready.</p></div>
+      <a class="brand-primary" href="https://coarfamily.myshopify.com/" target="_blank" rel="noopener noreferrer" data-i18n="shopify-link">Visit Shopify preparation</a>
+    </section>
+  </main>
 
   <!-- ⑦ Catalog Grid -->
   <section class="section-catalog" id="catalog">
     <div class="section-inner">
       <div class="catalog-header">
-        <h2 class="catalog-headline" data-i18n="catalog-headline" style="color:#c8962a;">Full Catalog</h2>
+        <h2 class="catalog-headline" data-i18n="catalog-headline">Marketplace catalog</h2>
         <div style="display:flex;gap:10px;align-items:center;">
           <button class="lang-btn active" onclick="setLang('en')" title="English"><span class="fi fi-us"></span></button>
           <button class="lang-btn" onclick="setLang('ja')" title="日本語"><span class="fi fi-jp"></span></button>
@@ -1577,7 +1605,7 @@
             </div>
             <div class="catalog-item-info">
               <div class="catalog-item-name" data-i18n="p1-name">La Belle Rose Glass Lip Gloss</div>
-              <div class="catalog-item-desc" data-i18n="p1-desc">Moisturizing • Radiant finish</div>
+              <div class="catalog-item-desc" data-i18n="p1-desc">View current ingredients, usage, and price on the sales page.</div>
             </div>
           </a>
           <!-- Item 2 -->
@@ -1587,7 +1615,7 @@
             </div>
             <div class="catalog-item-info">
               <div class="catalog-item-name" data-i18n="p2-name">Dewy Calming</div>
-              <div class="catalog-item-desc" data-i18n="p2-desc">Centella Cica &amp; Blue Vervetiale</div>
+              <div class="catalog-item-desc" data-i18n="p2-desc">View current ingredients, usage, and price on the sales page.</div>
             </div>
           </a>
           <!-- Item 4 -->
@@ -1597,7 +1625,7 @@
             </div>
             <div class="catalog-item-info">
               <div class="catalog-item-name" data-i18n="p3-name">Collagen Glow Mist Ampoule</div>
-              <div class="catalog-item-desc" data-i18n="p3-desc">Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen</div>
+              <div class="catalog-item-desc" data-i18n="p3-desc">View current ingredients, usage, and price on the sales page.</div>
             </div>
           </a>
         </div>
@@ -1611,7 +1639,7 @@
             </div>
             <div class="catalog-item-info">
               <div class="catalog-item-name" data-i18n="p4-name">Concentrated PDRN Glow Essence</div>
-              <div class="catalog-item-desc" data-i18n="p4-desc">Radiant, Firm, Youthful Skin</div>
+              <div class="catalog-item-desc" data-i18n="p4-desc">View current ingredients, usage, and price on the sales page.</div>
             </div>
           </a>
           <!-- Item 5 -->
@@ -1621,7 +1649,7 @@
             </div>
             <div class="catalog-item-info">
               <div class="catalog-item-name" data-i18n="p5-name">Vita C Whip First Essence</div>
-              <div class="catalog-item-desc" data-i18n="p5-desc">Skin Boosting · Brightening</div>
+              <div class="catalog-item-desc" data-i18n="p5-desc">View current ingredients, usage, and price on the sales page.</div>
             </div>
           </a>
         </div>
@@ -1688,12 +1716,19 @@
   <!-- ⑧ CTA Strip -->
   <section class="section-strip">
     <div class="section-inner">
-      <h2 class="strip-headline" data-i18n="cta-headline">Discover the full collection.</h2>
-      <p class="strip-body" data-i18n="cta-body">✨ Carefully selected in Korea, thoroughly tested for quality, and ready to ship right away.</p>
+      <h2 class="strip-headline" data-i18n="cta-headline">A little clarity before you choose.</h2>
+      <p class="strip-body" data-i18n="cta-body">Check current product details, availability, and shipping terms on each sales channel.</p>
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <button onclick="showEmailToast()" class="btn-primary btn-origin" style="font-size:15px; padding:13px 28px; cursor:pointer; border:none;"><span class="btn-origin-fill"></span><span class="btn-origin-label">E-mail</span></button>
       </div>
     </div>
+  </section>
+
+  <section class="brand-information" aria-label="Website information">
+    <article id="about"><h2 data-i18n="footer-about">About COARFAMILY</h2><p data-i18n="about-body">A Korean skincare introduction and sales-channel hub. Original abstract brand artwork is not product photography. The catalog links to external marketplace listings.</p></article>
+    <article id="privacy"><h2 data-i18n="footer-privacy">Privacy overview</h2><p data-i18n="privacy-body">This page does not take payments. Catalog data may be stored in your browser and resources may load from external providers. Destination websites apply their own privacy policies.</p></article>
+    <article id="terms"><h2 data-i18n="footer-terms">Using this website</h2><p data-i18n="terms-body">Information is for browsing, not a medical recommendation or a guarantee of results. Confirm the seller, current price, ingredients, delivery, and return conditions on the destination listing before purchase.</p></article>
+    <article id="contact"><h2 data-i18n="footer-support">Contact</h2><p data-i18n="contact-body">For website inquiries, use the existing contact email. For an order, contact the seller through the channel where you purchased.</p><a href="mailto:coar1004@naver.com">coar1004@naver.com</a></article>
   </section>
 
   <!-- ⑨ Footer -->
@@ -1701,12 +1736,12 @@
     <div class="footer-inner">
       <span class="footer-brand">Coar Family</span>
       <ul class="footer-links">
-        <li><a href="#" data-i18n="footer-about">About Us</a></li>
-        <li><a href="#" data-i18n="footer-privacy">Privacy Policy</a></li>
-        <li><a href="#" data-i18n="footer-terms">Terms of Use</a></li>
-        <li><a href="#" id="support-btn" data-i18n="footer-support">Customer Support</a></li>
+        <li><a href="#about" data-i18n="footer-about">About COARFAMILY</a></li>
+        <li><a href="#privacy" data-i18n="footer-privacy">Privacy overview</a></li>
+        <li><a href="#terms" data-i18n="footer-terms">Using this website</a></li>
+        <li><a href="#contact" id="support-btn" data-i18n="footer-support">Contact</a></li>
       </ul>
-      <span class="footer-copy" data-i18n="footer-copy">© 2026 Brand. All rights reserved.</span>
+      <span class="footer-copy" data-i18n="footer-copy">© 2026 COARFAMILY</span>
     </div>
   </footer>
 
@@ -2002,7 +2037,7 @@
       container.innerHTML = '';
       getProducts().forEach(function(p) {
         var displayName = p['name_' + lang] || p.name || '';
-        var displayDesc = p['desc_' + lang] || p.desc || '';
+        var displayDesc = (typeof i18nData !== 'undefined' && i18nData[lang] && i18nData[lang]['safe-product-desc']) || 'View ingredients, usage, and price on the sales page.';
         var imgHTML = p.img
           ? '<img src="' + p.img + '" alt="' + displayName + '" style="width:100%;height:100%;object-fit:cover;">'
           : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#636366;font-size:13px;">이미지 없음</div>';
@@ -2099,161 +2134,243 @@
   </script>
   <script>
     var i18nData = {
-      en: {
-        'hero-headline': 'Real skincare.<br>Real results.',
-        'hero-subtext': 'Sourced in Seoul. Trusted by millions. Shipped to your door.',
-        's2-eyebrow': 'K-Beauty',
-        's2-headline': 'A product that will<br>change your everyday.',
-        's2-body': 'Korean skincare trusted by millions — freshly sourced from Seoul and shipped straight to your door.',
-        's2-learn': 'Shop now',
-        's3-eyebrow': 'Skincare',
-        's3-headline': 'Skin that glows<br>from within.',
-        's3-learn': 'Shop now',
-        'catalog-headline': 'Full Catalog',
-        'p1-name': 'La Belle Rose Glass Lip Gloss',
-        'p1-desc': 'Moisturizing • Radiant finish',
-        'p2-name': 'Dewy Calming',
-        'p2-desc': 'Centella Cica &amp; Blue Vervetiale',
-        'p3-name': 'Collagen Glow Mist Ampoule',
-        'p3-desc': 'Enhances Radiance &amp; Elasticity · Small Molecule Nano-Collagen',
-        'p4-name': 'Concentrated PDRN Glow Essence',
-        'p4-desc': 'Radiant, Firm, Youthful Skin',
-        'p5-name': 'Vita C Whip First Essence',
-        'p5-desc': 'Skin Boosting · Brightening',
-        'cta-headline': 'Discover the full collection.',
-        'cta-body': '✨ Carefully selected in Korea, thoroughly tested for quality, and ready to ship right away.',
-        'cta-btn': 'Shop Now ›',
-        'footer-about': 'About Us',
-        'footer-privacy': 'Privacy Policy',
-        'footer-terms': 'Terms of Use',
-        'footer-support': 'Customer Support',
-        'footer-copy': '© 2026 Coar Family. All rights reserved.'
-      },
-      kr: {
-        'hero-headline': '진짜 피부 관리.<br>진짜 변화.',
-        'hero-subtext': '서울에서 소싱. 수백만 명이 신뢰.<br>전 세계 배송.',
-        's2-eyebrow': 'K-뷰티',
-        's2-headline': '당신의 일상을 새롭게 바꿔줄 제품',
-        's2-body': '제품의 가치와 경험을 3~4문장으로 담아 매력을 표현하세요.',
-        's2-learn': '더 알아보기',
-        's3-eyebrow': '스킨케어',
-        's3-headline': '피부 속부터 빛나는 광채',
-        's3-learn': '더 알아보기',
-        'catalog-headline': '전체 카탈로그',
-        'p1-name': 'La Belle Rose 글래스 립글로스',
-        'p1-desc': '촉촉함 • 빛나는 마무리',
-        'p2-name': 'Dewy Calming',
-        'p2-desc': '센텔라 시카 &amp; 블루 버베나',
-        'p3-name': '콜라겐 글로우 미스트 앰플',
-        'p3-desc': '광채 &amp; 탄력 강화 · 소분자 나노 콜라겐',
-        'p4-name': '고농축 PDRN 글로우 에센스',
-        'p4-desc': '빛나는, 탄탄한, 젊은 피부',
-        'p5-name': '비타C 휩 퍼스트 에센스',
-        'p5-desc': '피부 활력 · 브라이트닝',
-        'cta-headline': '전체 컬렉션을 만나보세요.',
-        'cta-body': '한국에서 직접 고른 제품 — 검증 완료, 바로 배송.',
-        'cta-btn': '지금 쇼핑하기 ›',
-        'footer-about': '회사 소개',
-        'footer-privacy': '개인정보 처리방침',
-        'footer-terms': '이용 약관',
-        'footer-support': '고객 지원',
-        'footer-copy': '© 2026 Coar Family. 모든 권리 보유.'
-      },
-      es: {
-        'hero-headline': 'Cuidado real.<br>Resultados reales.',
-        'hero-subtext': 'Desde Seúl. Confiado por millones.<br>Enviado a tu puerta.',
-        's2-eyebrow': 'K-Beauty',
-        's2-headline': 'Un producto que transformará<br>tu día a día',
-        's2-body': 'Describe aquí el valor y la experiencia del producto en tres o cuatro frases para destacar su encanto.',
-        's2-learn': 'Más información',
-        's3-eyebrow': 'Skincare',
-        's3-headline': 'Una piel que brilla<br>desde dentro',
-        's3-learn': 'Más información',
-        'catalog-headline': 'Catálogo completo',
-        'p1-name': 'La Belle Rose Glass Lip Gloss',
-        'p1-desc': 'Hidratante • Acabado radiante',
-        'p2-name': 'Dewy Calming',
-        'p2-desc': 'Centella Cica &amp; Blue Vervetiale',
-        'p3-name': 'Collagen Glow Mist Ampoule',
-        'p3-desc': 'Mejora la luminosidad y elasticidad · Nano-colágeno de molécula pequeña',
-        'p4-name': 'Concentrated PDRN Glow Essence',
-        'p4-desc': 'Piel radiante, firme y juvenil',
-        'p5-name': 'Vita C Whip First Essence',
-        'p5-desc': 'Potenciador de la piel · Iluminador',
-        'cta-headline': 'Descubre la colección completa.',
-        'cta-body': 'Cada producto elegido a mano en Corea — probado, verificado y listo para enviar.',
-        'cta-btn': 'Comprar ahora ›',
-        'footer-about': 'Sobre nosotros',
-        'footer-privacy': 'Política de privacidad',
-        'footer-terms': 'Términos de uso',
-        'footer-support': 'Atención al cliente',
-        'footer-copy': '© 2026 Coar Family. Todos los derechos reservados.'
-      },
-      ja: {
-        'hero-headline': '本物のスキンケア。<br>本物の効果。',
-        'hero-subtext': 'ソウル発。数百万人が信頼。<br>世界中にお届け。',
-        's2-eyebrow': 'K-ビューティー',
-        's2-headline': 'あなたの毎日を<br>変える一品。',
-        's2-body': '製品の価値と体験を3〜4文で描いて魅力を伝えましょう。',
-        's2-learn': '詳しく見る',
-        's3-eyebrow': 'スキンケア',
-        's3-headline': '内側から輝く<br>美しい肌。',
-        's3-learn': '詳しく見る',
-        'catalog-headline': '全製品カタログ',
-        'p1-name': 'La Belle Rose グラスリップグロス',
-        'p1-desc': '保湿 • 輝くツヤ感',
-        'p2-name': 'Dewy Calming',
-        'p2-desc': 'ツボクサCica &amp; ブルーバーベナ',
-        'p3-name': 'コラーゲングロウミストアンプル',
-        'p3-desc': '輝きと弾力アップ · ナノコラーゲン',
-        'p4-name': '高濃縮PDRNグロウエッセンス',
-        'p4-desc': '輝く・ハリのある・若々しい肌',
-        'p5-name': 'ビタC ホイップファーストエッセンス',
-        'p5-desc': '肌ブースター · ブライトニング',
-        'cta-headline': '今すぐ始めよう。',
-        'cta-body': '健康な肌が与える幸せを感じてください',
-        'cta-btn': '今すぐ購入',
-        'footer-about': '私たちについて',
-        'footer-privacy': 'プライバシーポリシー',
-        'footer-terms': '利用規約',
-        'footer-support': 'カスタマーサポート',
-        'footer-copy': '© 2026 ブランド. All rights reserved.'
-      },
-      zh: {
-        'hero-subtext': '作为韩国的卖家，我专注于韩国女性特别喜爱和信赖的产品。',
-        's2-eyebrow': '分类标签',
-        's2-headline': '一款能改变你日常生活的产品。',
-        's2-body': '在此撰写正文，描述产品的价值与体验。三到四句话为佳。',
-        's2-learn': '了解更多',
-        's3-eyebrow': '分类标签',
-        's3-headline': '由内而外焕发光彩的肌肤。',
-        's3-learn': '了解更多',
-        'catalog-headline': '全部目录',
-        'p1-name': 'La Belle Rose 玻璃唇彩',
-        'p1-desc': '保湿 • 光泽妆效',
-        'p2-name': 'Dewy Calming',
-        'p2-desc': '积雪草Cica &amp; 蓝色马鞭草',
-        'p3-name': '胶原焕亮喷雾安瓶',
-        'p3-desc': '提升光泽与弹性 · 小分子纳米胶原',
-        'p4-name': '高浓度PDRN焕亮精华',
-        'p4-desc': '光泽、紧致、年轻肌肤',
-        'p5-name': '维他命C绵密精华',
-        'p5-desc': '提升肌肤 · 焕亮肤色',
-        'cta-headline': '立即开始。',
-        'cta-body': '感受健康肌肤的喜悦',
-        'cta-btn': '立即购买',
-        'footer-about': '关于我们',
-        'footer-privacy': '隐私政策',
-        'footer-terms': '使用条款',
-        'footer-support': '客户支持',
-        'footer-copy': '© 2026 Coar Family。保留所有权利。'
-      }
+          "en": {
+                "hero-headline": "Thoughtful choices.<br>Everyday skincare.",
+                "hero-subtext": "Korean skincare, product details, and sales channels in one place.",
+                "s2-eyebrow": "K-Beauty",
+                "s2-headline": "Know what you choose.",
+                "s2-body": "Review ingredients, pack size, usage, and precautions on the product page before ordering.",
+                "s2-learn": "View product pages",
+                "s3-eyebrow": "Skincare",
+                "s3-headline": "Choose your sales channel.",
+                "s3-learn": "See marketplace listings",
+                "catalog-headline": "Marketplace catalog",
+                "p1-name": "La Belle Rose Glass Lip Gloss",
+                "p1-desc": "View current ingredients, usage, and price on the sales page.",
+                "p2-name": "Dewy Calming",
+                "p2-desc": "View current ingredients, usage, and price on the sales page.",
+                "p3-name": "Collagen Glow Mist Ampoule",
+                "p3-desc": "View current ingredients, usage, and price on the sales page.",
+                "p4-name": "Concentrated PDRN Glow Essence",
+                "p4-desc": "View current ingredients, usage, and price on the sales page.",
+                "p5-name": "Vita C Whip First Essence",
+                "p5-desc": "View current ingredients, usage, and price on the sales page.",
+                "cta-headline": "A little clarity before you choose.",
+                "cta-body": "Check current product details, availability, and shipping terms on each sales channel.",
+                "cta-btn": "Browse listings",
+                "footer-about": "About COARFAMILY",
+                "footer-privacy": "Privacy overview",
+                "footer-terms": "Using this website",
+                "footer-support": "Contact",
+                "footer-copy": "© 2026 COARFAMILY",
+                "channel-body": "Existing marketplace links are kept below. The destination seller's listing and checkout terms apply.",
+                "nav-catalog": "Catalog",
+                "nav-shopify": "Shopify preparation",
+                "nav-contact": "Contact",
+                "browse-catalog": "Explore the catalog",
+                "shopify-entry": "Shopify: in preparation",
+                "channel-note": "Availability, prices, and delivery depend on the selected sales channel.",
+                "shopify-status": "IN PREPARATION",
+                "shopify-title": "The next COARFAMILY storefront.",
+                "shopify-body": "Our Shopify store is being prepared for Korea. It is password protected; new product listings and checkout links are not advertised as ready.",
+                "shopify-link": "Visit Shopify preparation",
+                "about-body": "A Korean skincare introduction and sales-channel hub. Original abstract brand artwork is not product photography. The catalog links to external marketplace listings.",
+                "privacy-body": "This page does not take payments. Catalog data may be stored in your browser and resources may load from external providers. Destination websites apply their own privacy policies.",
+                "terms-body": "Information is for browsing, not a medical recommendation or a guarantee of results. Confirm the seller, current price, ingredients, delivery, and return conditions on the destination listing before purchase.",
+                "contact-body": "For website inquiries, use the existing contact email. For an order, contact the seller through the channel where you purchased.",
+                "safe-product-desc": "View current ingredients, usage, and price on the sales page."
+          },
+          "kr": {
+                "hero-headline": "정보는 명확하게.<br>선택은 가볍게.",
+                "hero-subtext": "한국 스킨케어의 제품 정보와 판매 채널을 한곳에서 만나보세요.",
+                "s2-eyebrow": "K-뷰티",
+                "s2-headline": "구매 전, 제품부터 확인하세요.",
+                "s2-body": "제품 페이지에서 성분, 구성과 용량, 사용법과 주의사항을 확인한 뒤 선택하세요.",
+                "s2-learn": "제품 페이지 보기",
+                "s3-eyebrow": "스킨케어",
+                "s3-headline": "원하는 판매 채널로 연결됩니다.",
+                "s3-learn": "외부 채널 상품 보기",
+                "catalog-headline": "외부 판매 채널 카탈로그",
+                "p1-name": "La Belle Rose 글래스 립글로스",
+                "p1-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요.",
+                "p2-name": "Dewy Calming",
+                "p2-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요.",
+                "p3-name": "콜라겐 글로우 미스트 앰플",
+                "p3-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요.",
+                "p4-name": "고농축 PDRN 글로우 에센스",
+                "p4-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요.",
+                "p5-name": "비타C 휩 퍼스트 에센스",
+                "p5-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요.",
+                "cta-headline": "선택 전에, 한 번 더 확인하세요.",
+                "cta-body": "현재 가격과 재고, 배송 및 반품 조건은 각 판매 채널의 상품·결제 페이지에서 확인하세요.",
+                "cta-btn": "상품 안내 보기",
+                "footer-about": "COARFAMILY 소개",
+                "footer-privacy": "개인정보 안내",
+                "footer-terms": "사이트 이용 안내",
+                "footer-support": "문의",
+                "footer-copy": "© 2026 COARFAMILY",
+                "channel-body": "기존 마켓플레이스 링크를 아래에 보존했습니다. 상품 정보와 결제 조건은 해당 판매자의 페이지를 따릅니다.",
+                "nav-catalog": "카탈로그",
+                "nav-shopify": "Shopify 준비",
+                "nav-contact": "문의",
+                "browse-catalog": "카탈로그 둘러보기",
+                "shopify-entry": "Shopify: 준비 중",
+                "channel-note": "가격과 재고, 배송 조건은 선택한 판매 채널에 따라 다릅니다.",
+                "shopify-status": "스토어 준비 중",
+                "shopify-title": "새로운 COARFAMILY 스토어.",
+                "shopify-body": "한국 판매를 위한 Shopify 스토어를 준비 중입니다. 현재 비밀번호로 보호되어 있으며, 신규 상품과 결제 링크가 판매 준비를 마친 것으로 안내하지 않습니다.",
+                "shopify-link": "Shopify 준비 페이지 보기",
+                "about-body": "한국 스킨케어 소개와 판매 채널을 연결하는 공간입니다. 자체 제작한 추상 브랜드 그래픽은 실물 상품 사진이 아닙니다. 카탈로그는 기존 외부 판매 페이지로 연결됩니다.",
+                "privacy-body": "이 페이지 자체에서는 결제를 받지 않습니다. 카탈로그 정보가 브라우저에 저장될 수 있고 일부 리소스는 외부 제공처에서 불러옵니다. 이동한 사이트의 개인정보 정책은 해당 사이트를 따릅니다.",
+                "terms-body": "이 정보는 제품 탐색용이며 의료적 조언이나 효과 보장이 아닙니다. 구매 전 판매자, 현재 가격, 성분, 배송 및 반품 조건을 해당 상품 페이지에서 확인하세요.",
+                "contact-body": "사이트 문의는 기존 연락 이메일을 이용해 주세요. 주문 문의는 구매한 판매 채널에서 해당 판매자에게 연락해 주세요.",
+                "safe-product-desc": "현재 성분·사용법·가격은 판매 페이지에서 확인하세요."
+          },
+          "es": {
+                "hero-headline": "Información clara.<br>Cuidado cotidiano.",
+                "hero-subtext": "Productos coreanos, información y canales de venta en un solo lugar.",
+                "s2-eyebrow": "K-Beauty",
+                "s2-headline": "Conoce lo que eliges.",
+                "s2-body": "Revisa ingredientes, contenido, uso y precauciones en la página del producto antes de comprar.",
+                "s2-learn": "Ver páginas de productos",
+                "s3-eyebrow": "Skincare",
+                "s3-headline": "Elige tu canal de venta.",
+                "s3-learn": "Ver anuncios externos",
+                "catalog-headline": "Catálogo de canales externos",
+                "p1-name": "La Belle Rose Glass Lip Gloss",
+                "p1-desc": "Consulta ingredientes, uso y precio actuales en la página de venta.",
+                "p2-name": "Dewy Calming",
+                "p2-desc": "Consulta ingredientes, uso y precio actuales en la página de venta.",
+                "p3-name": "Collagen Glow Mist Ampoule",
+                "p3-desc": "Consulta ingredientes, uso y precio actuales en la página de venta.",
+                "p4-name": "Concentrated PDRN Glow Essence",
+                "p4-desc": "Consulta ingredientes, uso y precio actuales en la página de venta.",
+                "p5-name": "Vita C Whip First Essence",
+                "p5-desc": "Consulta ingredientes, uso y precio actuales en la página de venta.",
+                "cta-headline": "Más claridad antes de elegir.",
+                "cta-body": "Comprueba precio actual, disponibilidad, envío y devoluciones en cada canal de venta.",
+                "cta-btn": "Ver anuncios",
+                "footer-about": "Sobre COARFAMILY",
+                "footer-privacy": "Información de privacidad",
+                "footer-terms": "Uso de este sitio",
+                "footer-support": "Contacto",
+                "footer-copy": "© 2026 COARFAMILY",
+                "channel-body": "Los enlaces existentes se mantienen abajo. Se aplican los datos y condiciones del vendedor de destino.",
+                "nav-catalog": "Catálogo",
+                "nav-shopify": "Shopify en preparación",
+                "nav-contact": "Contacto",
+                "browse-catalog": "Explorar catálogo",
+                "shopify-entry": "Shopify: en preparación",
+                "channel-note": "Precios, disponibilidad y entrega dependen del canal elegido.",
+                "shopify-status": "EN PREPARACIÓN",
+                "shopify-title": "La próxima tienda COARFAMILY.",
+                "shopify-body": "Preparamos Shopify para Corea. Está protegido con contraseña; no presentamos nuevos productos ni enlaces de pago como listos para vender.",
+                "shopify-link": "Visitar Shopify en preparación",
+                "about-body": "Una guía de cuidado coreano y canales de venta. Los gráficos abstractos originales no son fotografías de productos. El catálogo enlaza a anuncios externos existentes.",
+                "privacy-body": "Esta página no procesa pagos. Los datos del catálogo pueden guardarse en el navegador y algunos recursos cargarse desde proveedores externos. Rigen las políticas de privacidad del destino.",
+                "terms-body": "Información para explorar, no consejo médico ni garantía de resultados. Confirma vendedor, precio, ingredientes, envío y devoluciones antes de comprar.",
+                "contact-body": "Usa el correo existente para consultas del sitio. Para un pedido, contacta al vendedor en el canal donde compraste.",
+                "safe-product-desc": "Consulta ingredientes, uso y precio actuales en la página de venta."
+          },
+          "ja": {
+                "hero-headline": "情報は明確に。<br>毎日のスキンケア。",
+                "hero-subtext": "韓国スキンケアの商品情報と販売チャネルを一か所で。",
+                "s2-eyebrow": "K-ビューティー",
+                "s2-headline": "購入前に商品を確認。",
+                "s2-body": "商品ページで成分、内容量、使い方、注意事項を確認してからお選びください。",
+                "s2-learn": "商品ページを見る",
+                "s3-eyebrow": "スキンケア",
+                "s3-headline": "お好みの販売チャネルへ。",
+                "s3-learn": "外部の商品ページを見る",
+                "catalog-headline": "外部販売チャネルのカタログ",
+                "p1-name": "La Belle Rose グラスリップグロス",
+                "p1-desc": "成分・使い方・価格は販売ページで確認してください。",
+                "p2-name": "Dewy Calming",
+                "p2-desc": "成分・使い方・価格は販売ページで確認してください。",
+                "p3-name": "コラーゲングロウミストアンプル",
+                "p3-desc": "成分・使い方・価格は販売ページで確認してください。",
+                "p4-name": "高濃縮PDRNグロウエッセンス",
+                "p4-desc": "成分・使い方・価格は販売ページで確認してください。",
+                "p5-name": "ビタC ホイップファーストエッセンス",
+                "p5-desc": "成分・使い方・価格は販売ページで確認してください。",
+                "cta-headline": "選ぶ前に、もう一度確認。",
+                "cta-body": "現在の価格、在庫、配送、返品条件は各販売チャネルの商品・決済ページで確認してください。",
+                "cta-btn": "商品案内を見る",
+                "footer-about": "COARFAMILYについて",
+                "footer-privacy": "プライバシー案内",
+                "footer-terms": "サイト利用案内",
+                "footer-support": "お問い合わせ",
+                "footer-copy": "© 2026 COARFAMILY",
+                "channel-body": "既存のマーケットプレイスリンクを以下に保存しています。販売者の商品情報と決済条件が適用されます。",
+                "nav-catalog": "カタログ",
+                "nav-shopify": "Shopify準備",
+                "nav-contact": "お問い合わせ",
+                "browse-catalog": "カタログを見る",
+                "shopify-entry": "Shopify：準備中",
+                "channel-note": "価格、在庫、配送条件は販売チャネルによって異なります。",
+                "shopify-status": "準備中",
+                "shopify-title": "新しいCOARFAMILYストア。",
+                "shopify-body": "韓国向けShopifyストアを準備しています。現在はパスワード保護されており、新規商品や決済リンクを販売準備完了とは案内していません。",
+                "shopify-link": "Shopify準備ページへ",
+                "about-body": "韓国スキンケアを紹介し販売チャネルへつなぐサイトです。オリジナルの抽象グラフィックは実物の商品写真ではありません。カタログは既存の外部販売ページへつながります。",
+                "privacy-body": "このページ自体では決済を行いません。カタログ情報がブラウザーに保存され、一部リソースが外部から読み込まれる場合があります。移動先のプライバシーポリシーが適用されます。",
+                "terms-body": "閲覧用の情報であり、医療上の助言や効果の保証ではありません。購入前に販売者、価格、成分、配送、返品条件を商品ページで確認してください。",
+                "contact-body": "サイトに関するお問い合わせは既存のメールへ。注文は購入した販売チャネルで販売者へお問い合わせください。",
+                "safe-product-desc": "成分・使い方・価格は販売ページで確認してください。"
+          },
+          "zh": {
+                "hero-subtext": "在一处了解韩国护肤产品信息与销售渠道。",
+                "s2-eyebrow": "分类标签",
+                "s2-headline": "购买前先了解产品。",
+                "s2-body": "下单前请在产品页面确认成分、容量、用法及注意事项。",
+                "s2-learn": "查看产品页面",
+                "s3-eyebrow": "分类标签",
+                "s3-headline": "选择适合的销售渠道。",
+                "s3-learn": "查看外部商品页面",
+                "catalog-headline": "外部销售渠道目录",
+                "p1-name": "La Belle Rose 玻璃唇彩",
+                "p1-desc": "当前成分、用法和价格请查看销售页面。",
+                "p2-name": "Dewy Calming",
+                "p2-desc": "当前成分、用法和价格请查看销售页面。",
+                "p3-name": "胶原焕亮喷雾安瓶",
+                "p3-desc": "当前成分、用法和价格请查看销售页面。",
+                "p4-name": "高浓度PDRN焕亮精华",
+                "p4-desc": "当前成分、用法和价格请查看销售页面。",
+                "p5-name": "维他命C绵密精华",
+                "p5-desc": "当前成分、用法和价格请查看销售页面。",
+                "cta-headline": "选择之前，再确认一次。",
+                "cta-body": "请在各销售渠道的商品及结算页面确认当前价格、库存、配送和退货条件。",
+                "cta-btn": "查看商品",
+                "footer-about": "关于COARFAMILY",
+                "footer-privacy": "隐私说明",
+                "footer-terms": "网站使用说明",
+                "footer-support": "联系",
+                "footer-copy": "© 2026 COARFAMILY",
+                "hero-headline": "信息清楚。<br>日常护肤。",
+                "channel-body": "下方保留已有的商城链接。商品资料和结算条件以目标卖家的页面为准。",
+                "nav-catalog": "目录",
+                "nav-shopify": "Shopify筹备",
+                "nav-contact": "联系",
+                "browse-catalog": "浏览目录",
+                "shopify-entry": "Shopify：筹备中",
+                "channel-note": "价格、库存和配送条件因销售渠道而异。",
+                "shopify-status": "筹备中",
+                "shopify-title": "新的COARFAMILY商店。",
+                "shopify-body": "面向韩国的Shopify商店正在筹备，目前需要密码访问；不将新商品或付款链接宣传为已完成销售准备。",
+                "shopify-link": "访问Shopify筹备页面",
+                "about-body": "介绍韩国护肤并连接销售渠道的网站。原创抽象品牌图形并非实物产品照片。目录链接到已有的外部商品页面。",
+                "privacy-body": "本页面不处理付款。目录数据可能保存在浏览器中，部分资源可能从外部提供方加载。目标网站适用其自身的隐私政策。",
+                "terms-body": "信息仅供浏览，不是医疗建议或效果保证。购买前请确认卖家、价格、成分、配送及退货条件。",
+                "contact-body": "网站问题请使用已有联系邮箱。订单问题请通过购买渠道联系对应卖家。",
+                "safe-product-desc": "当前成分、用法和价格请查看销售页面。"
+          }
     };
 
     function setLang(lang) {
       var dict = i18nData[lang];
       if (!dict) return;
       window._currentLang = lang;
+      document.documentElement.lang = lang === 'kr' ? 'ko' : lang;
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.getAttribute('data-i18n');
         if (dict[key] !== undefined) el.innerHTML = dict[key];
