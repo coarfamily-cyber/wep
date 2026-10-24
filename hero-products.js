@@ -17,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '2026-10-24.2';
+  var VERSION = '2026-10-25.1';
   var CLOSE_MS = 480; // keep panel unhidden this long after close so CSS clip/fade can finish
   var SLOTS = ['section2', 'section3'];
   var SLOT_LABELS = { section2: 'Section 2', section3: 'Section 3' };
@@ -40,9 +40,13 @@
     closedHeight: 66,
     desktopWidth: 380,
     desktopHeight: 250,
-    mobileWidth: 218,
-    mobileHeight: 340,
-    mobileMax: 600,
+    mobileWidth: 360,
+    mobileHeight: 204,
+    mobileMax: 768,
+    mobileMargin: 24,
+    emptyWidth: 218,
+    emptyHeight: 128,
+    captionGap: 12,
     margin: 14
   };
 
@@ -250,10 +254,11 @@
     var vw = opts.viewportWidth;
     var vh = opts.viewportHeight;
     var align = opts.align === 'left' ? 'left' : 'right';
-    var m = LAYOUT.margin;
     var mobile = vw <= LAYOUT.mobileMax;
-    var targetW = mobile ? LAYOUT.mobileWidth : LAYOUT.desktopWidth;
-    var targetH = mobile ? LAYOUT.mobileHeight : LAYOUT.desktopHeight;
+    var m = mobile ? LAYOUT.mobileMargin : LAYOUT.margin;
+    var assigned = opts.assigned !== false;
+    var targetW = assigned ? (mobile ? LAYOUT.mobileWidth : LAYOUT.desktopWidth) : LAYOUT.emptyWidth;
+    var targetH = assigned ? (mobile ? LAYOUT.mobileHeight : LAYOUT.desktopHeight) : LAYOUT.emptyHeight;
 
     var availW = align === 'right' ? rect.right - m : vw - rect.left - m;
     var width = Math.min(targetW, availW, vw - 2 * m);
@@ -269,7 +274,9 @@
     var height = Math.min(targetH, avail, vh - 2 * m);
     height = Math.max(LAYOUT.closedHeight, Math.floor(height));
 
-    return { direction: direction, width: width, height: height, mobile: mobile };
+    var captionOffset = mobile && direction === 'up'
+      ? -(height - LAYOUT.closedHeight + LAYOUT.captionGap) : 0;
+    return { direction: direction, width: width, height: height, mobile: mobile, captionOffset: captionOffset };
   }
 
   function alignFromTextAlign(textAlign, dir) {
@@ -607,6 +614,16 @@
     return { w: w, h: h };
   }
 
+  function syncMobileCaption(r, expanded) {
+    if (!r.mobileLayout) {
+      r.overlay.removeAttribute('data-coar-mobile-layout');
+      r.overlay.style.removeProperty('--coar-caption-offset');
+      return;
+    }
+    r.overlay.setAttribute('data-coar-mobile-layout', expanded ? 'open' : 'closed');
+    r.overlay.style.setProperty('--coar-caption-offset', (expanded ? r.captionOffset : 0) + 'px');
+  }
+
   function applyLayout(slot) {
     var r = anchors[slot];
     if (!r) return;
@@ -617,11 +634,15 @@
       rect: rect,
       viewportWidth: vp.w,
       viewportHeight: vp.h,
-      align: r.wrapper.getAttribute('data-align')
+      align: r.wrapper.getAttribute('data-align'),
+      assigned: !!(state.slots[slot] && state.slots[slot].status === 'assigned')
     });
+    r.mobileLayout = lay.mobile;
+    r.captionOffset = lay.captionOffset;
     r.wrapper.setAttribute('data-direction', lay.direction);
     r.wrapper.style.setProperty('--coar-open-width', lay.width + 'px');
     r.wrapper.style.setProperty('--coar-open-height', lay.height + 'px');
+    syncMobileCaption(r, r.wrapper.classList.contains('is-open'));
   }
 
   /* ---------- rendering ---------- */
@@ -658,6 +679,7 @@
       var empty = el('p', 'coar-hero-empty', EMPTY_MESSAGE);
       panel.appendChild(empty);
     }
+    if (r.lifecycle && r.lifecycle.isOpen()) applyLayout(slot);
   }
 
   // Pre-decode the product image off the interaction path (idle time), so the
@@ -702,6 +724,7 @@
       commitOpen: function () {
         void r.wrapper.offsetWidth; // flush closed styles so the transition runs
         r.wrapper.classList.add('is-open');
+        syncMobileCaption(r, true);
         r.wrapper.setAttribute('data-phase', 'open');
       },
       startClose: function (opts) {
@@ -709,6 +732,7 @@
         var active = document.activeElement;
         var focusInside = !!(active && r.panel.contains(active));
         r.wrapper.classList.remove('is-open');
+        syncMobileCaption(r, false);
         r.trigger.setAttribute('aria-expanded', 'false');
         if (restoreFocus || focusInside) {
           try { r.trigger.focus({ preventScroll: true }); } catch (e) { r.trigger.focus(); }
@@ -718,6 +742,8 @@
       },
       hide: function () {
         r.panel.hidden = true;
+        r.overlay.removeAttribute('data-coar-mobile-layout');
+        r.overlay.style.removeProperty('--coar-caption-offset');
         r.wrapper.setAttribute('data-phase', 'closed');
       }
     }, {

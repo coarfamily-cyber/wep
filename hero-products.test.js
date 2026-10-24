@@ -11,7 +11,7 @@ const SHOP = 'https://coar-store.myshopify.com/products/glow-serum';
 
 test('exports helpers without a DOM and exposes version/constants', () => {
   assert.equal(typeof document, 'undefined');
-  assert.equal(H.VERSION, '2026-10-24.2');
+  assert.equal(H.VERSION, '2026-10-25.1');
   assert.equal(H.CLOSE_MS, 480);
   assert.deepEqual(H.SLOTS, ['section2', 'section3']);
   assert.equal(H.DEFAULT_CTA, 'Shopify에서 보기 ›');
@@ -181,21 +181,21 @@ test('buildSavePayload: clear saves explicit empty record, validation errors are
 test('computeLayout: desktop/mobile targets, direction choice and viewport clamping', () => {
   // Desktop, plenty of room below.
   let l = H.computeLayout({ rect: { top: 300, bottom: 366, left: 900, right: 1118 }, viewportWidth: 1440, viewportHeight: 900, align: 'right' });
-  assert.deepEqual(l, { direction: 'down', width: 380, height: 250, mobile: false });
+  assert.deepEqual(l, { direction: 'down', width: 380, height: 250, mobile: false, captionOffset: 0 });
 
   // Desktop near bottom -> opens up.
   l = H.computeLayout({ rect: { top: 780, bottom: 846, left: 900, right: 1118 }, viewportWidth: 1440, viewportHeight: 900, align: 'right' });
   assert.equal(l.direction, 'up');
   assert.equal(l.height, 250);
 
-  // Mobile (<=600): 218 x 340, bottom-anchored overlay opens up.
+  // Mobile (<=768): compact horizontal card; upward growth reserves title space.
   l = H.computeLayout({ rect: { top: 700, bottom: 766, left: 24, right: 242 }, viewportWidth: 390, viewportHeight: 844, align: 'left' });
-  assert.deepEqual(l, { direction: 'up', width: 218, height: 340, mobile: true });
+  assert.deepEqual(l, { direction: 'up', width: 342, height: 204, mobile: true, captionOffset: -150 });
 
   // Tight viewport: clamps to margins, never below closed size.
   l = H.computeLayout({ rect: { top: 100, bottom: 166, left: 20, right: 238 }, viewportWidth: 600, viewportHeight: 300, align: 'left' });
   assert.equal(l.mobile, true);
-  assert.ok(l.height <= 300 - 14 * 2 || l.height === 66);
+  assert.ok(l.height <= 300 - 24 * 2 || l.height === 66);
   assert.ok(l.height >= 66);
 
   // Right-aligned with little room on the left: width shrinks to fit margin.

@@ -23,6 +23,10 @@ hero-products.json의 section2와 section3를 각각 수정합니다. name / ima
 
 ## 검사
 
-`node --test hero-products.test.js catalog-preservation.test.cjs`
+`node --test hero-products.test.js catalog-preservation.test.cjs mobile-layout.test.cjs`
 
 기존 Full Catalog 마크업과 인라인 로직 보존, 독립 설정, URL 검증을 확인합니다.
+
+## 모바일 표시
+
+모바일 카드는 사진과 상품명·버튼을 가로로 배치합니다. 위로 펼쳐질 때 제목과 설명은 같은 속도로 이동해 카드와 겹치지 않으며, Learn more 위치는 유지됩니다. 미지정 상품은 작은 안내만 표시합니다. Full Catalog와 저장된 상품 정보는 변경하지 않습니다.
