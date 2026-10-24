@@ -1452,6 +1452,8 @@
     }
   }
 </script>
+  <link rel="stylesheet" href="hero-products.css?v=20261024-2">
+  <script src="hero-products.js?v=20261024-2" defer></script>
 </head>
 <body>
 
@@ -1516,7 +1518,7 @@
       <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">K-Beauty</div>
       <h2 class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">A product that will<br>change your everyday.</h2>
       <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Korean skincare trusted by millions — freshly sourced from Seoul and shipped straight to your door.</p>
-      <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
+      <a class="inline-link" id="section2-learn-more" data-hero-product-slot="section2" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s2-learn">Learn more</span>
         <span>›</span>
       </a>
@@ -1524,7 +1526,7 @@
   </section>
 
   <!-- ⑥ Section 3 Full-bleed -->
-  <section class="hero">
+  <section class="hero" id="section3">
     <div class="hero-visual">
       <img class="hero-product-img" src="images/4.png" alt="Section 3" style="width:100%; height:100%; object-fit:cover; object-position:center center;">
       <div style="position:absolute; inset:0; background:
@@ -1535,7 +1537,7 @@
     <div class="section-text-overlay section3-text" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
       <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Skincare</div>
       <h2 class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
-      <a class="inline-link" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
+      <a class="inline-link" id="section3-learn-more" data-hero-product-slot="section3" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s3-learn">Learn more</span>
         <span>›</span>
       </a>
@@ -1755,6 +1757,7 @@
       return sessionStorage.getItem('adminAuth') === '1';
     }
     function setAdminUI(on) {
+      if (window.CoarHeroProducts) window.CoarHeroProducts.syncAdminUI(on);
       document.getElementById('addProductCard').style.display = on ? 'flex' : 'none';
       document.getElementById('adminBadge').style.display = on ? 'block' : 'none';
       // 삭제 버튼 표시/숨김
