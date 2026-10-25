@@ -17,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '2026-10-25.1';
+  var VERSION = '2026-10-25.2';
   var CLOSE_MS = 480; // keep panel unhidden this long after close so CSS clip/fade can finish
   var SLOTS = ['section2', 'section3'];
   var SLOT_LABELS = { section2: 'Section 2', section3: 'Section 3' };
@@ -26,6 +26,47 @@
   var FALLBACK_FIREBASE_URL = 'https://coarfamily-e4960-default-rtdb.firebaseio.com';
   var DEFAULT_CTA = 'Shopify에서 보기 \u203A';
   var EMPTY_MESSAGE = '상품 정보를 준비 중입니다.';
+
+  var PUBLIC_TEXT = {
+    en: { learnMore: 'Learn more', viewProduct: 'View product \u203A', empty: 'Details coming soon.' },
+    kr: { learnMore: '더 알아보기', viewProduct: '상품 보기 \u203A', empty: '상품 정보를 준비 중입니다.' },
+    ja: { learnMore: '詳しく見る', viewProduct: '商品を見る \u203A', empty: '商品情報は準備中です。' },
+    zh: { learnMore: '了解更多', viewProduct: '查看商品 \u203A', empty: '商品详情即将上线。' },
+    es: { learnMore: 'Más información', viewProduct: 'Ver producto \u203A', empty: 'Próximamente más detalles.' }
+  };
+
+  function normalizeLanguage(lang) {
+    lang = typeof lang === 'string' ? lang.toLowerCase() : '';
+    if (lang === 'ko' || lang.indexOf('ko-') === 0) return 'kr';
+    if (lang.indexOf('zh-') === 0) return 'zh';
+    lang = lang.split('-')[0];
+    return PUBLIC_TEXT[lang] ? lang : 'en';
+  }
+
+  function publicText(lang, key) {
+    return PUBLIC_TEXT[normalizeLanguage(lang)][key] || '';
+  }
+
+  function publicCta(cta, lang) {
+    var value = normalizeCta(cta);
+    var isDefault = value === DEFAULT_CTA || Object.keys(PUBLIC_TEXT).some(function (key) {
+      return value === PUBLIC_TEXT[key].viewProduct;
+    });
+    return isDefault ? publicText(lang, 'viewProduct') : value;
+  }
+
+  function parseSaveResponse(status, text) {
+    if (status < 200 || status >= 300) throw new Error(describeHttpError(status, text));
+    var accepted;
+    try { accepted = JSON.parse(text); } catch (e) {
+      throw new Error('서버 응답을 해석할 수 없어 저장 여부를 확인하지 못했습니다.');
+    }
+    var norm = normalizeRecord(accepted);
+    if (norm.status !== 'assigned' && norm.status !== 'empty') {
+      throw new Error('서버가 반환한 데이터가 올바르지 않아 반영하지 않았습니다.');
+    }
+    return norm;
+  }
 
   var LIMITS = {
     name: 80,
@@ -387,6 +428,10 @@
 
   var helpers = {
     VERSION: VERSION,
+    normalizeLanguage: normalizeLanguage,
+    publicText: publicText,
+    publicCta: publicCta,
+    parseSaveResponse: parseSaveResponse,
     CLOSE_MS: CLOSE_MS,
     inputModeForKey: inputModeForKey,
     createDisclosure: createDisclosure,
@@ -427,6 +472,7 @@
 
   var state = {
     version: VERSION,
+    language: normalizeLanguage(root._currentLang || 'en'),
     loaded: false,
     defaultsError: null,
     remoteError: null,
@@ -645,6 +691,24 @@
     syncMobileCaption(r, r.wrapper.classList.contains('is-open'));
   }
 
+  function setLanguage(lang) {
+    state.language = normalizeLanguage(lang);
+    document.documentElement.lang = { kr: 'ko', zh: 'zh-CN' }[state.language] || state.language;
+    SLOTS.forEach(function (slot) {
+      var r = anchors[slot];
+      if (r) {
+        var labelText = r.label.querySelector('[data-i18n]');
+        if (labelText) labelText.textContent = publicText(state.language, 'learnMore');
+      }
+      renderSlot(slot);
+    });
+    if (editor) {
+      editor.cta.placeholder = publicText(state.language, 'viewProduct');
+      renderPreview(editor);
+    }
+    return state.language;
+  }
+
   /* ---------- rendering ---------- */
 
   function renderSlot(slot) {
@@ -672,11 +736,11 @@
         cancelDecode(r);
       }
       link.appendChild(el('span', 'coar-hero-name', p.name));
-      link.appendChild(el('span', 'coar-hero-cta', p.cta || DEFAULT_CTA));
+      link.appendChild(el('span', 'coar-hero-cta', publicCta(p.cta, state.language)));
       panel.appendChild(link);
     } else {
       cancelDecode(r);
-      var empty = el('p', 'coar-hero-empty', EMPTY_MESSAGE);
+      var empty = el('p', 'coar-hero-empty', publicText(state.language, 'empty'));
       panel.appendChild(empty);
     }
     if (r.lifecycle && r.lifecycle.isOpen()) applyLayout(slot);
@@ -847,6 +911,8 @@
     title.id = 'coar-hero-editor-title';
     form.appendChild(title);
 
+    var body = el('div', 'coar-hero-editor-body');
+    body.id = 'coar-hero-editor-body';
     var fields = el('fieldset', 'coar-hero-editor-fields');
     fields.id = 'coar-hero-editor-fields';
 
@@ -861,7 +927,7 @@
     image.inputMode = 'url';
     image.autocomplete = 'off';
     image.placeholder = 'images/product1.webp 또는 https://…';
-    fields.appendChild(field('coar-hero-editor-image', '이미지 주소', image, '저장소 상대 경로 또는 https 주소'));
+    fields.appendChild(field('coar-hero-editor-image', '이미지 주소 (파일 업로드 시 생략)', image, '상품 페이지가 아닌 사진 파일 링크입니다. 아래에서 파일을 올리면 비워도 됩니다.'));
 
     var upload = el('input');
     upload.type = 'file';
@@ -873,16 +939,16 @@
     url.inputMode = 'url';
     url.autocomplete = 'off';
     url.placeholder = 'https://your-store.myshopify.com/products/…';
-    fields.appendChild(field('coar-hero-editor-url', 'Shopify 상품 주소', url, 'myshopify.com 또는 shopifypreview.com https 주소'));
+    fields.appendChild(field('coar-hero-editor-url', 'Shopify 상품 주소', url, '실제 상품 주소를 권장합니다. shopifypreview.com 미리보기 주소는 만료될 수 있습니다.'));
 
     var cta = el('input');
     cta.type = 'text';
     cta.maxLength = LIMITS.cta;
     cta.autocomplete = 'off';
-    cta.placeholder = DEFAULT_CTA;
-    fields.appendChild(field('coar-hero-editor-cta', '버튼 문구', cta, '비우면 기본 문구: ' + DEFAULT_CTA));
+    cta.placeholder = publicText(state.language, 'viewProduct');
+    fields.appendChild(field('coar-hero-editor-cta', '버튼 문구', cta, '비우면 방문자가 선택한 언어의 기본 문구를 사용합니다.'));
 
-    form.appendChild(fields);
+    body.appendChild(fields);
 
     var clearWrap = el('div', 'coar-hero-editor-field coar-hero-editor-clear-field');
     var clear = el('input');
@@ -892,18 +958,22 @@
     clearLabel.htmlFor = clear.id;
     clearWrap.appendChild(clear);
     clearWrap.appendChild(clearLabel);
-    form.appendChild(clearWrap);
+    body.appendChild(clearWrap);
 
     var preview = el('div', 'coar-hero-editor-preview');
     preview.id = 'coar-hero-editor-preview';
     preview.setAttribute('aria-label', '미리보기');
-    form.appendChild(preview);
+    body.appendChild(preview);
+    form.appendChild(body);
+    var footer = el('div', 'coar-hero-editor-footer');
 
     var status = el('p', 'coar-hero-editor-status');
     status.id = 'coar-hero-editor-status';
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
-    form.appendChild(status);
+    status.setAttribute('aria-atomic', 'true');
+    status.tabIndex = -1;
+    footer.appendChild(status);
 
     var actions = el('div', 'coar-hero-editor-actions');
     var cancel = el('button', 'coar-hero-editor-cancel', '취소');
@@ -914,7 +984,8 @@
     save.id = 'coar-hero-editor-save';
     actions.appendChild(cancel);
     actions.appendChild(save);
-    form.appendChild(actions);
+    footer.appendChild(actions);
+    form.appendChild(footer);
 
     dialog.appendChild(form);
     document.body.appendChild(dialog);
@@ -922,21 +993,30 @@
     var ed = {
       dialog: dialog, form: form, title: title, fields: fields,
       name: name, image: image, upload: upload, url: url, cta: cta, clear: clear,
-      preview: preview, status: status, save: save, cancel: cancel,
-      slot: null, uploadData: '', saving: false, returnFocus: null, uploadToken: 0
+      body: body, footer: footer, preview: preview, status: status, save: save, cancel: cancel,
+      slot: null, uploadData: '', saving: false, saved: false, uploading: false, returnFocus: null, uploadToken: 0
     };
 
-    function refreshPreview() { renderPreview(ed); }
+    function refreshPreview() {
+      markEdited(ed);
+      renderPreview(ed);
+    }
     name.addEventListener('input', refreshPreview);
     cta.addEventListener('input', refreshPreview);
     url.addEventListener('input', refreshPreview);
     image.addEventListener('input', function () {
-      if (image.value.trim()) ed.uploadData = '';
+      if (image.value.trim()) {
+        ed.uploadData = '';
+        ed.upload.value = '';
+        ed.uploadToken++;
+        ed.uploading = false;
+      }
       image.placeholder = 'images/product1.webp 또는 https://…';
       refreshPreview();
     });
     clear.addEventListener('change', function () {
       fields.disabled = clear.checked;
+      markEdited(ed);
       refreshPreview();
     });
     upload.addEventListener('change', function () { handleUpload(ed); });
@@ -951,15 +1031,26 @@
     });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      submitEditor(ed);
+      var pendingSave = submitEditor(ed);
+      if (pendingSave && pendingSave.catch) pendingSave.catch(function () { /* status already explains failure */ });
     });
     return ed;
+  }
+
+  function markEdited(ed) {
+    if (ed.saving) return;
+    var explain = ed.saved || ed.status.getAttribute('data-kind') === 'error';
+    ed.saved = false;
+    setSaving(ed, false);
+    if (explain) setStatus(ed, '변경한 내용은 저장을 눌러야 반영됩니다.', 'info');
   }
 
   function setStatus(ed, text, kind) {
     ed.status.textContent = text || '';
     if (kind) ed.status.setAttribute('data-kind', kind);
     else ed.status.removeAttribute('data-kind');
+    ed.status.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+    ed.status.setAttribute('aria-live', kind === 'error' ? 'assertive' : 'polite');
   }
 
   function editorInput(ed) {
@@ -977,7 +1068,7 @@
     while (box.firstChild) box.removeChild(box.firstChild);
     var input = editorInput(ed);
     if (input.clear) {
-      box.appendChild(el('p', 'coar-hero-empty', EMPTY_MESSAGE));
+      box.appendChild(el('p', 'coar-hero-empty', publicText(state.language, 'empty')));
       return;
     }
     var src = input.image ? normalizeImageSrc(input.image) : '';
@@ -990,18 +1081,23 @@
     }
     var nm = normalizeName(input.name);
     box.appendChild(el('span', 'coar-hero-name', nm || '(상품명)'));
-    box.appendChild(el('span', 'coar-hero-cta', normalizeCta(input.cta)));
+    box.appendChild(el('span', 'coar-hero-cta', publicCta(input.cta, state.language)));
   }
 
   function handleUpload(ed) {
     var file = ed.upload.files && ed.upload.files[0];
     if (!file) return;
     var token = ++ed.uploadToken;
+    markEdited(ed);
     if (UPLOAD.types.indexOf(String(file.type).toLowerCase()) === -1) {
+      ed.uploading = false;
+      setSaving(ed, false);
       ed.upload.value = '';
       setStatus(ed, '이미지 파일(JPEG/PNG/WebP/GIF)만 업로드할 수 있습니다.', 'error');
       return;
     }
+    ed.uploading = true;
+    setSaving(ed, false);
     setStatus(ed, '이미지 처리 중…', 'info');
     var objectUrl = URL.createObjectURL(file);
     var img = new Image();
@@ -1023,12 +1119,16 @@
         ctx.drawImage(img, 0, 0, cw, ch);
         var data = canvas.toDataURL('image/jpeg', UPLOAD.quality);
         if (!normalizeImageSrc(data)) throw new Error('encoded image rejected');
+        ed.uploading = false;
+        setSaving(ed, false);
         ed.uploadData = data;
         ed.image.value = '';
         ed.image.placeholder = '(업로드한 이미지 사용 · ' + cw + '×' + ch + ')';
         setStatus(ed, '업로드 이미지가 준비되었습니다 (' + cw + '×' + ch + ' JPEG). 저장을 눌러야 반영됩니다.', 'info');
         renderPreview(ed);
       } catch (err) {
+        ed.uploading = false;
+        setSaving(ed, false);
         ed.upload.value = '';
         setStatus(ed, '이미지를 처리할 수 없습니다: ' + (err && err.message ? err.message : err), 'error');
       }
@@ -1036,6 +1136,8 @@
     img.onerror = function () {
       URL.revokeObjectURL(objectUrl);
       if (token !== ed.uploadToken) return;
+      ed.uploading = false;
+      setSaving(ed, false);
       ed.upload.value = '';
       setStatus(ed, '이미지 파일을 읽을 수 없습니다.', 'error');
     };
@@ -1053,6 +1155,8 @@
     ed.returnFocus = anchors[slot] ? anchors[slot].edit : null;
     ed.title.textContent = SLOT_LABELS[slot] + ' Learn more 상품';
     ed.uploadData = '';
+    ed.saved = false;
+    ed.uploading = false;
     ed.uploadToken++;
     ed.upload.value = '';
     ed.clear.checked = false;
@@ -1063,6 +1167,7 @@
     ed.name.value = p ? p.name : '';
     ed.url.value = p ? p.url : '';
     ed.cta.value = p && p.cta !== DEFAULT_CTA ? p.cta : '';
+    ed.cta.placeholder = publicText(state.language, 'viewProduct');
     if (p && /^data:/i.test(p.image)) {
       ed.uploadData = p.image;
       ed.image.value = '';
@@ -1070,7 +1175,7 @@
     } else {
       ed.image.value = p ? p.image : '';
     }
-    setStatus(ed, s && s.status !== 'assigned' ? '현재 이 섹션은 비어 있습니다.' : '', null);
+    setStatus(ed, s && s.status !== 'assigned' ? '현재 이 섹션은 비어 있습니다.' : '현재 설정된 상품을 불러왔습니다. 수정 후 저장을 눌러주세요.', 'info');
     setSaving(ed, false);
     renderPreview(ed);
     try { ed.dialog.showModal(); } catch (e) { ed.dialog.setAttribute('open', ''); }
@@ -1079,7 +1184,9 @@
 
   function setSaving(ed, on) {
     ed.saving = on;
-    ed.save.disabled = on;
+    ed.save.disabled = on || ed.uploading || ed.saved;
+    ed.save.textContent = on ? '저장 중…' : (ed.saved ? '저장 완료' : '저장');
+    ed.cancel.textContent = ed.saved ? '닫기' : '취소';
     ed.cancel.disabled = on;
     ed.clear.disabled = on;
     ed.fields.disabled = on || ed.clear.checked;
@@ -1087,7 +1194,8 @@
   }
 
   function submitEditor(ed) {
-    if (ed.saving) return;
+    if (ed.saving || ed.saved) return;
+    if (ed.uploading) { setStatus(ed, '이미지 처리가 끝난 후 저장해 주세요.', 'info'); return; }
     var slot = ed.slot;
     if (!isKnownSlot(slot)) return;
     if (!currentIsAdmin()) {
@@ -1102,7 +1210,7 @@
       if (first && first.focus) first.focus();
       return;
     }
-    saveSlot(slot, built.payload, ed);
+    return saveSlot(slot, built.payload, ed);
   }
 
   function saveSlot(slot, payload, ed) {
@@ -1116,10 +1224,7 @@
       cache: 'no-store'
     }).then(function (res) {
       return res.text().then(function (text) {
-        if (!res.ok) throw new Error(describeHttpError(res.status, text));
-        var accepted;
-        try { accepted = JSON.parse(text); } catch (e) { throw new Error('서버 응답을 해석할 수 없어 저장 여부를 확인하지 못했습니다.'); }
-        var norm = normalizeRecord(accepted);
+        var norm = parseSaveResponse(res.status, text);
         if (norm.status === 'assigned') {
           state.slots[slot] = { status: 'assigned', source: 'saved', product: norm.product };
         } else if (norm.status === 'empty') {
@@ -1131,11 +1236,14 @@
         return cloneState().slots[slot];
       });
     }, function (netErr) {
-      throw new Error('네트워크 오류로 저장하지 못했습니다' + (netErr && netErr.message ? ': ' + netErr.message : '.'));
+      throw new Error('네트워크 오류로 저장 결과를 확인하지 못했습니다' + (netErr && netErr.message ? ': ' + netErr.message : '.'));
     }).then(function (result) {
       if (ed) {
+        ed.saved = true;
         setSaving(ed, false);
-        setStatus(ed, '저장되었습니다. (' + SLOT_LABELS[slot] + ')', 'success');
+        if (ed.uploadData) ed.image.placeholder = '(현재 업로드 이미지 사용 중)';
+        var savedMessage = result.status !== 'assigned' ? '저장 완료: 이 섹션의 상품 선택이 해제되었습니다.' : (result.product.image ? '저장 완료: 상품과 이미지가 서버에 저장되었습니다.' : '저장 완료: 상품 정보가 서버에 저장되었습니다.');
+        setStatus(ed, savedMessage + ' (' + SLOT_LABELS[slot] + ')', 'success');
         renderPreview(ed);
       }
       return result;
@@ -1199,6 +1307,7 @@
     version: VERSION,
     ready: ready,
     syncAdminUI: syncAdminUI,
+    setLanguage: setLanguage,
     getState: cloneState,
     open: function (slot) { if (isKnownSlot(slot)) open(slot); },
     close: function (slot) { if (isKnownSlot(slot)) close(slot, false); },
@@ -1214,6 +1323,7 @@
     document.addEventListener('mousedown', onInputPointer, true);
     document.addEventListener('touchstart', onInputPointer, { capture: true, passive: true });
     SLOTS.forEach(enhanceSlot);
+    setLanguage(state.language);
     document.addEventListener('click', onDocumentPointer, true);
     document.addEventListener('keydown', onDocumentKeydown);
     root.addEventListener('resize', onResize);
