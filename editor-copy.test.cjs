@@ -1,0 +1,26 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const H = require('./hero-products.js');
+const html = fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
+const js = fs.readFileSync(path.join(__dirname,'hero-products.js'),'utf8');
+const css = fs.readFileSync(path.join(__dirname,'hero-products.css'),'utf8');
+const data = JSON.parse(JSON.stringify(vm.runInNewContext('('+html.match(/var i18nData = (\{[\s\S]*?^    \});/m)[1]+')',Object.create(null),{timeout:100})));
+const product = {name:'Plu365 Body Scrub 100 g - Raspberry',url:'https://fixture-123.shopifypreview.com/products_preview?preview_key=test-only',image:'data:image/jpeg;base64,'+'A'.repeat(78024),cta:H.DEFAULT_CTA};
+test('large uploaded image and optional image URL produce a valid save payload',()=>{const p=H.buildSavePayload({...product,clear:false});assert.equal(p.ok,true);assert.equal(p.payload.image,product.image);assert.equal(p.payload.name,product.name)});
+test('200 save echo is accepted, including uploaded image and independent clear',()=>{const n=H.parseSaveResponse(200,JSON.stringify(product));assert.equal(n.status,'assigned');assert.equal(n.product.image,product.image);assert.equal(H.parseSaveResponse(200,'{"empty":true}').status,'empty')});
+test('401/403 save replies surface permission failures',()=>{for(const n of [401,403])assert.throws(()=>H.parseSaveResponse(n,'{"error":"Permission denied"}'),/권한.*거부/)});
+test('malformed and invalid 200 replies never claim confirmed save',()=>{assert.throws(()=>H.parseSaveResponse(200,'<html>broken</html>'),/확인하지 못/);assert.throws(()=>H.parseSaveResponse(200,'null'),/올바르지/);assert.throws(()=>H.parseSaveResponse(204,''),/확인하지 못/)});
+test('all five public languages have default CTA and empty copy',()=>{for(const lang of ['en','kr','ja','zh','es']){assert.ok(H.publicText(lang,'viewProduct'));assert.ok(H.publicText(lang,'empty'));assert.ok(H.publicText(lang,'learnMore'));assert.equal(H.publicCta(H.DEFAULT_CTA,lang),H.publicText(lang,'viewProduct'));assert.equal(H.publicCta('',lang),H.publicText(lang,'viewProduct'))}});
+test('language normalization handles BCP47 and unknown values',()=>{assert.equal(H.normalizeLanguage('ko-KR'),'kr');assert.equal(H.normalizeLanguage('ja-JP'),'ja');assert.equal(H.normalizeLanguage('zh-CN'),'zh');assert.equal(H.normalizeLanguage('es-MX'),'es');assert.equal(H.normalizeLanguage('en-US'),'en');assert.equal(H.normalizeLanguage(null),'en');assert.equal(H.normalizeLanguage('de'),'en')});
+test('legacy default CTA translates; custom owner CTA is preserved',()=>{assert.equal(H.publicCta('Shopify에서 보기 ›','en'),'View product ›');assert.equal(H.publicCta('View product ›','kr'),'상품 보기 ›');assert.equal(H.publicCta('My custom button','ja'),'My custom button')});
+test('brand copy contains no placeholder or unsupported popularity/testing/shipping promise',()=>{for(const [lang,dict] of Object.entries(data)){const text=['hero-headline','hero-subtext','s2-headline','s2-body','cta-body'].map(k=>dict[k]||'').join(' ');assert.ok(!/millions|thoroughly tested|ready to ship|수백만|검증 완료|바로 배송|数百万|millones|Describe aquí|描述产品的价值|製品の価値と体験|제품의 가치와 경험/i.test(text),lang);assert.ok(dict['footer-copy'].includes('Coar Family'),lang);assert.ok(dict['cta-btn'])}assert.ok(!html.includes('© 2026 Brand.'));assert.ok(html.includes('data-i18n="cta-btn">Contact us'))});
+test('preview has intrinsic height, readable grid layout and scoped image size',()=>{const rule=css.match(/\.coar-hero-editor-preview\{([^}]*)\}/)[1];assert.ok(rule.includes('display:grid'));assert.ok(rule.includes('width:100%'));assert.ok(!/(?:^|;)height:/.test(rule));assert.ok(!rule.includes('background:#fff'));assert.ok(css.includes('.coar-hero-editor-preview .coar-hero-image{width:96px;height:116px}'))});
+test('footer feedback stays separate from scrolling fields with distinct status colors',()=>{assert.ok(css.includes('grid-template-rows:auto minmax(0,1fr) auto'));assert.ok(css.includes('.coar-hero-editor-body{'));assert.ok(css.includes('.coar-hero-editor .coar-hero-editor-status[data-kind=success]'));assert.ok(css.includes('.coar-hero-editor .coar-hero-editor-status[data-kind=error]'));assert.ok(js.includes('footer.appendChild(status)'));assert.ok(js.includes('footer.appendChild(actions)'))});
+test('save UX blocks upload races, confirms saved and handles rejected promises',()=>{assert.ok(js.includes('ed.save.disabled = on || ed.uploading || ed.saved'));assert.ok(js.includes("ed.saved ? '저장 완료'"));assert.ok(js.includes('pendingSave.catch'));assert.ok(js.includes('이미지 처리가 끝난 후 저장해 주세요.'));assert.ok(js.includes('상품 페이지가 아닌 사진 파일 링크입니다.'))});
+
+test('scrolling editor rows keep the full preview image and CTA intrinsic height',()=>{assert.ok(css.includes('grid-auto-rows:max-content'));assert.ok(css.includes('min-height:136px'));assert.ok(css.includes('.coar-hero-editor-preview .coar-hero-cta{min-width:0;max-width:100%;white-space:normal;overflow:visible;overflow-wrap:anywhere}'))});
+test('editor preview uses the same localized CTA as the public card',()=>{assert.ok(js.includes("box.appendChild(el('span', 'coar-hero-cta', publicCta(input.cta, state.language)))"));assert.ok(js.includes("editor.cta.placeholder = publicText(state.language, 'viewProduct')"))});

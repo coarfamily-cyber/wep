@@ -11,7 +11,7 @@ const SHOP = 'https://coar-store.myshopify.com/products/glow-serum';
 
 test('exports helpers without a DOM and exposes version/constants', () => {
   assert.equal(typeof document, 'undefined');
-  assert.equal(H.VERSION, '2026-10-25.1');
+  assert.equal(H.VERSION, '2026-10-25.2');
   assert.equal(H.CLOSE_MS, 480);
   assert.deepEqual(H.SLOTS, ['section2', 'section3']);
   assert.equal(H.DEFAULT_CTA, 'Shopify에서 보기 ›');
