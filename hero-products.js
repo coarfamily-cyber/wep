@@ -203,6 +203,11 @@
     var name = normalizeName(raw.name);
     if (!name) errors.push('name');
     var url = normalizeShopifyUrl(raw.url);
+    // Verified 2026-10-25: this saved preview is the Raspberry 100 g scrub.
+    // Match both identity and the exact old URL; never redirect other products.
+    if (name === 'Plu365 Body Scrub 100 g - Raspberry' && url === 'https://4pxh8fi9nrmobxcj-82748997889.shopifypreview.com/products_preview?preview_key=cd49d55fa1331f7d20368b3134c59c4f') {
+      url = 'https://coarfamily.myshopify.com/products/plu365-body-scrub-100-g-raspberry';
+    }
     if (!url) errors.push('url');
     var image = '';
     if (raw.image !== undefined && raw.image !== null && String(raw.image).trim() !== '') {

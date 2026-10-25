@@ -1703,9 +1703,9 @@
     <div class="footer-inner">
       <span class="footer-brand">Coar Family</span>
       <ul class="footer-links">
-        <li><a href="#" data-i18n="footer-about">About Us</a></li>
-        <li><a href="#" data-i18n="footer-privacy">Privacy Policy</a></li>
-        <li><a href="#" data-i18n="footer-terms">Terms of Use</a></li>
+        <li><a href="#section2" data-i18n="footer-about">About Us</a></li>
+        <li><a href="https://coarfamily.myshopify.com/policies/privacy-policy" data-i18n="footer-privacy">Privacy Policy</a></li>
+        <li><a href="https://coarfamily.myshopify.com/policies/terms-of-service" data-i18n="footer-terms">Terms of Use</a></li>
         <li><a href="#" id="support-btn" data-i18n="footer-support">Customer Support</a></li>
       </ul>
       <span class="footer-copy" data-i18n="footer-copy">© 2026 Coar Family. All rights reserved.</span>
@@ -2004,6 +2004,19 @@
       var container = document.getElementById('custom-items');
       container.innerHTML = '';
       getProducts().forEach(function(p) {
+        // BEGIN reviewed purchase-link handling
+        // Keep saved records intact. Preview links are not verified purchase URLs.
+        var seller = '';
+        var preview = false;
+        try {
+          var host = new URL(p.link).hostname.toLowerCase();
+          preview = host === 'shopifypreview.com' || host.endsWith('.shopifypreview.com');
+          if (host === 'buyma.com' || host === 'www.buyma.com') seller = 'BUYMA';
+          else if (host === 'etsy.com' || host === 'www.etsy.com') seller = 'Etsy';
+          else if (host === 'coarfamily.myshopify.com') seller = 'Shopify';
+        } catch (e) { /* Unassigned cards have no seller. */ }
+        if (preview) p = Object.assign({}, p, { link: '' });
+        // END reviewed purchase-link handling
         var displayName = p['name_' + lang] || p.name || '';
         var displayDesc = p['desc_' + lang] || p.desc || '';
         var imgHTML = p.img
@@ -2023,7 +2036,30 @@
             '</div>' +
           '</' + outer + '>'
         );
+        // BEGIN reviewed purchase-link handling
+        var label = document.createElement('div');
+        label.className = 'catalog-item-category';
+        label.textContent = preview ? ({
+          en: 'Purchase link pending verification',
+          ko: '구매 링크 확인 중',
+          ja: '購入リンク確認中',
+          zh: '购买链接待确认',
+          es: 'Enlace de compra pendiente de verificar'
+        }[lang] || 'Purchase link pending verification') : seller;
+        if (label.textContent) container.lastElementChild.querySelector('.catalog-item-info').prepend(label);
+        // END reviewed purchase-link handling
       });
+      // BEGIN reviewed purchase-link handling
+      // Static Etsy cards retain their original URLs and translations.
+      document.querySelectorAll('.catalog-row .catalog-item-info').forEach(function(info) {
+        if (!info.querySelector('.catalog-item-category')) {
+          var label = document.createElement('div');
+          label.className = 'catalog-item-category';
+          label.textContent = 'Etsy';
+          info.prepend(label);
+        }
+      });
+      // END reviewed purchase-link handling
     }
 
     // 모바일 도트 인디케이터
