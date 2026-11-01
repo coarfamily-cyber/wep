@@ -1474,6 +1474,8 @@
 </script>
   <link rel="stylesheet" href="subscription-notice.css?v=20261101-1">
   <script src="subscription-notice.js?v=20261101-1" defer></script>
+  <link rel="stylesheet" href="intro-video.css?v=20261101-1">
+  <script src="intro-video.js?v=20261101-1" defer></script>
   <link rel="stylesheet" href="responsive-hero.css?v=20261101-1">
   <link rel="stylesheet" href="hero-products.css?v=20261101-4">
   <script src="hero-products.js?v=20261101-2" defer></script>
@@ -1501,11 +1503,13 @@
   </div>
 
   <!-- ③ Hero Stage -->
-  <section class="hero">
+  <section class="hero" id="intro-hero" data-intro-media="poster">
     <div class="hero-visual">
       <img class="hero-product-img" src="images/hero-new.jpg" alt="Hero Model" style="object-fit:cover; object-position:center center;">
+      <video id="intro-video" class="intro-video" muted loop playsinline preload="none" poster="images/hero-new.jpg" aria-hidden="true" data-src="videos/hero-intro.mp4" hidden></video>
       <div class="hero-overlay"></div>
     </div>
+    <button id="intro-video-control" type="button" aria-controls="intro-video" hidden>Pause background video</button>
   </section>
 
 
