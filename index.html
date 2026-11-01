@@ -1509,7 +1509,7 @@
       <video id="intro-video" class="intro-video" muted loop playsinline preload="none" poster="images/hero-new.jpg" aria-hidden="true" data-src="videos/hero-intro.mp4" hidden></video>
       <div class="hero-overlay"></div>
     </div>
-    <button id="intro-video-control" type="button" aria-controls="intro-video" hidden>Pause background video</button>
+    <span id="intro-video-instructions" class="intro-video-help" hidden>Click or tap this background to pause or play. Use Enter or Space with the keyboard.</span>
   </section>
 
 
@@ -1539,9 +1539,11 @@
     </div>
     <!-- 텍스트: 오른쪽 상단 -->
     <div class="section-text-overlay" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
+      <div class="section-copy" tabindex="0" role="region" aria-labelledby="section2-title">
       <div class="eyebrow-tag" data-i18n="s2-eyebrow" style="justify-content:flex-end; color:#c8962a;">K-Beauty</div>
-      <h2 class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">Korean beauty.<br>Thoughtfully selected.</h2>
+      <h2 id="section2-title" class="light-headline" data-i18n="s2-headline" style="color:var(--color-frost-white);">Korean beauty.<br>Thoughtfully selected.</h2>
       <p class="light-body" data-i18n="s2-body" style="color:var(--color-frost-white); font-weight:600;">Skincare and beauty essentials, thoughtfully chosen for your daily routine.</p>
+      </div>
       <a class="inline-link" id="section2-learn-more" data-hero-product-slot="section2" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s2-learn">Learn more</span>
         <span>›</span>
@@ -1559,8 +1561,10 @@
         pointer-events:none;"></div>
     </div>
     <div class="section-text-overlay section3-text" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
+      <div class="section-copy" tabindex="0" role="region" aria-labelledby="section3-title">
       <div class="eyebrow-tag" data-i18n="s3-eyebrow" style="justify-content:flex-end; color:#c8962a;">Skincare</div>
-      <h2 class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
+      <h2 id="section3-title" class="light-headline" data-i18n="s3-headline" style="color:var(--color-frost-white);">Skin that glows<br>from within.</h2>
+      </div>
       <a class="inline-link" id="section3-learn-more" data-hero-product-slot="section3" href="#catalog" style="color:var(--color-halo-blue); justify-content:flex-end;">
         <span data-i18n="s3-learn">Learn more</span>
         <span>›</span>

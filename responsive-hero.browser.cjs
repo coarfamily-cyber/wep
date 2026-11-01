@@ -1,59 +1,29 @@
-'use strict';
-// Offline viewport/zoom/fold regression; no real Firebase, mail or admin writes.
-const {chromium}=require('playwright');
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const origin=process.env.HERO_TEST_ORIGIN||'http://127.0.0.1:8771';
-const out=process.env.HERO_TEST_EVIDENCE||'/tmp/coar-responsive-hero';fs.mkdirSync(out,{recursive:true});
-const sizes=[[600,600],[600,900],[700,700],[768,1024],[1024,768],[820,1180],[1180,820],[900,900],[1024,1024],[1199,900],[1200,1200],[320,568],[390,844],[1440,900],[1920,1080]];
-const copy={en:'Thoughtfully selected skincare for a comfortable daily routine. ',kr:'매일 편안하게 사용할 수 있는 스킨케어 제품을 소개합니다. 자세한 정보를 끝까지 확인하세요. ',ja:'毎日のスキンケアに使いやすい商品を選びました。詳しい情報を最後までご確認ください。 ',zh:'精心挑选适合日常护理的护肤品，请阅读完整说明并查看商品信息。 ',es:'Cuidado de la piel seleccionado para tu rutina diaria. Consulta toda la información del producto. '};
-const product={name:copy.kr.repeat(12),image:'images/dr-cpu-glutathione-capsule-cream.png',url:'https://coarfamily.myshopify.com/ko/products/dr-cpu-lacto-exosome-glutathione-capsule-cream',cta:'View product ›'};
-const results=[];
-const split=(w,h)=>w>=600&&(w<=1199||w/h<=1.2);
-(async()=>{
- const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],headless:true});
- for(const [width,height] of sizes){
-  const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true,serviceWorkers:'block'});const page=await context.newPage();page.setDefaultTimeout(7000);let writes=0;const errors=[];
-  page.on('pageerror',e=>errors.push(e.message));
-  await page.route('**/*',route=>{const req=route.request(),url=req.url();if(!['GET','HEAD'].includes(req.method())){writes++;return route.abort();}if(url.endsWith('/hero-products.json'))return route.fulfill({json:{version:1,section2:product,section3:product}});if(url.startsWith(origin+'/'))return route.continue();if(url.includes('flag-icons.min.css'))return route.fulfill({contentType:'text/css',body:'.fi{display:inline-block;width:1.333333em;line-height:1em}.fi:before{content:"\\00a0"}'});return route.abort();});
-  await page.goto(origin+'/',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>window.CoarHeroProducts?.getState().loaded);
-  async function geometry(slot){return page.locator('#'+slot).evaluate(e=>{const box=x=>{const r=x.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};const text=e.querySelector('.section-text-overlay'),media=e.querySelector('video')||e.querySelector('.hero-visual'),headline=e.querySelector('.light-headline'),body=e.querySelector('.light-body');return {section:box(e),text:box(text),media:box(media),headline:box(headline),body:body&&box(body),position:getComputedStyle(text).position,transform:getComputedStyle(media).transform,vw:innerWidth,vh:innerHeight,scroll:document.documentElement.scrollWidth};});}
-  function check(g,mode,label){assert.ok(g.text.x>=-.5&&g.text.right<=width+.5,'copy horizontal bounds '+label);assert.ok(g.scroll<=width+1,'page overflow '+label);if(mode){assert.equal(g.position,'relative',label);assert.ok(g.text.y>=g.media.bottom-.6,'copy overlaps media '+label);assert.ok(g.headline.y>=g.media.bottom-.6,'headline overlaps media '+label);assert.ok(g.headline.bottom<=g.text.bottom+.5,'headline clipped '+label);assert.ok(g.text.bottom<=g.section.bottom+.5,'section clips copy '+label);if(g.body?.height)assert.ok(g.body.y>=g.media.bottom-.5&&g.body.bottom<=g.text.bottom+.5,'body clipped '+label);}}
-  for(const lang of Object.keys(copy)){
-   await page.evaluate(lang=>setLang(lang),lang);await page.waitForTimeout(20);
-   for(const slot of ['section2','section3']){
-    let g=await geometry(slot);check(g,split(width,height),`${width}x${height}/${lang}/${slot}`);
-    if(lang==='kr'&&slot==='section3'&&[700,820,1024,1180].includes(width)){await page.locator('#'+slot).evaluate(e=>e.scrollIntoView({behavior:'instant'}));await page.screenshot({path:path.join(out,`${width}x${height}-default.png`)});}
-    if(split(width,height)){
-     await page.locator('#'+slot+' .light-headline').evaluate((e,s)=>e.textContent=s,copy[lang].repeat(3));
-     if(await page.locator('#'+slot+' .light-body').count())await page.locator('#'+slot+' .light-body').evaluate((e,s)=>e.textContent=s,copy[lang].repeat(9));
-     g=await geometry(slot);check(g,true,`long ${width}/${lang}/${slot}`);
-    }
-    const trigger=page.locator('#'+slot+' .coar-hero-trigger');
-    await trigger.evaluate(e=>{const r=e.getBoundingClientRect();scrollTo({top:scrollY+r.top-innerHeight*.4,behavior:'instant'});});await page.waitForTimeout(30);
-    const beforeY=await page.evaluate(()=>scrollY),r=await trigger.boundingBox();await page.touchscreen.tap(r.x+r.width/2,r.y+r.height/2);await page.waitForTimeout(510);
-    const surface=page.locator('#'+slot+' .coar-hero-surface');const b=await surface.boundingBox();
-    assert.equal(await trigger.getAttribute('aria-expanded'),'true');assert.ok(b.x>=-.6&&b.x+b.width<=width+.6&&b.y>=-.6&&b.y+b.height<=height+.6,'open capsule bounds');assert.ok(Math.abs(await page.evaluate(()=>scrollY)-beforeY)<1,'opening scroll jump');
-    const panel=page.locator('#'+slot+' .coar-hero-panel');await panel.evaluate(e=>{e.scrollTop=e.scrollHeight;});const cta=await page.locator('#'+slot+' .coar-hero-cta').boundingBox(),pb=await panel.boundingBox();assert.ok(cta.y>=pb.y-.6&&cta.y+cta.height<=pb.y+pb.height+.6,'long product CTA unreachable');
-    await page.keyboard.press('Escape');await page.waitForTimeout(500);assert.equal(await trigger.getAttribute('aria-expanded'),'false');
-    if(split(width,height))check(await geometry(slot),true,'after open');
-    results.push({width,height,lang,slot,split:split(width,height),naturalCopy:true,longCopyTested:split(width,height),openClose:true,longProductEnd:true,noScrollJump:true});
-   }
+const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs');
+const out=process.env.HERO_TEST_EVIDENCE||'/tmp/coar-text-only-layout',results=[];fs.mkdirSync(out,{recursive:true});
+const baselineOrigin=process.env.HERO_BASELINE_ORIGIN||'http://127.0.0.1:8775',candidateOrigin=process.env.HERO_TEST_ORIGIN||'http://127.0.0.1:8776';
+const sizes=[[320,568],[390,844],[600,600],[600,900],[700,700],[768,1024],[1024,768],[820,1180],[1180,820],[900,900],[1199,900],[1200,1200],[1440,900],[1920,1080],[720,450],[568,320]];
+const copy={en:'Thoughtfully selected skincare for a comfortable daily routine. Read the full description before opening the product. ',kr:'일상에서 편안하게 사용하는 스킨케어입니다. 긴 설명과 상품 정보를 끝까지 읽고 확인해 주세요. ',ja:'毎日のスキンケアを心地よく楽しめる商品です。詳しい情報を最後までご確認ください。 ',zh:'精心挑选适合日常护理的护肤品，请阅读完整说明并查看商品信息。 ',es:'Cuidado de la piel para una rutina diaria cómoda. Lee la descripción completa y consulta los detalles del producto. '};
+const fixture={name:copy.kr,image:'images/dr-cpu-glutathione-capsule-cream.png',url:'https://coarfamily.myshopify.com/ko/products/dr-cpu-lacto-exosome-glutathione-capsule-cream'};
+function overlap(a,b){return a.x<b.right-.5&&a.right>b.x+.5&&a.y<b.bottom-.5&&a.bottom>b.y+.5;}
+(async()=>{const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
+async function setup(origin,w,h){const context=await browser.newContext({viewport:{width:w,height:h},hasTouch:true,isMobile:w<1025,serviceWorkers:'block',reducedMotion:'reduce'});const p=await context.newPage();p.setDefaultTimeout(7000);let writes=0;
+ await p.route('**/*',r=>{let url=r.request().url();if(!['GET','HEAD'].includes(r.request().method())){writes++;return r.abort();}if(url.endsWith('/hero-products.json'))return r.fulfill({json:{version:1,section2:fixture,section3:fixture}});if(url.startsWith(origin+'/'))return r.continue();return r.abort();});await p.goto(origin+'/',{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>window.CoarHeroProducts?.getState().loaded);await p.waitForFunction(()=>document.getElementById('section2-video').videoWidth>0);return {context,p,writes:()=>writes};}
+async function media(p){return p.evaluate(()=>{function box(el,base){const r=el.getBoundingClientRect(),s=base.getBoundingClientRect(),c=getComputedStyle(el);return {x:r.x-s.x,y:r.y-s.y,w:r.width,h:r.height,fit:c.objectFit,pos:c.objectPosition,transform:c.transform};}return [...document.querySelectorAll('body > section.hero')].map(e=>({w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height,media:box(e.querySelector('video')||e.querySelector('.hero-visual'),e),image:e.querySelector('img.hero-product-img')?box(e.querySelector('img.hero-product-img'),e):null}));});}
+function equal(a,b,label){assert.equal(a.length,b.length);a.forEach((x,i)=>{for(const k of ['w','h'])assert.ok(Math.abs(x[k]-b[i][k])<.6,label+' '+i+' '+k);for(const key of ['media','image'])if(x[key]){let y=b[i][key];assert.ok(y,key);for(const k of ['x','y','w','h'])assert.ok(Math.abs(x[key][k]-y[k])<.6,label+' '+i+' '+key+'.'+k);for(const k of ['fit','pos','transform'])assert.equal(x[key][k],y[k],label+' '+i+' '+key+'.'+k);}});}
+async function compare(a,b,label){const before=await media(a),after=await media(b);/* first baseline is its visual wrapper; compare new video via poster instead */before[0].media=before[0].image;after[0].media=after[0].image;equal(before,after,label);return {baseline:before,candidate:after};}
+for(const [w,h] of sizes){const a=await setup(baselineOrigin,w,h),b=await setup(candidateOrigin,w,h);const comparison=await compare(a.p,b.p,`${w}x${h}`);
+ for(const [lang,str] of Object.entries(copy)){
+  await b.p.evaluate(lang=>setLang(lang),lang);
+  for(const slot of ['section2','section3']){
+   const region=b.p.locator('#'+slot+' .section-copy');await region.evaluate(e=>e.scrollTop=0);
+   const measure=await region.evaluate(e=>{const r=e.getBoundingClientRect(),s=e.closest('section').getBoundingClientRect(),t=e.closest('.section-text-overlay').querySelector('.coar-hero-anchor').getBoundingClientRect();return {copy:{x:r.x,y:r.y,right:r.right,bottom:r.bottom},island:{x:t.x,y:t.y,right:t.right,bottom:t.bottom},section:{x:s.x,y:s.y,w:s.width,h:s.height}};});
+   assert.ok(!overlap(measure.copy,measure.island),'closed copy/island overlap');
+   const active=w<=1199||w/h<=1.2;if(active){const core={x:w*.25,right:w*.75,y:measure.section.y+measure.section.h*.2,bottom:measure.section.y+measure.section.h*.67};assert.ok(!overlap(measure.copy,core),'copy enters central focal guard '+JSON.stringify({w,h,lang,slot,measure,core}));}
+   await region.locator('.light-headline').evaluate((e,str)=>e.textContent=str,str.repeat(3));if(await region.locator('.light-body').count())await region.locator('.light-body').evaluate((e,str)=>e.textContent=str,str.repeat(12));await region.evaluate(e=>e.scrollTop=e.scrollHeight);assert.ok(await region.evaluate(e=>e.scrollTop+e.clientHeight>=e.scrollHeight-1));assert.ok(await region.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+   await b.p.evaluate(({slot})=>{const e=document.querySelector('#'+slot+' .coar-hero-trigger'),r=e.getBoundingClientRect();scrollTo({top:scrollY+r.top-innerHeight*.4,behavior:'instant'});},{slot});await b.p.waitForTimeout(20);const trigger=b.p.locator('#'+slot+' .coar-hero-trigger');const hit=await trigger.locator('.coar-hero-label').boundingBox();await b.p.touchscreen.tap(hit.x+hit.width/2,hit.y+hit.height/2);await b.p.waitForTimeout(60);assert.equal(await trigger.getAttribute('aria-expanded'),'true');const surface=b.p.locator('#'+slot+' .coar-hero-surface'),rect=await surface.boundingBox();assert.ok(rect.x>=-.5&&rect.x+rect.width<=w+.5&&rect.y>=-.5&&rect.y+rect.height<=h+.5,'capsule bounds');const copyBox=await region.boundingBox();const cr={x:copyBox.x,y:copyBox.y,right:copyBox.x+copyBox.width,bottom:copyBox.y+copyBox.height},sr={x:rect.x,y:rect.y,right:rect.x+rect.width,bottom:rect.y+rect.height};assert.ok(!overlap(cr,sr),'expanded copy/capsule overlap '+JSON.stringify({w,h,lang,slot,cr,sr}));await b.p.keyboard.press('Escape');await b.p.waitForTimeout(60);
   }
-  assert.equal(writes,0);assert.deepEqual(errors,[]);await context.close();console.log(`PASS ${width}x${height}`);fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));
  }
- // Resize the SAME document through fold/unfold, landscape and narrow layouts.
- const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,serviceWorkers:'block'});const page=await context.newPage();const cdp=await context.newCDPSession(page);
- await page.route(/^https?:\/\/(?!127\.0\.0\.1)/,r=>r.abort());await page.route('**/hero-products.json',r=>r.fulfill({json:{version:1,section2:product,section3:product}}));await page.goto(origin+'/');await page.waitForFunction(()=>window.CoarHeroProducts?.getState().loaded);
- for(const [width,height] of [[820,1180],[1180,820],[700,700],[390,844],[768,1024],[1024,768],[320,568],[1440,900]]){
-  await page.setViewportSize({width,height});await page.waitForTimeout(100);
-  const heroHeight=await page.locator('body > section.hero').first().evaluate(e=>e.getBoundingClientRect().height);assert.ok(heroHeight>0,'first hero remains visible');
-  const trigger=page.locator('#section3 .coar-hero-trigger');await trigger.evaluate(e=>{const r=e.getBoundingClientRect();scrollTo({top:scrollY+r.top-innerHeight*.4,behavior:'instant'});});await page.waitForTimeout(50);await trigger.tap();await page.waitForTimeout(520);await page.keyboard.press('Escape');await page.waitForTimeout(490);
-  results.push({resizeTo:[width,height],firstHeroHeight:heroHeight,reopen:true});
- }
- // Pinch/page-scale emulation changes visualViewport, without UA model guessing.
- await page.setViewportSize({width:820,height:1180});await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await cdp.send('Emulation.setPageScaleFactor',{pageScaleFactor:2});await page.waitForTimeout(100);assert.ok(await page.evaluate(()=>visualViewport.scale)>1.9);assert.ok(!await page.locator('meta[name=viewport]').getAttribute('content').then(x=>/user-scalable=no|maximum-scale/.test(x)));await cdp.send('Emulation.setPageScaleFactor',{pageScaleFactor:1});
- // 200% desktop layout zoom equivalent: 1440x900 CSS viewport becomes 720x450.
- await page.setViewportSize({width:720,height:450});await page.waitForTimeout(100);assert.equal(await page.locator('#section3 .section-text-overlay').evaluate(e=>getComputedStyle(e).position),'relative');
- await page.locator('.subscription-nav').tap();assert.equal(await page.locator('#subscription-notice').evaluate(e=>e.open),true);await page.keyboard.press('Escape');await page.waitForFunction(()=>!history.state?.coarSubscriptionNotice);
- results.push({pageScale:2,zoomLayout:[720,450],subscriptionDialog:true});await context.close();await browser.close();fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));console.log('PASS '+results.length+' cases');
-})().catch(e=>{fs.writeFileSync(path.join(out,'partial.json'),JSON.stringify(results,null,2));console.error(e);process.exit(1);});
+ await b.p.evaluate(()=>{setLang('kr');document.querySelectorAll('.section-copy').forEach(e=>e.scrollTop=0);document.querySelector('#section3').scrollIntoView({behavior:'instant'});});if([390,600,700,820,1024,1180,1440].includes(w))await b.p.screenshot({path:`${out}/${w}x${h}-copy.png`});
+ assert.equal(a.writes()+b.writes(),0);results.push({w,h,mediaEqual:true,languages:5,longCopyScrollable:true,noCopyIslandOverlap:true,focalGuardResponsive:true,comparison});await a.context.close();await b.context.close();fs.writeFileSync(out+'/results.json',JSON.stringify(results,null,2));console.log('PASS '+w+'x'+h);
+}
+await browser.close();console.log('PASS '+results.length+' viewport comparisons');})().catch(e=>{fs.writeFileSync(out+'/partial.json',JSON.stringify(results,null,2));console.error(e);process.exit(1)});

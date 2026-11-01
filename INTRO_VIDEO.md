@@ -18,14 +18,16 @@ There is no autoplay attribute or initial video src. JS assigns the source only
 when the hero is visible, the document is active, reduced motion is off and
 navigator.connection.saveData is not true. The last check depends on browser API
 availability. A muted inline loop begins only then. Poster remains visible until
-actual playback, and there is a visible keyboard/touch pause/play button with
-labels following all five existing languages. Explicit user pause persists
+actual playback, and the hero box itself is the keyboard/touch pause/play control with
+labels and instructions following all five existing languages. There is no
+visible stop button. Enter and Space toggle playback. Interactive descendants,
+scroll gestures, and drags (including a round trip) do not toggle the video. Explicit user pause persists
 through scrolling. Offscreen/document-hidden playback pauses automatically.
 
 Reduced-motion or exposed saveData changes stop and release the source and show
 the original image. Network/decoder errors fall back to the image without an
-automatic retry loop. An autoplay-policy rejection leaves the image and a manual
-play button. With JS unavailable the original image remains intact.
+automatic retry loop. An autoplay-policy rejection leaves the image and allows a deliberate
+box tap/keyboard action to retry. With JS unavailable the original image remains intact.
 
 Local tests:
 
@@ -45,3 +47,9 @@ and all writes are blocked; browser service workers are disabled in local tests.
 Existing 50 source tests and 18 subscription cases also run. Existing panel touch,
 internal scrolling and rotation checks use local fixtures. These checks are
 Chromium emulation rather than a physical-device or deployed Pages inspection.
+
+The first hero handles pointer/touch click, Enter and Space without changing the
+second box. Its existing section2 click handler toggles sound/muting, not video
+paused state; this behavior is intentionally preserved. Reduced-motion, SaveData
+and media-error fallbacks remove the first hero interaction role/tab stop. The
+first box retains a keyboard focus outline inside its existing bounds.

@@ -8,24 +8,17 @@
   object-position: center center;
   pointer-events: none;
 }
-#intro-video-control {
+#intro-hero[role="button"] { cursor: pointer; touch-action: pan-y pinch-zoom; }
+#intro-hero:focus-visible { outline: 2px solid #92c7ff; outline-offset: -4px; }
+#intro-hero .intro-video-help {
   position: absolute;
-  z-index: 4;
-  bottom: 24px;
-  left: 24px;
-  max-width: calc(100% - 48px);
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(15, 22, 31, .8);
-  color: #f5f5f7;
-  font: 500 12px/1.4 system-ui, sans-serif;
-  cursor: pointer;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
 }
-#intro-video-control:focus-visible { outline: 2px solid #92c7ff; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   #intro-hero .intro-video { display: none !important; }
 }
