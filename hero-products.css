@@ -4,3 +4,48 @@
 .coar-hero-anchor[data-align=left]+.coar-hero-edit{margin-left:0;margin-right:auto}.coar-hero-editor fieldset{min-width:0;margin:0;padding:0;border:0;display:grid;gap:13px}.coar-hero-editor input[type=checkbox]{width:16px;height:16px;padding:0;justify-self:start;accent-color:#fff}.coar-hero-editor small{font-size:11px;color:rgba(255,255,255,.62)}
 
 @media(prefers-reduced-motion:reduce){.section-text-overlay[data-coar-mobile-layout]>.eyebrow-tag,.section-text-overlay[data-coar-mobile-layout]>.light-headline,.section-text-overlay[data-coar-mobile-layout]>.light-body{transition:none!important}}
+
+/* Glass belongs to the capsule surface; its text and product stay sharp. */
+.coar-hero-surface {
+  background: rgba(18, 25, 36, .82);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .coar-hero-surface {
+    background: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, 0) 55%), rgba(18, 25, 36, .38);
+    backdrop-filter: blur(12px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+  }
+}
+/* Trace the visible pill while closed, then follow its expanding bounds. */
+.coar-hero-surface::before {
+  content: "";
+  position: absolute;
+  inset: var(--coar-clip-top) var(--coar-clip-right) var(--coar-clip-bottom) var(--coar-clip-left);
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 33px;
+  pointer-events: none;
+  z-index: 3;
+  transition: inset .48s cubic-bezier(.2,.8,.2,1), border-radius .48s cubic-bezier(.2,.8,.2,1);
+}
+.coar-hero-anchor.is-open .coar-hero-surface::before {
+  inset: 0;
+  border-radius: 29px;
+}
+.coar-hero-surface .coar-hero-label,
+.coar-hero-surface .coar-hero-name,
+.coar-hero-surface .coar-hero-empty {
+  text-shadow: 0 1px 2px #000, 0 0 6px rgba(0, 0, 0, .9);
+}
+.coar-hero-surface .coar-hero-cta {
+  background: rgba(255, 255, 255, .94);
+  color: #172334 !important;
+  text-shadow: none;
+}
+.coar-hero-surface .coar-hero-product:hover .coar-hero-cta {
+  background: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coar-hero-surface::before { transition: none; }
+}

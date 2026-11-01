@@ -988,9 +988,31 @@
 
     /* ─── Divider Section Dark → Light ─────────────────────── */
     .section-strip {
-      background: var(--color-pure-black);
+      --color-platinum: #b9bec8;
+      background: rgba(26, 32, 42, .9);
+      border-block: 1px solid rgba(255, 255, 255, .18);
       padding: 80px 0;
       text-align: center;
+    }
+    .section-strip .btn-primary {
+      background: rgba(18, 25, 36, .82);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35);
+    }
+    @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .section-strip {
+        background: linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+        backdrop-filter: blur(12px) saturate(125%);
+        -webkit-backdrop-filter: blur(12px) saturate(125%);
+      }
+      .section-strip .btn-primary {
+        background: rgba(255, 255, 255, .1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+    }
+    @media (max-width: 768px) {
+      .section-strip .btn-origin:hover { transform: scale(1.04); }
+      .section-strip .btn-origin:active { transform: scale(1.02); }
     }
     .strip-headline {
       font-family: var(--font-text);
@@ -1452,7 +1474,7 @@
     }
   }
 </script>
-  <link rel="stylesheet" href="hero-products.css?v=20261025-2">
+  <link rel="stylesheet" href="hero-products.css?v=20261101-2">
   <script src="hero-products.js?v=20261101-1" defer></script>
 </head>
 <body>
