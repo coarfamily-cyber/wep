@@ -17,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '2026-10-25.2';
+  var VERSION = '2026-11-01.1';
   var CLOSE_MS = 480; // keep panel unhidden this long after close so CSS clip/fade can finish
   var SLOTS = ['section2', 'section3'];
   var SLOT_LABELS = { section2: 'Section 2', section3: 'Section 3' };
@@ -705,6 +705,15 @@
     r.wrapper.setAttribute('data-direction', lay.direction);
     r.wrapper.style.setProperty('--coar-open-width', lay.width + 'px');
     r.wrapper.style.setProperty('--coar-open-height', lay.height + 'px');
+    // Rotation can move the unchanged anchor above the viewport. Keep the
+    // open surface within its visible section without scrolling the page.
+    var surfaceTop = lay.direction === 'up' ? rect.bottom - lay.height : rect.top;
+    var margin = lay.mobile ? LAYOUT.mobileMargin : LAYOUT.margin;
+    var visibleTop = clipBounds ? clipBounds.top : 0;
+    var visibleBottom = clipBounds ? clipBounds.bottom : vp.h;
+    var clampedTop = Math.max(visibleTop + margin,
+      Math.min(surfaceTop, visibleBottom - margin - lay.height));
+    r.wrapper.style.setProperty('--coar-surface-shift', (clampedTop - surfaceTop) + 'px');
     syncMobileCaption(r, r.wrapper.classList.contains('is-open'));
   }
 

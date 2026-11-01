@@ -31,3 +31,44 @@
 .coar-hero-surface .coar-hero-product:hover .coar-hero-cta {
   background: #fff;
 }
+
+/* Keep long product copy inside the space left below the capsule trigger. */
+.coar-hero-anchor.is-open .coar-hero-surface {
+  transform: translate3d(0, var(--coar-surface-shift, 0px), 0);
+}
+.coar-hero-panel {
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 2px 2px 6px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  scrollbar-gutter: stable;
+  scroll-padding-block: 6px;
+  touch-action: pan-y pinch-zoom;
+}
+.coar-hero-panel .coar-hero-product {
+  height: auto;
+  min-height: 0;
+  grid-template-rows: max-content max-content;
+  column-gap: 14px;
+  row-gap: 12px;
+  align-content: start;
+  align-items: start;
+}
+.coar-hero-panel .coar-hero-image {
+  max-height: none;
+  align-self: start;
+}
+.coar-hero-panel .coar-hero-name {
+  display: block;
+  align-self: start;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.coar-hero-panel .coar-hero-cta {
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
