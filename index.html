@@ -1472,6 +1472,8 @@
     }
   }
 </script>
+  <link rel="stylesheet" href="subscription-notice.css?v=20261101-1">
+  <script src="subscription-notice.js?v=20261101-1" defer></script>
   <link rel="stylesheet" href="hero-products.css?v=20261101-4">
   <script src="hero-products.js?v=20261101-2" defer></script>
 </head>
@@ -1485,6 +1487,7 @@
     <button class="lang-btn lang-btn-kr" onclick="setLang('kr')" title="한국어"><span class="fi fi-kr"></span></button>
     <button class="lang-btn" onclick="setLang('zh')" title="中文"><span class="fi fi-cn"></span></button>
     <button class="lang-btn" onclick="setLang('es')" title="Español"><span class="fi fi-es"></span></button>
+    <button type="button" class="subscription-nav" data-subscription-open aria-haspopup="dialog" aria-controls="subscription-notice" aria-label="Subscribe"><span aria-hidden="true">🔔</span><span class="subscription-nav-label" data-subscription-text="subscribe">Subscribe</span></button>
   </div>
 
   <div class="nav-wrapper">
@@ -1711,8 +1714,18 @@
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <button onclick="showEmailToast()" class="btn-primary btn-origin" style="font-size:15px; padding:13px 28px; cursor:pointer; border:none;"><span class="btn-origin-fill"></span><span class="btn-origin-label" data-i18n="cta-btn">Contact us</span></button>
       </div>
+      <button type="button" class="subscription-contact" data-subscription-open aria-haspopup="dialog" aria-controls="subscription-notice" data-subscription-text="contact">New product updates</button>
     </div>
   </section>
+
+  <dialog id="subscription-notice" class="subscription-notice" aria-labelledby="subscription-notice-title" aria-describedby="subscription-notice-body subscription-notice-status">
+    <button type="button" class="subscription-close" data-subscription-close aria-label="Close" autofocus><span aria-hidden="true">×</span></button>
+    <p class="subscription-eyebrow" data-subscription-text="eyebrow">New product updates</p>
+    <h2 id="subscription-notice-title" data-subscription-text="title">Subscriptions coming soon</h2>
+    <p id="subscription-notice-body" data-subscription-text="body">Email subscriptions are being prepared. Sign-up is not available yet.</p>
+    <p id="subscription-notice-status" data-subscription-text="status">We are not collecting email addresses or sending subscription messages.</p>
+    <button type="button" class="subscription-dismiss" data-subscription-close data-subscription-text="close">Close</button>
+  </dialog>
 
   <!-- ⑨ Footer -->
   <footer>
