@@ -306,12 +306,15 @@
     var targetW = assigned ? (mobile ? LAYOUT.mobileWidth : LAYOUT.desktopWidth) : LAYOUT.emptyWidth;
     var targetH = assigned ? (mobile ? LAYOUT.mobileHeight : LAYOUT.desktopHeight) : LAYOUT.emptyHeight;
 
-    var availW = align === 'right' ? rect.right - m : vw - rect.left - m;
-    var width = Math.min(targetW, availW, vw - 2 * m);
+    // The capsule is painted inside its hero section, which clips overflow.
+    // Available space must respect that section as well as the viewport.
+    var bounds = opts.clipBounds || { left: 0, top: 0, right: vw, bottom: vh };
+    var availW = align === 'right' ? rect.right - bounds.left - m : bounds.right - rect.left - m;
+    var width = Math.min(targetW, availW, bounds.right - bounds.left - 2 * m);
     width = Math.max(LAYOUT.closedWidth, Math.floor(width));
 
-    var downAvail = vh - rect.top - m;
-    var upAvail = rect.bottom - m;
+    var downAvail = bounds.bottom - rect.top - m;
+    var upAvail = rect.bottom - bounds.top - m;
     var direction;
     if (downAvail >= targetH) direction = 'down';
     else if (upAvail >= targetH) direction = 'up';
@@ -681,10 +684,19 @@
     updateAlign(slot);
     var rect = r.wrapper.getBoundingClientRect();
     var vp = viewportSize();
+    var section = r.wrapper.closest('section');
+    var sectionRect = section ? section.getBoundingClientRect() : null;
+    var clipBounds = sectionRect ? {
+      left: Math.max(0, sectionRect.left),
+      top: Math.max(0, sectionRect.top),
+      right: Math.min(vp.w, sectionRect.right),
+      bottom: Math.min(vp.h, sectionRect.bottom)
+    } : null;
     var lay = computeLayout({
       rect: rect,
       viewportWidth: vp.w,
       viewportHeight: vp.h,
+      clipBounds: clipBounds,
       align: r.wrapper.getAttribute('data-align'),
       assigned: !!(state.slots[slot] && state.slots[slot].status === 'assigned')
     });
