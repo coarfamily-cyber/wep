@@ -1,0 +1,74 @@
+/* Give intermediate and near-square viewports a separate media/copy layout.
+ * Compact phones and wide desktop compositions retain their original layout. */
+@media (min-width: 600px) and (max-width: 1199px),
+       (min-width: 1200px) and (max-aspect-ratio: 6/5) {
+  #section2, #section3 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: clamp(280px, 58svh, 720px) auto;
+    height: auto;
+    min-height: 100svh !important;
+    align-items: stretch !important;
+  }
+  #section2-video, #section3 > .hero-visual {
+    position: relative !important;
+    inset: auto !important;
+    grid-area: 1 / 1;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+  #section2-video {
+    transform: none !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+  #section3 .hero-product-img {
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+  #section2 > .section-text-overlay, #section3 > .section-text-overlay {
+    position: relative !important;
+    inset: auto !important;
+    grid-area: 2 / 1;
+    width: 100%;
+    max-width: none !important;
+    min-width: 0;
+    padding: 28px clamp(24px, 4vw, 48px) 40px !important;
+    background: #111111;
+    text-align: left !important;
+  }
+  #section2 #sound-btn {
+    top: 16px !important;
+    left: clamp(24px, 4vw, 48px) !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+  #section2 .light-headline, #section3 .light-headline {
+    max-width: 820px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.14;
+    overflow-wrap: anywhere;
+  }
+  #section2 .light-body, #section3 .light-body {
+    display: block;
+    max-width: 660px;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+  #section2 .eyebrow-tag, #section3 .eyebrow-tag,
+  #section2 .inline-link, #section3 .inline-link {
+    justify-content: flex-start !important;
+  }
+  /* The copy has its own space; opening a mobile capsule must not translate it
+   * back into the media area. Keep the existing capsule's own clamping/scroll. */
+  #section2 .section-text-overlay > .eyebrow-tag,
+  #section2 .section-text-overlay > .light-headline,
+  #section2 .section-text-overlay > .light-body,
+  #section3 .section-text-overlay > .eyebrow-tag,
+  #section3 .section-text-overlay > .light-headline,
+  #section3 .section-text-overlay > .light-body {
+    translate: none !important;
+  }
+}
