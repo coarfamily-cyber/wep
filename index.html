@@ -73,24 +73,18 @@
       position: relative;
       display: inline-block;
       height: 280px;
-      width: 280px;
     }
     .logo-base {
-      position: absolute;
-      top: 10px;
-      left: 64px;
-      height: 200px;
+      height: 280px;
       width: auto;
       display: block;
     }
     .logo-butterfly {
       position: absolute;
-      top: -62px;
-      left: -100px;
+      top: 0;
+      left: 0;
       height: 280px;
       width: auto;
-      transform-origin: 61.13% 34.38%;
-      pointer-events: none;
     }
 
     /* ─── 나비 로고 날아오기 애니메이션 ───────────────────────── */
@@ -112,9 +106,6 @@
     }
     .logo-butterfly {
       animation: butterfly-land 2.6s ease-in-out both;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .logo-butterfly { animation: none; }
     }
     @media (min-width: 769px) {
       /* 데스크탑 화살표 */
@@ -1174,13 +1165,10 @@
       .nav-wrapper {
         position: absolute;
       }
-      .logo-wrapper {
-        height: 120px;
-        width: 144px;
+      .logo-wrapper, .logo-wrapper img {
+        height: 120px !important;
         opacity: 1;
       }
-      .logo-base { height: 104px; top: 12px; left: 32px; }
-      .logo-butterfly { height: 120px; top: -18px; left: -29px; }
 
       /* Hero */
       .hero {
@@ -1426,9 +1414,9 @@
       .section-inner {
         padding: 0 28px;
       }
-      .logo-wrapper { height: 180px; width: 200px; }
-      .logo-base { height: 150px; top: 10px; left: 40px; }
-      .logo-butterfly { height: 180px; top: -34px; left: -44px; }
+      .logo-wrapper, .logo-wrapper img {
+        height: 180px !important;
+      }
     }
     /* 모바일 고정 높이 */
   .hero {
@@ -1482,7 +1470,7 @@
   <div class="nav-wrapper">
     <nav>
       <div class="logo-wrapper" onclick="logoClick()" style="cursor:pointer;">
-        <img src="images/logo-suppong.png" alt="MD 수뽕 브랜드 로고" class="logo-base">
+        <img src="images/logo-no-butterfly.png" alt="브랜드 로고" class="logo-base">
         <img src="images/logo-butterfly.png" alt="" class="logo-butterfly">
       </div>
     </nav>
