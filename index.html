@@ -1474,11 +1474,11 @@
 </script>
   <link rel="stylesheet" href="subscription-notice.css?v=20261101-1">
   <script src="subscription-notice.js?v=20261101-1" defer></script>
-  <link rel="stylesheet" href="intro-video.css?v=20261101-1">
-  <script src="intro-video.js?v=20261101-1" defer></script>
-  <link rel="stylesheet" href="responsive-hero.css?v=20261101-1">
+  <link rel="stylesheet" href="intro-video.css?v=20261101-2">
+  <script src="intro-video.js?v=20261101-2" defer></script>
+  <link rel="stylesheet" href="responsive-hero.css?v=20261101-2">
   <link rel="stylesheet" href="hero-products.css?v=20261101-4">
-  <script src="hero-products.js?v=20261101-2" defer></script>
+  <script src="hero-products.js?v=20261101-3" defer></script>
 </head>
 <body>
 
@@ -1514,7 +1514,7 @@
 
 
   <!-- ⑤ Full-bleed Image Section -->
-  <section class="hero" id="section2" onclick="toggleSound()" style="position:relative; background:#111111; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start; cursor:pointer;">
+  <section class="hero" id="section2" style="position:relative; background:#111111; min-height:600px; display:flex; align-items:flex-end; overflow:hidden; scroll-snap-align:start; cursor:pointer;">
     <!-- 배경 영상 (데스크탑: cover / 모바일: scale 확대) -->
     <video id="section2-video" autoplay muted loop playsinline
       style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center center;">
@@ -1524,8 +1524,9 @@
     <div style="position:absolute; inset:0; background:
       linear-gradient(to bottom, #111111 0%, rgba(17,17,17,0.5) 5%, transparent 14%, transparent 65%, rgba(17,17,17,0.5) 80%, rgba(17,17,17,0.85) 92%, #111111 100%);
       pointer-events:none;"></div>
+    <span id="section2-video-instructions" class="intro-video-help" hidden>Click or tap this background to pause or play. Use Enter or Space with the keyboard.</span>
     <!-- 사운드 버튼 -->
-    <div id="sound-btn" onclick="event.stopPropagation(); toggleSound();" style="position:absolute; z-index:10; bottom:24px; right:24px;
+    <button type="button" aria-label="Toggle sound" id="sound-btn" onclick="event.stopPropagation(); toggleSound();" style="position:absolute; z-index:10; bottom:24px; right:24px;
       width:36px; height:36px; border-radius:50%;
       background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.25);
       display:flex; align-items:center; justify-content:center;
@@ -1536,7 +1537,7 @@
         <line x1="23" y1="9" x2="17" y2="15" class="mute-x"/>
         <line x1="17" y1="9" x2="23" y2="15" class="mute-x"/>
       </svg>
-    </div>
+    </button>
     <!-- 텍스트: 오른쪽 상단 -->
     <div class="section-text-overlay" style="position:absolute; z-index:2; top:120px; right:200px; max-width:420px; text-align:right;">
       <div class="section-copy" tabindex="0" role="region" aria-labelledby="section2-title">

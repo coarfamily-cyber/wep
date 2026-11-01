@@ -48,8 +48,16 @@ Existing 50 source tests and 18 subscription cases also run. Existing panel touc
 internal scrolling and rotation checks use local fixtures. These checks are
 Chromium emulation rather than a physical-device or deployed Pages inspection.
 
-The first hero handles pointer/touch click, Enter and Space without changing the
-second box. Its existing section2 click handler toggles sound/muting, not video
-paused state; this behavior is intentionally preserved. Reduced-motion, SaveData
-and media-error fallbacks remove the first hero interaction role/tab stop. The
-first box retains a keyboard focus outline inside its existing bounds.
+Both video boxes share the same guarded tap/click, Enter and Space controller.
+The second video keeps its existing autoplay/muted/loop/playsinline markup and
+source bytes. A box tap never enables audio. Its existing separate speaker
+control remains available as a native keyboard-accessible button. Manual pause
+survives scroll-away/re-entry and document visibility changes. Runtime reduced
+motion and exposed SaveData pause the second video without replacing its media
+or geometry. The first video's lazy source and poster fallback remain intact.
+
+`second-video.browser.cjs` checks six phone/fold/tablet/desktop shapes, actual
+playback advancement, tap, keyboard/focus, child controls, round-trip drag,
+visibility, manual intent, rotation, five labels and reduced motion. Run with
+`INTRO_TEST_ORIGIN=http://127.0.0.1:8777` (default). External requests and writes
+are blocked. `intro-gestures.browser.cjs` covers first-box gesture regression.

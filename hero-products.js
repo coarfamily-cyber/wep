@@ -669,6 +669,11 @@
   }
 
   function syncMobileCaption(r, expanded) {
+    // Stacked captions stay above an upward-opening surface on every viewport.
+    var height = parseFloat(r.wrapper.style.getPropertyValue('--coar-open-height')) || LAYOUT.desktopHeight;
+    var shift = parseFloat(r.wrapper.style.getPropertyValue('--coar-surface-shift')) || 0;
+    var lift = expanded && r.wrapper.getAttribute('data-direction') === 'up' ? Math.min(0, 66 - height + shift) : 0;
+    r.overlay.style.setProperty('--coar-copy-lift', lift + 'px');
     if (!r.mobileLayout) {
       r.overlay.removeAttribute('data-coar-mobile-layout');
       r.overlay.style.removeProperty('--coar-caption-offset');

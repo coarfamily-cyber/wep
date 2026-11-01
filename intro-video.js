@@ -1,13 +1,15 @@
-/* Intro playback only; no account, storage, analytics or changes to other media. */
+/* Shared box playback; no account, storage or analytics. */
 (function () {
   'use strict';
-  var section = document.getElementById('intro-hero');
-  var video = document.getElementById('intro-video');
-  var instructions = document.getElementById('intro-video-instructions');
+  ['intro-hero', 'section2'].forEach(function (id) {
+  var isIntro = id === 'intro-hero';
+  var section = document.getElementById(id);
+  var video = document.getElementById(isIntro ? 'intro-video' : 'section2-video');
+  var instructions = document.getElementById(isIntro ? 'intro-video-instructions' : 'section2-video-instructions');
   if (!section || !video || !instructions) return;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   var connection = navigator.connection;
-  var inView = false, userPaused = false, failed = false, hasSource = false, attempt = 0;
+  var inView = false, userPaused = false, failed = false, hasSource = !isIntro, attempt = 0;
   video.muted = true;
   video.defaultMuted = true;
   function restricted() { return reduced.matches || !!(connection && connection.saveData); }
@@ -35,6 +37,7 @@
   function releaseSource() {
     attempt++;
     video.pause();
+    if (!isIntro) return;
     video.hidden = true;
     if (hasSource) { hasSource = false; video.removeAttribute('src'); video.load(); }
   }
@@ -60,7 +63,7 @@
       if (result && result.catch) result.catch(function () {
         if (current !== attempt || !allowed()) return;
         userPaused = true;
-        video.hidden = true;
+        if (isIntro) video.hidden = true;
         section.dataset.introMedia = 'poster';
         label();
       });
@@ -75,7 +78,7 @@
   video.addEventListener('pause', label);
   video.addEventListener('error', fallback);
   function interactiveChild(target) {
-    var child = target && target.closest && target.closest('a,button,input,select,textarea,label,summary,details,[contenteditable]:not([contenteditable="false"]),[role="button"],[role="link"]');
+    var child = target && target.closest && target.closest('a,button,input,select,textarea,label,summary,details,[tabindex],[contenteditable]:not([contenteditable="false"]),[role="button"],[role="link"]');
     return !!(child && child !== section);
   }
   function toggle() {
@@ -147,4 +150,5 @@
     assess();
   }
   label();
+  });
 })();

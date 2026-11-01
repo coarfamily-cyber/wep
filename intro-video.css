@@ -1,4 +1,4 @@
-/* Intro only. Original image remains visible until playback actually starts. */
+/* Box controls and intro poster. Original image remains visible until playback actually starts. */
 #intro-hero .intro-video {
   position: absolute;
   inset: 0;
@@ -8,9 +8,9 @@
   object-position: center center;
   pointer-events: none;
 }
-#intro-hero[role="button"] { cursor: pointer; touch-action: pan-y pinch-zoom; }
-#intro-hero:focus-visible { outline: 2px solid #92c7ff; outline-offset: -4px; }
-#intro-hero .intro-video-help {
+:is(#intro-hero, #section2)[role="button"] { cursor: pointer; touch-action: pan-y pinch-zoom; }
+:is(#intro-hero, #section2):focus-visible { outline: 2px solid #92c7ff; outline-offset: -4px; }
+:is(#intro-hero, #section2) .intro-video-help {
   position: absolute;
   width: 1px;
   height: 1px;

@@ -78,3 +78,23 @@
 @media (prefers-reduced-motion: reduce) {
   .section-text-overlay > .section-copy { transition: none !important; }
 }
+/* Keep the copy directly above its own Learn more capsule at every width. */
+#section2 > .section-text-overlay, #section3 > .section-text-overlay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+#section2 .section-copy, #section3 .section-copy { grid-area: 1 / 1; }
+#section2 .coar-hero-anchor, #section3 .coar-hero-anchor { grid-area: 2 / 1; }
+#section2 .section-copy {
+  max-height: none;
+  overflow: visible;
+  scrollbar-gutter: auto;
+  overscroll-behavior: auto;
+}
+#section2 > .section-text-overlay > .section-copy,
+#section3 > .section-text-overlay > .section-copy {
+  translate: 0 var(--coar-copy-lift, 0px) !important;
+}
+:is(#section2, #section3) .coar-hero-anchor[data-align="right"] { justify-self: end; }
+:is(#section2, #section3) .coar-hero-anchor[data-align="left"] { justify-self: start; }
