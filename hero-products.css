@@ -77,8 +77,8 @@
 /* Learn more capsule: clearer premium transparent-glass finish. */
 .coar-hero-surface {
   background: rgba(255, 255, 255, .10) !important;
-  border: 1px solid rgba(255, 255, 255, .32) !important;
-  box-shadow: 0 10px 34px rgba(0, 0, 0, .16), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+  border: 0 !important;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .16) !important;
   backdrop-filter: blur(18px) saturate(145%) !important;
   -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
 }
